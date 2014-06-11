@@ -1,6 +1,7 @@
 html,
 .account-masthead,
 .masthead .navigation .nav-pills li a:hover,
+.masthead .navigation .nav-pills li.active a,
 .hero .tags {
     background-color: #231859;
 }
