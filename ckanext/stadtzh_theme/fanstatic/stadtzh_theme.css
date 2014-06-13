@@ -3,11 +3,11 @@ html,
 .masthead .navigation .nav-pills li a:hover,
 .masthead .navigation .nav-pills li.active a,
 .hero .tags {
-    background-color: #231859;
+    background-color: #0E2B56;
 }
 
 .masthead,
 .hero .module-dark .module-content,
 .site-footer {
-    background-color: #411CA6;
+    background-color: #1F52A3;
 }
