@@ -11,3 +11,8 @@ html,
 .site-footer {
     background-color: #1F52A3;
 }
+
+.additional-info {
+  padding: 0 25px;
+  margin: 20px 0;
+}
