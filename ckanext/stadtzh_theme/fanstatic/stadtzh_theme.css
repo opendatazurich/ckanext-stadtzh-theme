@@ -16,3 +16,8 @@ html,
   padding: 0 25px;
   margin: 20px 0;
 }
+
+.additional-info table td{
+    padding: 0px;
+    border-top: none;
+}
