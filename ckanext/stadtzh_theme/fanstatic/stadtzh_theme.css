@@ -18,5 +18,13 @@ html,
 }
 
 .additional-info table td{
-    border-top: none;
+  border-top: none;
+}
+
+.control-label {
+  word-wrap: normal;
+}
+
+.page-heading {
+  word-wrap: break-word;
 }
