@@ -21,6 +21,10 @@ html,
   border-top: none;
 }
 
+.additional-info table .heading {
+    font-weight: bold;
+}
+
 .control-label {
   word-wrap: normal;
 }
