@@ -18,7 +18,19 @@ html,
 }
 
 .additional-info table td{
-    border-top: none;
+  border-top: none;
+}
+
+.additional-info table .heading {
+    font-weight: bold;
+}
+
+.control-label {
+  word-wrap: normal;
+}
+
+.page-heading {
+  word-wrap: break-word;
 }
 
 .icon-google-plus-sign {
