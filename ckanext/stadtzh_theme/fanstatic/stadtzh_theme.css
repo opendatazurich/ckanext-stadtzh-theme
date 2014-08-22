@@ -20,3 +20,15 @@ html,
 .additional-info table td{
     border-top: none;
 }
+
+.icon-google-plus-sign {
+    color: #dd4b39;
+}
+
+.icon-twitter-sign {
+    color: #55acee;
+}
+
+.icon-facebook-sign {
+    color: #3B5999;
+}
