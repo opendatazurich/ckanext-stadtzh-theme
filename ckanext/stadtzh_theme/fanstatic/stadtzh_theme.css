@@ -2,12 +2,14 @@ html,
 .account-masthead,
 .masthead .navigation .nav-pills li a:hover,
 .masthead .navigation .nav-pills li.active a,
+.homepage .module-search .tags,
 .hero .tags {
     background-color: #0E2B56;
 }
 
 .masthead,
 .hero .module-dark .module-content,
+.homepage .module-search .module-content,
 .site-footer {
     background-color: #1F52A3;
 }
