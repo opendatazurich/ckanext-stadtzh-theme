@@ -54,3 +54,7 @@ h3 {
 .follow_button {
     display: none;
 }
+
+table.package-attributes {
+    font-size: 13px;
+}
