@@ -50,3 +50,7 @@ html,
 h3 {
     font-size: 14px;
 }
+
+.follow_button {
+    display: none;
+}
