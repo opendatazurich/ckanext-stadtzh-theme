@@ -1,0 +1,118 @@
+{% import 'macros/form.html' as form %}
+
+{% set p = h.get_package_dict(data.id) %}
+
+{% block package_metadata_fields %}
+
+
+  {% block package_metadata_author %}
+    {{ form.input('author', label=_('Author'), id='field-author', placeholder=_('Joe Bloggs'), value=data.author, error=errors.author, classes=['control-medium']) }}
+
+    {{ form.input('author_email', label=_('Author Email'), id='field-author-email', placeholder=_('joe@example.com'), value=data.author_email, error=errors.author_email, classes=['control-medium']) }}
+  {% endblock %}
+
+  {% block package_metadata_fields_url %}
+    {{ form.input('url', label=_('Source'), id='field-url', placeholder=_('e.g. Statistik Stadt Zürich'), value=data.url, error=errors.url, classes=['control-medium']) }}
+  {% endblock %}
+
+  {% block package_metadata_fields_maintainer %}
+    {% if data.maintainer %}
+      {% set maintainer = data.maintainer %}
+    {% else %}
+      {% set maintainer = "Open Data Zürich" %}
+    {% endif %}
+
+    {% if data.maintainer_email %}
+      {% set maintainer_email = data.maintainer_email %}
+    {% else %}
+      {% set maintainer_email = "opendata@zuerich.ch" %}
+    {% endif %}
+
+    {{ form.input('maintainer', label=_('Maintainer'), id='field-maintainer', placeholder=_('Joe Bloggs'), value=maintainer, error=errors.maintainer, classes=['control-medium']) }}
+
+    {{ form.input('maintainer_email', label=_('Maintainer Email'), id='field-maintainer-email', placeholder=_('joe@example.com'), value=maintainer_email, error=errors.maintainer_email, classes=['control-medium']) }}
+  {% endblock %}
+
+  {% block dataset_fields %}
+    {% set groups = h.groups() %}
+    {% if groups %}
+      <div class="control-group">
+        <label class="control-label">{{ _('Groups') }}</label>
+        <div class="controls">
+          {% for group in groups %}
+            <label class="checkbox" for="field-group-{{ loop.index0 }}">
+              <input id="field-group-{{ loop.index0 }}" type="checkbox" name="groups__{{ loop.index0 }}__id" value="{{ group.id }}" {% if h.package_has_group(group.name, p['groups']) %}checked{% endif %} />
+              {{ group.title }}
+            </label>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+    {% set group_name = 'groups__%s__id' % data.groups|length %}
+    {% set group_attrs = {'data-module': 'autocomplete', 'data-module-source': '/api/2/util/group/autocomplete?q=?', 'data-module-key': 'id', 'data-module-label': 'title'} %}
+  {% endblock %}
+
+  {{ form.input('spatialRelationship', label=_('Spatial relationship'), id='field-spatialRelationship', placeholder=_('Spatial relationship'), value=data.spatialRelationship, error=errors.spatialRelationship, classes=['control-medium']) }}
+
+  {{ form.input('dateFirstPublished', label=_('Date first published'), id='field-dateFirstPublished', placeholder=_('Date first published'), value=data.dateFirstPublished, error=errors.dateFirstPublished, classes=['control-medium'], type="datetime") }}
+
+  {{ form.input('timeRange', label=_('Time range'), id='field-timeRange', placeholder=_('Time range'), value=data.timeRange, error=errors.timeRange, classes=['control-medium']) }}
+
+<div class="control-group">
+  <label class="control-label" for="field-updateInterval">{{ _("Update interval")|safe }}</label>
+  <div class="controls">
+    <select id="field-updateInterval" name="updateInterval" data-module="autocomplete">
+      {% for interval in h.updateInterval() %}
+      <option value="{{ interval }}"
+
+      {% if data.updateInterval %}
+        {% if interval == data.updateInterval[0] %}
+          selected="selected"
+        {% endif %}
+      {% elif interval == h.get_tag_vocab_values(p)['updateInterval'] %}
+        selected="selected"
+      {% endif %}
+
+      >{{ interval }}</option>
+      {% endfor %}
+    </select>
+  </div>
+</div>
+
+  {{ form.input('version', label=_('Version'), id='field-version', placeholder=_('Version'), value=data.version, error=errors.version, classes=['control-medium']) }}
+
+  {{ form.input('dateLastUpdated', label=_('Date last updated')|safe, id='field-dateLastUpdated', placeholder=_('Date last updated')|safe, value=data.dateLastUpdated, error=errors.dateLastUpdated, classes=['control-medium'], type="datetime") }}
+
+<div class="control-group">
+  <label class="control-label" for="field-dataType">{{ _("Data type") }}</label>
+  <div class="controls">
+    <select id="field-dataType" name="dataType" data-module="autocomplete">
+      {% for interval in h.dataType() %}
+      <option value="{{ interval }}"
+
+      {% if data.dataType %}
+        {% if interval == data.dataType[0] %}
+          selected="selected"
+        {% endif %}
+      {% elif interval == h.get_tag_vocab_values(p)['dataType'] %}
+        selected="selected"
+      {% endif %}
+
+      >{{ interval }}</option>
+      {% endfor %}
+    </select>
+  </div>
+</div>
+
+  {{ form.input('legalInformation', label=_('Legal information'), id='field-legalInformation', placeholder=_('legalInformation'), value=data.legalInformation, error=errors.legalInformation, classes=['control-medium']) }}
+
+  {{ form.markdown('comments', label=_('Comments'), id='field-comments', placeholder=_('Comments'), value=data.comments, error=errors.comments) }}
+
+  {{ form.textarea('dataQuality', label=_('Data quality'), id='field-dataQuality', placeholder=_('Data quality'), value=data.dataQuality, error=errors.dataQuality, classes=['control-full']) }}
+
+  {% call form.input_block('field-attributes', label=_('Attributes'),  error=errors.attributes, classes = ['editor', 'control-full']) %}
+    <textarea id="field-attributes" name="attributes" cols="20" rows="5" placeholder="Attribute" >{{ data.attributes | empty_and_escape }}</textarea>
+  <span class="editor-info-block">{% trans %}JSON-Format für Attribute: [["feldname1", "wert1"], ["feldname2", "wert2"]]{% endtrans %}</span>
+  {% endcall %}
+
+{% endblock %}
