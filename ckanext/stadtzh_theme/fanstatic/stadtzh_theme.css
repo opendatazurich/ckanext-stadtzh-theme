@@ -55,6 +55,8 @@ h3 {
     display: none;
 }
 
+.package-comments,
+.package-dataquality,
 table.package-attributes {
     font-size: 13px;
 }

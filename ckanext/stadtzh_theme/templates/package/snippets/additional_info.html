@@ -104,12 +104,16 @@
 
   {% if pkg_dict.comments %}
     <h3>{{ _("Comments") }}</h3>
-    {{ h.render_markdown(pkg_dict.comments) }}
+    <div class="package-comments">
+      {{ h.render_markdown(pkg_dict.comments) }}
+    </div>
   {% endif %}
 
   {% if pkg_dict.dataQuality %}
     <h3>{{ _("Data quality") }}</h3>
-    {{ pkg_dict.dataQuality|safe }}
+    <div class="package-dataquality">
+      {{ pkg_dict.dataQuality|safe }}
+    </div>
   {% endif %}
 
   {% if pkg_dict.attributes %}
