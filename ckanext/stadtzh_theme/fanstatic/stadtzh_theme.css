@@ -60,3 +60,8 @@ h3 {
 table.package-attributes {
     font-size: 13px;
 }
+
+table.package-metadata td,
+table.package-metadata th {
+    padding-left: 0px;
+}
