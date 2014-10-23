@@ -50,3 +50,13 @@ html,
 h3 {
     font-size: 14px;
 }
+
+.follow_button {
+    display: none;
+}
+
+.package-comments,
+.package-dataquality,
+table.package-attributes {
+    font-size: 13px;
+}

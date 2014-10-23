@@ -1,0 +1,133 @@
+<section class="additional-info module-content">
+  <table class="table">
+    <tr>
+      <td>
+        <p class="heading">{{ _("Author") }}</p>
+        {% if pkg_dict.author_email %}
+          <p class="metadata">{{ h.mail_to(email_address=pkg_dict.author_email, name=pkg_dict.author) }}</p>
+        {% elif pkg_dict.author %}
+          <p class="metadata">{{ pkg_dict.author }}</p>
+        {% endif %}
+      </td>
+      <td>
+        <p class="heading">{{ _("Date first published") }}</p>
+        {% if pkg_dict.dateFirstPublished %}
+          {% set date = h.validate_date(pkg_dict.dateFirstPublished) %}
+          {% if date %}
+            <p class="metadata">{{ date }}</p>
+          {% endif %}
+        {% endif %}
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <p class="heading">{{ _('Maintainer') }}</p>
+        {% if pkg_dict.maintainer_email %}
+          <p class="metadata">{{ h.mail_to(email_address=pkg_dict.maintainer_email, name=pkg_dict.maintainer) }}</p>
+        {% elif pkg_dict.maintainer %}
+          <p class="metadata">{{ pkg_dict.maintainer }}</p>
+        {% endif %}
+      </td>
+      <td>
+        <p class="heading">{{ _("Time range") }}</p>
+        {% if pkg_dict.timeRange %}
+          <p class="metadata">{{ pkg_dict.timeRange }}</p>
+        {% endif %}
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <p class="heading">{{ _("Data type") }}</p>
+        {% if pkg_dict.dataType %}
+          <p class="metadata">{{ pkg_dict.dataType[0] }}</p>
+        {% else %}
+          {% for extra in h.sorted_extras(pkg_dict.extras) %}
+            {% set key, value = extra %}
+            {% if key == "dataType" and value %}
+              <p class="metadata">{{ value }}</p>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </td>
+      <td>
+        <p class="heading">{{ _('Date last updated')|safe }}</p>
+        {% if pkg_dict.dateLastUpdated %}
+          {% set date = h.validate_date(pkg_dict.dateLastUpdated) %}
+          {% if date %}
+            <p class="metadata">{{ date }}</p>
+          {% endif %}
+        {% endif %}
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <p class="heading">{{ _('Source') }}</p>
+        {% if pkg_dict.url %}
+          <p class="metadata">{{ pkg_dict.url }}</p>
+        {% else %}
+          <p class="metadata">{{ pkg_dict.author }}</p>
+        {% endif %}
+      </td>
+      <td>
+        <p class="heading">{{ _("Version") }}</p>
+        {% if pkg_dict.version %}
+          <p class="metadata">{{ pkg_dict.version }}</p>
+        {% endif %}
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <p class="heading">{{ _("Spatial relationship") }}</p>
+        {% if pkg_dict.spatialRelationship %}
+          <p class="metadata">{{ pkg_dict.spatialRelationship }}</p>
+        {% endif %}
+      </td>
+      <td>
+        <p class="heading">{{ _("Update interval")|safe }}</p>
+        {% if pkg_dict.updateInterval %}
+          <p class="metadata">{{ pkg_dict.updateInterval[0] }}</p>
+        {% else %}
+          {% for extra in h.sorted_extras(pkg_dict.extras) %}
+            {% set key, value = extra %}
+            {% if key == "updateInterval" and value %}
+              <p class="metadata">{{ value }}</p>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </td>
+    </tr>
+  </table>
+
+  {% if pkg_dict.comments %}
+    <h3>{{ _("Comments") }}</h3>
+    <div class="package-comments">
+      {{ h.render_markdown(pkg_dict.comments) }}
+    </div>
+  {% endif %}
+
+  {% if pkg_dict.dataQuality %}
+    <h3>{{ _("Data quality") }}</h3>
+    <div class="package-dataquality">
+      {{ pkg_dict.dataQuality|safe }}
+    </div>
+  {% endif %}
+
+  {% if pkg_dict.attributes %}
+    {% set attribs = h.load_json(pkg_dict.attributes) %}
+    {% if attribs %}
+      <h3>Attribute</h3>
+      <table class="table table-striped table-bordered table-condensed package-attributes">
+        <tbody>
+          {% for key, value in attribs %}
+            <tr><th>{{key}}</th></tr>
+            <tr><td>{{value}}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  {% endif %}
+</section>

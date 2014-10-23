@@ -1,0 +1,5 @@
+{% ckan_extends %}
+
+{% block basic_fields_description %}
+  {{ form.markdown('description', id='field-description', label=_('Description of the resource'), placeholder=_('Some useful notes about the data'), value=data.description, error=errors.description) }}
+{% endblock %}
