@@ -1,3 +1,38 @@
 {% ckan_extends %}
-{% block header_account_notlogged %}
+
+
+{% block header_account_container_content %}
+  {% block top_header_logo %}
+    <a class="logo" href="/"><img src="/logo.png" alt="CKAN Logo" title="CKAN Logo"></a>
+  {% endblock %}
+  {% block top_links %}
+    {# top links #}
+  {% endblock %}
+  {% if c.userobj %}
+    {{ super() }}
+  {% else %}
+    <nav class="account not-authed">
+      <ul class="unstyled">
+        {% block header_account_notlogged %}
+        {% endblock %}
+      </ul>
+    </nav>
+  {% endif %}
+{% endblock %}
+
+{% block header_logo %}
+{% endblock %}
+
+{% block header_site_navigation %}
+  <nav class="section navigation">
+    <ul class="nav nav-pills">
+      {% block header_site_navigation_tabs %}
+        {{ h.build_nav_main(
+          ('home', _('Homepage')),
+          ('search', _('Datasets')),
+          ('group_index', _('Groups'))
+        ) }}
+      {% endblock %}
+    </ul>
+  </nav>
 {% endblock %}

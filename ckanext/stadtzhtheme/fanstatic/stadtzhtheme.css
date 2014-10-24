@@ -14,6 +14,16 @@ html,
     background-color: #1F52A3;
 }
 
+.masthead .content {
+    left: 0px;
+    width: 100%;
+}
+
+.masthead .site-search {
+    position: absolute;
+    right: 0px;
+}
+
 .additional-info {
   padding: 0 25px;
   margin: 20px 0;
@@ -28,11 +38,11 @@ html,
 }
 
 .control-label {
-  word-wrap: normal;
+    word-wrap: normal;
 }
 
 .page-heading {
-  word-wrap: break-word;
+    word-wrap: break-word;
 }
 
 .icon-google-plus-sign {
