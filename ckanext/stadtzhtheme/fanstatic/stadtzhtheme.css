@@ -65,3 +65,7 @@ table.package-metadata td,
 table.package-metadata th {
     padding-left: 0px;
 }
+
+.footer-links {
+    width: 300px;
+}
