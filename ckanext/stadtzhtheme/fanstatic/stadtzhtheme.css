@@ -1,10 +1,12 @@
 html,
 .account-masthead,
+.account-masthead a,
 .masthead .navigation .nav-pills li a:hover,
 .masthead .navigation .nav-pills li.active a,
 .homepage .module-search .tags,
 .hero .tags {
     background-color: #0E2B56;
+    color: #FFF;
 }
 
 .masthead,
@@ -22,6 +24,18 @@ html,
 .masthead .site-search {
     position: absolute;
     right: 0px;
+}
+
+.account-masthead .nav-tabs:after,
+.account-masthead .nav-pills:after {
+    clear: none;
+}
+
+.account-masthead .nav,
+.account-masthead .account {
+    float: right;
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .additional-info {

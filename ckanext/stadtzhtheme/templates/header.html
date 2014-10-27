@@ -2,22 +2,68 @@
 
 
 {% block header_account_container_content %}
-  {% block top_header_logo %}
-    <a class="logo" href="/"><img src="/logo.png" alt="CKAN Logo" title="CKAN Logo"></a>
-  {% endblock %}
-  {% block top_links %}
-    {# top links #}
-  {% endblock %}
-  {% if c.userobj %}
-    {{ super() }}
-  {% else %}
-    <nav class="account not-authed">
-      <ul class="unstyled">
-        {% block header_account_notlogged %}
-        {% endblock %}
+  <nav class="section navigation">
+    {% block top_header_logo %}
+      <a class="logo" href="/"><img src="/logo.png" alt="CKAN Logo" title="CKAN Logo"></a>
+    {% endblock %}
+    {% if c.userobj %}
+      <nav class="account authed">
+        <ul class="unstyled" class="account avatar authed" data-module="me" data-me="{{ c.userobj.id }}">
+          {% block header_account_logged %}
+          {% if c.userobj.sysadmin %}
+            <li>
+              <a href="{{ h.url_for(controller='admin', action='index') }}" title="{{ _('Sysadmin settings') }}">
+                <i class="icon-legal"></i>
+              </a>
+            </li>
+          {% endif %}
+          <li>
+            <a href="{{ h.url_for(controller='user', action='read', id=c.userobj.name) }}" class="image" title="{{ _('View profile') }}">
+              {{ h.gravatar((c.userobj.email_hash if c and c.userobj else ''), size=22) }}
+              <span class="username">{{ c.userobj.display_name }}</span>
+            </a>
+          </li>
+          {% set new_activities = h.new_activities() %}
+          <li class="notifications {% if new_activities > 0 %}notifications-important{% endif %}">
+            {% set notifications_tooltip = ngettext('Dashboard (%(num)d new item)', 'Dashboard (%(num)d new items)', new_activities) %}
+            <a href="{{ h.url_for(controller='user', action='dashboard') }}" title="{{ notifications_tooltip }}">
+              <i class="icon-dashboard"></i>
+              <span>{{ new_activities }}</span>
+            </a>
+          </li>
+          {% block header_account_settings_link %}
+            <li>
+              <a href="{{ h.url_for(controller='user', action='edit', id=c.userobj.name) }}" title="{{ _('Edit settings') }}">
+                <i class="icon-cog"></i>
+              </a>
+            </li>
+          {% endblock %}
+          {% block header_account_log_out_link %}
+            <li>
+              <a href="{{ h.url_for('/user/_logout') }}" title="{{ _('Log out') }}">
+                <i class="icon-signout"></i>
+              </a>
+            </li>
+          {% endblock %}
+          {% endblock %}
+        </ul>
+      </nav>
+    {% else %}
+      <nav class="account not-authed">
+        <ul class="unstyled">
+          {% block header_account_notlogged %}
+          {% endblock %}
+        </ul>
+      </nav>
+    {% endif %}
+    {% block top_links %}
+      <ul class="nav nav-pills">
+        <li><a href="/">Startseite</a></li>
+        <li><a href="/dataset">Datensätze</a></li>
+        <li><a href="/group">Kategorien</a></li>
       </ul>
-    </nav>
-  {% endif %}
+    {% endblock %}
+  </nav>
 {% endblock %}
 
 {% block header_logo %}
