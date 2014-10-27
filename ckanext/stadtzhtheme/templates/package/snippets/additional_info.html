@@ -102,17 +102,18 @@
     </tr>
   </table>
 
+  {% if pkg_dict.dataQuality %}
+    <div class="package-dataquality">
+    <h5>{{ _("Data quality") }}</h5>
+      {{ pkg_dict.dataQuality|safe }}
+    </div>
+  {% endif %}
+
+
   {% if pkg_dict.comments %}
     <h3>{{ _("Comments") }}</h3>
     <div class="package-comments">
       {{ h.render_markdown(pkg_dict.comments) }}
-    </div>
-  {% endif %}
-
-  {% if pkg_dict.dataQuality %}
-    <h3>{{ _("Data quality") }}</h3>
-    <div class="package-dataquality">
-      {{ pkg_dict.dataQuality|safe }}
     </div>
   {% endif %}
 

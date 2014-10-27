@@ -48,20 +48,30 @@ html,
 }
 
 h3 {
-    font-size: 14px;
+    font-size: 17px;
+}
+
+.package-dataquality h5 {
+    margin-top: 0px;
+}
+
+.package-dataquality {
+    padding-bottom: 10px;
 }
 
 .follow_button {
     display: none;
 }
 
-.package-comments,
-.package-dataquality,
-table.package-attributes {
-    font-size: 13px;
+table.package-metadata {
+    margin-bottom: 0px;
 }
 
 table.package-metadata td,
 table.package-metadata th {
     padding-left: 0px;
+}
+
+.additional-info {
+    padding: 0px 0px;
 }
