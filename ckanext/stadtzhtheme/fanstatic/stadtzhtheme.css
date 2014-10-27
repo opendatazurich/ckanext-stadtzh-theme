@@ -15,7 +15,7 @@ html,
 }
 
 .additional-info {
-  padding: 0 25px;
+  padding: 0px 0px;
   margin: 20px 0;
 }
 
@@ -68,6 +68,11 @@ table.package-metadata th {
     padding-left: 0px;
 }
 
-.additional-info {
-    padding: 0px 0px;
+table.package-metadata,
+.module-content .tags,
+ul.resource-list,
+.package-comments,
+.package-dataquality,
+.package-attributes {
+    margin-left: 20px;
 }
