@@ -2,5 +2,9 @@
   <header>
     <h2>Kategorien</h2>
   </header>
-
+  {% block kategorien %}
+    {{ h.biggest_groups() }}
+    {% set groups = h.biggest_groups() %}
+    {% snippet "group/snippets/group_list.html", groups=groups %}
+  {% endblock %}
 </div>
