@@ -115,6 +115,11 @@ h3 {
     float: right;
 }
 
+.hero, [role="main"], .main {
+    background-image: none;
+    background: #ECECEC;
+}
+
 .follow_button {
     display: none;
 }
