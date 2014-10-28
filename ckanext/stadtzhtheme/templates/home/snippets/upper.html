@@ -1,15 +1,9 @@
-{% set intro = g.site_intro_text %}
-
 <div class="module-content box">
   <header>
-    {% if intro %}
-      {{ h.render_markdown(intro) }}
-    {% else %}
-      <h1 class="page-heading">Willkommen auf dem Open Data Katalog der Stadt Zürich</h1>
-      <p>
-        Der Datenkatalog ist Ihr zentraler Einstiegspunkt zur Suche und Nutzung von offenen Daten der Stadt Zürich. Die hier veröffentlichten Daten stehen kostenlos und zur freien – auch kommerziellen - Weiterverwendung zur Verfügung.
-      </p>
-    {% endif %}
+    <h1 class="page-heading">Willkommen auf dem Open Data Katalog der Stadt Zürich</h1>
+    <p>
+      Der Datenkatalog ist Ihr zentraler Einstiegspunkt zur Suche und Nutzung von offenen Daten der Stadt Zürich. Die hier veröffentlichten Daten stehen kostenlos und zur freien – auch kommerziellen - Weiterverwendung zur Verfügung.
+    </p>
   </header>
     <div class="row">
         <div class="span5 col1">
