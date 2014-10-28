@@ -38,6 +38,10 @@ html,
     margin-top: 10px;
 }
 
+.header-icon {
+    vertical-align: text-bottom;
+}
+
 .additional-info {
   padding: 0 25px;
   margin: 20px 0;
