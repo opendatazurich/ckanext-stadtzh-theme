@@ -75,6 +75,15 @@ html,
     color: #3B5999;
 }
 
+.icon-search-big:after {
+    background-size: 100%;
+    content: '';
+    height: 30px;
+    width:30px;
+    background-image: url('/search2@2x.png');
+    display:block;
+}
+
 h3 {
     font-size: 14px;
 }
