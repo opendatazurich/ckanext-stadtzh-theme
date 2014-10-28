@@ -102,7 +102,10 @@ def biggest_groups():
         'all_fields': True,
     }
     groups = tk.get_action('group_list')(context, data_dict)
-    return sorted(groups, key=lambda group: group['packages'])[-10:-1]
+    if len(groups) > 9:
+        return sorted(groups, key=lambda group: group['packages'])[-1:-10:-1]
+    else:
+        return sorted(groups, key=lambda group: group['packages'])[::-1]
 
 
 def package_has_group(group_name, groups):
