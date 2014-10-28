@@ -5,23 +5,23 @@
       Der Datenkatalog ist Ihr zentraler Einstiegspunkt zur Suche und Nutzung von offenen Daten der Stadt Zürich. Die hier veröffentlichten Daten stehen kostenlos und zur freien – auch kommerziellen - Weiterverwendung zur Verfügung.
     </p>
   </header>
-    <div class="row">
-        <div class="span5 col1">
-            {% block search %}
-                {% snippet 'home/snippets/search.html' %}
-            {% endblock %}
-        </div>
-        <div class="span5 col2">
-            {% block links %}
-                <div class="teaser">
-                  <a href="http://stadt-zuerich.ch/portal/de/index/ogd/anwendungen.html"><h3>Daten nutzen</h3></a>
-                  <p>Lernen Sie Werkzeuge, Anleitungen und Vorlagen zur Verarbeitung unserer Datensätze kennen.</p>
-                </div>
-                <div class="teaser">
-                  <a href="http://stadt-zuerich.ch/portal/de/index/ogd/anwendungen.html"><h3>Anwendungen anschauen</h3></a>
-                  <p>Diese Anwendungen und Visualisierungen sind mit unseren Datensätzen entwickelt worden.</p>
-                </div>
-            {% endblock %}
-        </div>
+  <div class="row">
+    <div class="span5 col1">
+      {% block search %}
+        {% snippet 'home/snippets/search.html' %}
+      {% endblock %}
     </div>
+    <div class="span5 col2">
+      {% block links %}
+        <div class="teaser">
+          <a href="http://stadt-zuerich.ch/portal/de/index/ogd/werkstatt.html"><h3>Daten nutzen</h3></a>
+          <p>Lernen Sie Werkzeuge, Anleitungen und Vorlagen zur Verarbeitung unserer Datensätze kennen.</p>
+        </div>
+        <div class="teaser">
+          <a href="http://stadt-zuerich.ch/portal/de/index/ogd/anwendungen.html"><h3>Anwendungen anschauen</h3></a>
+          <p>Diese Anwendungen und Visualisierungen sind mit unseren Datensätzen entwickelt worden.</p>
+        </div>
+      {% endblock %}
+    </div>
+  </div>
 </div>
