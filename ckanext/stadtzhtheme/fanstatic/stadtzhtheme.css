@@ -136,6 +136,17 @@ h3 {
     float: right;
 }
 
+.homepage [role="main"] {
+    padding: 20px;
+    min-height: 0px;
+}
+
+.homepage .hero {
+    padding-top: 20px;
+    padding-bottom: 0px;
+    min-height: 0px;
+}
+
 .hero, [role="main"], .main {
     background-image: none;
     background: #ECECEC;
