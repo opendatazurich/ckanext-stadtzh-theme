@@ -1,3 +1,11 @@
+a {
+    color: #1F52A3;
+}
+
+a:hover, a:active {
+    color: #0E2B56
+}
+
 html,
 .account-masthead,
 .account-masthead a,
@@ -119,6 +127,10 @@ h3 {
     color: #1F52A3;
 }
 
+.teaser a:hover, .teaser a:active {
+    color: #0E2B56;
+}
+
 .homepage.layout-1 .row1 .col2 {
     position: relative;
     float: right;
@@ -140,6 +152,7 @@ h3 {
 .category-box .media-grid {
     background-image: none;
     background-color: white;
+    margin-top: 20px;
 }
 
 .follow_button {
