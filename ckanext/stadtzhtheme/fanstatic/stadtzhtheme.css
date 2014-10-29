@@ -84,6 +84,15 @@ html,
     display:block;
 }
 
+.icon-star-big:after {
+    background-size: 100%;
+    content: '';
+    height: 22px;
+    width: 22px;
+    background-image: url('/star@2x.png');
+    display: inline-block;
+}
+
 h3 {
     font-size: 14px;
 }
@@ -118,6 +127,19 @@ h3 {
 .hero, [role="main"], .main {
     background-image: none;
     background: #ECECEC;
+}
+
+.category-box {
+    background-color: #F4F4F4;
+}
+
+.category-box .media-item {
+    width: 252px;
+}
+
+.category-box .media-grid {
+    background-image: none;
+    background-color: white;
 }
 
 .follow_button {
