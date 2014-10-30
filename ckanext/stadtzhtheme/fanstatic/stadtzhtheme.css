@@ -51,7 +51,7 @@ html,
 }
 
 .additional-info {
-  padding: 0 25px;
+  padding: 0px 0px;
   margin: 20px 0;
 }
 
@@ -82,6 +82,13 @@ html,
 .icon-facebook-sign {
     color: #3B5999;
 }
+
+.package-dataquality h5 {
+    margin-top: 0px;
+}
+
+.package-dataquality {
+    padding-bottom: 10px;
 
 .icon-search-big:after {
     background-size: 100%;
@@ -185,16 +192,22 @@ a.tag:hover {
     display: none;
 }
 
-.package-comments,
-.package-dataquality,
-table.package-attributes {
-    font-size: 13px;
+table.package-metadata {
+    margin-bottom: 0px;
 }
 
 table.package-metadata td,
 table.package-metadata th {
     padding-left: 0px;
 }
+
+table.package-metadata,
+.module-content .tags,
+ul.resource-list,
+.package-comments,
+.package-dataquality,
+.package-attributes {
+    margin-left: 20px;
 
 .footer-links {
     width: 300px;
