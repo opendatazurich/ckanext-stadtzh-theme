@@ -6,6 +6,7 @@ import re
 
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as tk
+from ckan import model
 
 def create_updateInterval():
     '''Create update interval vocab and tags, if they don't exist already.'''
@@ -96,7 +97,7 @@ def biggest_groups():
     '''
     Returns the 9 biggest groups, to display on start page.
     '''
-    user = tk.get_action('get_site_user')({}, {})
+    user = tk.get_action('get_site_user')({'ignore_auth': True},{})
     context = {'user': user['name']}
     data_dict = {
         'all_fields': True,
