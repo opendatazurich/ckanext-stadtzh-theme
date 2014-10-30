@@ -1,3 +1,47 @@
 {% ckan_extends %}
-{% block header_account_notlogged %}
+
+
+{% block header_account_container_content %}
+  <nav class="section navigation">
+    {% block top_header_logo %}
+      <a class="logo" href="/"><img src="/logo@2x.png" alt="CKAN Logo" title="CKAN Logo" height="41px" width="185px"></a>
+    {% endblock %}
+    {% if c.userobj %}
+      {{ super() }}
+    {% else %}
+      <nav class="account not-authed">
+        <ul class="unstyled">
+          {% block header_account_notlogged %}
+          {% endblock %}
+        </ul>
+      </nav>
+    {% endif %}
+    {% block top_links %}
+      <ul class="nav nav-pills">
+        <li><a href="http://stadt-zuerich.ch/portal/de/index/ogd.html">Open Data Portal</a></li>
+        <li><a href="http://stadt-zuerich.ch/portal/de/index/ogd/anwendungen.html">Anwendungen</a></li>
+        <li><a href="http://stadt-zuerich.ch/portal/de/index/ogd/werkstatt.html">Werkstatt</a></li>
+        <li><a href="http://stadt-zuerich.ch/portal/de/index/ogd/aktuell.html">Aktuell</a></li>
+        <li><a href="https://twitter.com/OpenDataZurich" target="_blank"><img src="/twitter@2x.png" alt="Twitter" title ="Twitter" height="22px" width="22px" class="header-icon"></a></li>
+        <li><a href="mailto:opendata@zuerich.ch"><img src="/envelope@2x.png" alt="Email" title ="Email" height="22px" width="22px" class="header-icon"></a></li>
+      </ul>
+    {% endblock %}
+  </nav>
+{% endblock %}
+
+{% block header_logo %}
+{% endblock %}
+
+{% block header_site_navigation %}
+  <nav class="section navigation">
+    <ul class="nav nav-pills">
+      {% block header_site_navigation_tabs %}
+        {{ h.build_nav_main(
+          ('home', _('Homepage')),
+          ('search', _('Datasets')),
+          ('group_index', _('Groups'))
+        ) }}
+      {% endblock %}
+    </ul>
+  </nav>
 {% endblock %}

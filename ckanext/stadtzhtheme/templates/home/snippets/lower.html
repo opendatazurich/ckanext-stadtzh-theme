@@ -1,0 +1,9 @@
+<div class="module-content box category-box">
+  <header>
+    <h2><i class="icon-star-big"></i> Grösste Kategorien / <a href="/group">Alle Kategorien</a></h2>
+  </header>
+  {% block kategorien %}
+    {% set groups = h.biggest_groups() %}
+    {% snippet "group/snippets/group_list.html", groups=groups %}
+  {% endblock %}
+</div>

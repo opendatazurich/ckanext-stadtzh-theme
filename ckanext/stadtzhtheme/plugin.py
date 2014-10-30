@@ -90,6 +90,22 @@ def groups():
         'all_fields': True,
     }
     return tk.get_action('group_list')(context, data_dict)
+    
+    
+def biggest_groups():
+    '''
+    Returns the 9 biggest groups, to display on start page.
+    '''
+    user = tk.get_action('get_site_user')({}, {})
+    context = {'user': user['name']}
+    data_dict = {
+        'all_fields': True,
+    }
+    groups = tk.get_action('group_list')(context, data_dict)
+    if len(groups) > 9:
+        return sorted(groups, key=lambda group: group['packages'])[-1:-10:-1]
+    else:
+        return sorted(groups, key=lambda group: group['packages'])[::-1]
 
 
 def package_has_group(group_name, groups):
@@ -138,7 +154,7 @@ def validate_date(datestring):
         return datestring
     else:
         return False
-
+        
 
 class IFacetPlugin(plugins.SingletonPlugin):
 
@@ -184,6 +200,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'dataType': dataType,
             'load_json': load_json,
             'groups': groups,
+            'biggest_groups': biggest_groups,
             'package_has_group': package_has_group,
             'get_tag_vocab_values': get_tag_vocab_values,
             'get_package_dict': get_package_dict,
