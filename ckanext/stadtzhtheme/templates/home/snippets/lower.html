@@ -3,7 +3,7 @@
     <h2><i class="icon-star-big"></i> Grösste Kategorien / <a href="/group">Alle Kategorien</a></h2>
   </header>
   {% block kategorien %}
-    {% set groups = h.biggest_groups() %}
+    {% set groups = h.biggest_groups(8) %}
     {% snippet "group/snippets/group_list.html", groups=groups %}
   {% endblock %}
 </div>

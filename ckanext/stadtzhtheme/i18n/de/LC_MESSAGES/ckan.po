@@ -2985,7 +2985,7 @@ msgid "Search"
 msgstr "Suche"
 
 #: ckan/templates/home/snippets/search.html:16
-msgid "Popular Tags"
+msgid "Popular tags"
 msgstr "Beliebte Schlagwörter"
 
 #: ckan/templates/home/snippets/stats.html:5

@@ -93,9 +93,9 @@ def groups():
     return tk.get_action('group_list')(context, data_dict)
     
     
-def biggest_groups():
+def biggest_groups(n):
     '''
-    Returns the 9 biggest groups, to display on start page.
+    Returns the n biggest groups, to display on start page.
     '''
     user = tk.get_action('get_site_user')({'ignore_auth': True},{})
     context = {'user': user['name']}
@@ -103,8 +103,8 @@ def biggest_groups():
         'all_fields': True,
     }
     groups = tk.get_action('group_list')(context, data_dict)
-    if len(groups) > 9:
-        return sorted(groups, key=lambda group: group['packages'])[-1:-10:-1]
+    if len(groups) > n:
+        return sorted(groups, key=lambda group: group['packages'])[-1:-(n+1):-1]
     else:
         return sorted(groups, key=lambda group: group['packages'])[::-1]
 
