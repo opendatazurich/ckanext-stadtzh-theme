@@ -230,6 +230,14 @@ ul.resource-list,
     margin-left: 20px;
 }
 
-.footer-links {
-    width: 300px;
+.footer-links-left, .footer-links-right {
+    width: 160px;
+}
+
+.footer-links-left {
+    float:left;
+}
+
+.footer-links-right {
+    float:right
 }
