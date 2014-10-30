@@ -179,7 +179,8 @@ a.tag:hover {
     background-color: #F4F4F4;
 }
 
-.category-box .media-item {
+.category-box .media-item,
+[role="main"] .primary .media-item {
     width: 186px;
 }
 
@@ -191,6 +192,11 @@ a.tag:hover {
 
 .follow_button {
     display: none;
+}
+
+[role="main"] .span12 {
+    width: 938px;
+    float: right;
 }
 
 table.package-metadata {
