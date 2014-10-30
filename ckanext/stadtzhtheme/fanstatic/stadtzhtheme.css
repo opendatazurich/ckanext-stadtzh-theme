@@ -3,7 +3,7 @@ a {
 }
 
 a:hover, a:active {
-    color: #0E2B56
+    color: #0E2B56;
 }
 
 html,
@@ -89,6 +89,7 @@ html,
 
 .package-dataquality {
     padding-bottom: 10px;
+}
 
 .icon-search-big:after {
     background-size: 100%;
