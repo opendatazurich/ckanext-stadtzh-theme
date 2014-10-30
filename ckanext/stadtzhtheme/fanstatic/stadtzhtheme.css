@@ -17,6 +17,11 @@ html,
     color: #FFF;
 }
 
+.account-masthead .navigation .nav-pills li a:hover,
+.account-masthead .navigation .nav-pills li a:active {
+    background-color: #1F52A3;
+}
+
 .masthead,
 .hero .module-dark .module-content,
 .homepage .module-search .module-content,
@@ -109,8 +114,17 @@ html,
     display: inline-block;
 }
 
-h3 {
+h3, .media-heading {
     font-size: 17px;
+}
+
+.header-icon {
+    margin-top: -10px;
+}
+
+.navigation .logo {
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .module-content .search-form {
@@ -181,7 +195,7 @@ a.tag:hover {
 
 .category-box .media-item,
 [role="main"] .primary .media-item {
-    width: 185px;
+    width: 108px;
 }
 
 .category-box .media-grid {

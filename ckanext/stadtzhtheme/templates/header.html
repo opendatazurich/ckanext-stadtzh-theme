@@ -4,7 +4,7 @@
 {% block header_account_container_content %}
   <nav class="section navigation">
     {% block top_header_logo %}
-      <a class="logo" href="/"><img src="/logo@2x.png" alt="CKAN Logo" title="CKAN Logo" height="41px" width="185px"></a>
+      <a class="logo" href="/"><img class="logo" src="/logo@2x.png" alt="CKAN Logo" title="CKAN Logo" height="41px" width="185px"></a>
     {% endblock %}
     {% if c.userobj %}
       {{ super() }}
@@ -22,8 +22,8 @@
         <li><a href="http://stadt-zuerich.ch/portal/de/index/ogd/anwendungen.html">Anwendungen</a></li>
         <li><a href="http://stadt-zuerich.ch/portal/de/index/ogd/werkstatt.html">Werkstatt</a></li>
         <li><a href="http://stadt-zuerich.ch/portal/de/index/ogd/aktuell.html">Aktuell</a></li>
-        <li><a href="https://twitter.com/OpenDataZurich" target="_blank"><img src="/twitter@2x.png" alt="Twitter" title ="Twitter" height="22px" width="22px" class="header-icon"></a></li>
-        <li><a href="mailto:opendata@zuerich.ch"><img src="/envelope@2x.png" alt="Email" title ="Email" height="22px" width="22px" class="header-icon"></a></li>
+        <li><a href="https://twitter.com/OpenDataZurich" target="_blank"><img src="/twitter@2x.png" alt="Twitter" title ="Twitter" height="20px" width="20px" class="header-icon"></a></li>
+        <li><a href="mailto:opendata@zuerich.ch"><img src="/envelope@2x.png" alt="Email" title ="Email" height="20px" width="20px" class="header-icon"></a></li>
       </ul>
     {% endblock %}
   </nav>
