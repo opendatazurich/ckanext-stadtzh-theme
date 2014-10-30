@@ -51,10 +51,6 @@ html,
     margin-top: 10px;
 }
 
-.header-icon {
-    vertical-align: text-bottom;
-}
-
 .additional-info {
   padding: 0px 0px;
   margin: 20px 0;
@@ -193,8 +189,7 @@ a.tag:hover {
     background-color: #F4F4F4;
 }
 
-.category-box .media-item,
-[role="main"] .primary .media-item {
+.category-box .media-item {
     width: 108px;
 }
 
