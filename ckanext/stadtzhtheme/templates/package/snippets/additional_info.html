@@ -100,6 +100,17 @@
         {% endif %}
       </td>
     </tr>
+
+    <tr>
+      <td>
+        <p class="heading">{{ _("Legal information") }}</p>
+        {% if pkg_dict.legalInformation %}
+          <p class="metadata">{{ pkg_dict.legalInformation }}</p>
+        {% endif %}
+      </td>
+      <td>
+      </td>
+    </tr>
   </table>
 
   {% if pkg_dict.dataQuality %}
