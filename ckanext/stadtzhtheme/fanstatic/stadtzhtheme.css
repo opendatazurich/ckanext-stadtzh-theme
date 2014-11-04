@@ -116,11 +116,15 @@ html,
 
 .header-icon {
     margin-top: -10px;
+    height: 20px;
+    width: 20px;
 }
 
-.navigation .logo {
+.navigation .logo img {
     padding-top: 10px;
     padding-bottom: 10px;
+    height: 41px;
+    width: 185px;
 }
 
 .module-content .search-form {
