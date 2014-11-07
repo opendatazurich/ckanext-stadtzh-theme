@@ -264,7 +264,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
 
         # Add comments as extra field
         schema.update({
-            'comments': [tk.get_validator('ignore_missing'),
+            'sszC': [tk.get_validator('ignore_missing'),
                          tk.get_converter('convert_to_extras')]
         })
 
@@ -276,7 +276,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
 
         # Add attributes as extra field
         schema.update({
-            'attributes': [tk.get_validator('ignore_missing'),
+            'sszA': [tk.get_validator('ignore_missing'),
                            tk.get_converter('convert_to_extras')]
         })
 
@@ -348,7 +348,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
 
         # Add our comments field to the dataset schema.
         schema.update({
-            'comments': [tk.get_converter('convert_from_extras'),
+            'sszC': [tk.get_converter('convert_from_extras'),
                          tk.get_validator('ignore_missing')]
         })
 
@@ -366,7 +366,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
 
         # Add our attributes field to the dataset schema.
         schema.update({
-            'attributes': [tk.get_converter('convert_from_extras'),
+            'sszA': [tk.get_converter('convert_from_extras'),
                            tk.get_validator('ignore_missing')]
         })
 

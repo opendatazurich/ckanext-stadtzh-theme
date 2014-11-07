@@ -106,12 +106,12 @@
 
   {{ form.input('legalInformation', label=_('Legal information'), id='field-legalInformation', placeholder=_('legalInformation'), value=data.legalInformation, error=errors.legalInformation, classes=['control-medium']) }}
 
-  {{ form.markdown('comments', label=_('Comments'), id='field-comments', placeholder=_('Comments'), value=data.comments, error=errors.comments) }}
+  {{ form.markdown('sszC', label=_('sszC'), id='field-sszC', placeholder=_('Comments'), value=data.sszC, error=errors.sszC) }}
 
   {{ form.textarea('dataQuality', label=_('Data quality'), id='field-dataQuality', placeholder=_('Data quality'), value=data.dataQuality, error=errors.dataQuality, classes=['control-full']) }}
 
-  {% call form.input_block('field-attributes', label=_('Attributes'),  error=errors.attributes, classes = ['editor', 'control-full']) %}
-    <textarea id="field-attributes" name="attributes" cols="20" rows="5" placeholder="Attribute" >{{ data.attributes | empty_and_escape }}</textarea>
+  {% call form.input_block('field-sszA', label=_('Attributes'),  error=errors.sszA, classes = ['editor', 'control-full']) %}
+    <textarea id="field-sszA" name="sszA" cols="20" rows="5" placeholder="Attribute" >{{ data.sszA | empty_and_escape }}</textarea>
   <span class="editor-info-block">{% trans %}JSON-Format für Attribute: [["feldname1", "wert1"], ["feldname2", "wert2"]]{% endtrans %}</span>
   {% endcall %}
 
