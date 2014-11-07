@@ -2,7 +2,7 @@
 
 {% block fields %}
   {% set types = c.types %}
-  {% set new_types = [{'text': 'Applikation', 'value': 'applikation'}, {'text': 'Publikation', 'value': 'publikation'}, {'text': 'APP', 'value': 'app'}] %}
+  {% set new_types = [{'text': 'Applikation', 'value': 'applikation'}, {'text': 'Publikation', 'value': 'publikation'}] %}
   {% set options = new_types + types|list() %}
   
   {{ form.input('title', label=_('Title'), id='field-title', placeholder=_('My Related Item'), value=data.title, error=errors.title, classes=['control-full']) }}
