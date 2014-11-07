@@ -120,15 +120,15 @@
     </div>
   {% endif %}
 
-  {% if pkg_dict.comments %}
+  {% if pkg_dict.sszBemerkungen %}
     <h3>{{ _("Comments") }}</h3>
     <div class="package-comments">
-      {{ h.render_markdown(pkg_dict.comments) }}
+      {{ h.render_markdown(pkg_dict.sszBemerkungen) }}
     </div>
   {% endif %}
 
-  {% if pkg_dict.attributes %}
-    {% set attribs = h.load_json(pkg_dict.attributes) %}
+  {% if pkg_dict.sszFields %}
+    {% set attribs = h.load_json(pkg_dict.sszFields) %}
     {% if attribs %}
       <h3>Attribute</h3>
       <div class="package-attributes">
