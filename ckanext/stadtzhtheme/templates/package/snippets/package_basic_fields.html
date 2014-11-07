@@ -32,7 +32,17 @@
     <div class="controls">
       <select id="field-private" name="private">
         {% for option in [('True', _('Private')), ('False', _('Public'))] %}
-        <option value="{{ option[0] }}" {% if option[0] == 'True' %}selected="selected"{% endif %}>{{ option[1] }}</option>
+        <option value="{{ option[0] }}" 
+        {% if data.private %} 
+            {% if option[0] == data.private %}
+                selected="selected"
+            {% endif %}
+        {% else %}
+            {% if option[0] == 'False' %}
+                selected="selected"
+            {% endif %}
+        {% endif %}
+        >{{ option[1] }}</option>
         {% endfor %}
       </select>
     </div>
