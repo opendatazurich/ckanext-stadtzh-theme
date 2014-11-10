@@ -140,7 +140,7 @@
 
   {% set attribs = [] %}
   {% if pkg_dict.sszFields %}
-    {% do attribs.append(load_json(pkg_dict.sszFields)) %}
+    {% do attribs.append(h.load_json(pkg_dict.sszFields)) %}
   {% else %}
     {% for extra in h.sorted_extras(pkg_dict.extras) %}
       {% set key, value = extra %}
