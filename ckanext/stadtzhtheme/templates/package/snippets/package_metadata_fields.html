@@ -108,51 +108,43 @@
 
   {% set comments = [] %}
   {% if data.sszBemerkungen %}
-    {% set sszBemerkungen = data.sszBemerkungen %}
-    {{ form.markdown('sszBemerkungen', label=_('sszBemerkungen'), id='field-sszBemerkungen', placeholder=_('Comments'), value=data.sszBemerkungen, error=errors.sszBemerkungen) }}
-    {% do comments.append(1) %}
+    {% do comments.append(data.sszBemerkungen) %}
   {% else %}
     {% for extra in h.sorted_extras(data.extras) %}
       {% set key, value = extra %}
       {% if key == "sszBemerkungen" and value %}
-        {% set sszBemerkungen = value %}
-        {{ form.markdown('sszBemerkungen', label=_('sszBemerkungen'), id='field-sszBemerkungen', placeholder=_('Comments'), value=data.sszBemerkungen, error=errors.sszBemerkungen) }}
-        {% do comments.append(1) %}
+        {% do comments.append(value) %}
       {% endif %}
     {% endfor %}
   {% endif %}
-  {% if not comments %}
-    {{ form.markdown('sszBemerkungen', label=_('sszBemerkungen'), id='field-sszBemerkungen', placeholder=_('Comments'), value=data.sszBemerkungen, error=errors.sszBemerkungen) }}
+  {% if comments %}
+    {% set value = comments[0] %}
+  {% else %}
+    {% set value = None %}
   {% endif %}
-
+  {{ form.markdown('sszBemerkungen', label=_('sszBemerkungen'), id='field-sszBemerkungen', placeholder=_('Comments'), value=value, error=errors.sszBemerkungen) }}
+  
   {{ form.textarea('dataQuality', label=_('Data quality'), id='field-dataQuality', placeholder=_('Data quality'), value=data.dataQuality, error=errors.dataQuality, classes=['control-full']) }}
 
   {% set fields = [] %}
   {% if data.sszFields %}
-    {% set sszFields = data.sszFields %}
-    {% call form.input_block('field-sszFields', label=_('Attributes'),  error=errors.sszFields, classes = ['editor', 'control-full']) %}
-      <textarea id="field-sszFields" name="sszFields" cols="20" rows="5" placeholder="Attribute" >{{ sszFields | empty_and_escape }}</textarea>
-      <span class="editor-info-block">{% trans %}JSON-Format für Attribute: [["feldname1", "wert1"], ["feldname2", "wert2"]]{% endtrans %}</span>
-    {% endcall %}
-    {% do fields.append(1) %}
+    {% do fields.append(data.sszFields) %}
   {% else %}
     {% for extra in h.sorted_extras(data.extras) %}
       {% set key, value = extra %}
       {% if key == "sszFields" and value %}
-        {% set sszFields = value %}
-        {% call form.input_block('field-sszFields', label=_('Attributes'),  error=errors.sszFields, classes = ['editor', 'control-full']) %}
-          <textarea id="field-sszFields" name="sszFields" cols="20" rows="5" placeholder="Attribute" >{{ sszFields | empty_and_escape }}</textarea>
-          <span class="editor-info-block">{% trans %}JSON-Format für Attribute: [["feldname1", "wert1"], ["feldname2", "wert2"]]{% endtrans %}</span>
-        {% endcall %}
-        {% do fields.append(1) %}
+        {% do fields.append(value) %}
       {% endif %}
     {% endfor %}
   {% endif %}
-  {% if not fields %}
-    {% call form.input_block('field-sszFields', label=_('Attributes'),  error=errors.sszFields, classes = ['editor', 'control-full']) %}
-      <textarea id="field-sszFields" name="sszFields" cols="20" rows="5" placeholder="Attribute" >{{ sszFields | empty_and_escape }}</textarea>
-      <span class="editor-info-block">{% trans %}JSON-Format für Attribute: [["feldname1", "wert1"], ["feldname2", "wert2"]]{% endtrans %}</span>
-    {% endcall %}
+  {% if fields %}
+    {% set value = fields[0] %}
+  {% else %}
+    {% set value = None %}
   {% endif %}
+  {% call form.input_block('field-sszFields', label=_('Attributes'),  error=errors.sszFields, classes = ['editor', 'control-full']) %}
+    <textarea id="field-sszFields" name="sszFields" cols="20" rows="5" placeholder="Attribute" >{{ value | empty_and_escape }}</textarea>
+    <span class="editor-info-block">{% trans %}JSON-Format für Attribute: [["feldname1", "wert1"], ["feldname2", "wert2"]]{% endtrans %}</span>
+  {% endcall %}
 
 {% endblock %}
