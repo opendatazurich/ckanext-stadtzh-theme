@@ -157,17 +157,19 @@
       {% set key, value = extra %}
       {% if key == "sszFields" and value %}
         {% set attribs = h.load_json(value) %}
-        <h3>Attribute</h3>
-        <div class="package-attributes">
-          <table class="table table-striped table-bordered table-condensed">
-            <tbody>
-              {% for key, value in attribs %}
-                <tr><th>{{key}}</th></tr>
-                <tr><td>{{value}}</td></tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
+        {% if attribs %}
+          <h3>Attribute</h3>
+          <div class="package-attributes">
+            <table class="table table-striped table-bordered table-condensed">
+              <tbody>
+                {% for key, value in attribs %}
+                  <tr><th>{{key}}</th></tr>
+                  <tr><td>{{value}}</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% endif %}
       {% endif %}
     {% endfor %}
   {% endif %}
