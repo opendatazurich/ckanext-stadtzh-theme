@@ -120,27 +120,46 @@
     </div>
   {% endif %}
 
+  {% set comments = [] %}
   {% if pkg_dict.sszBemerkungen %}
+    {% do comments.append(pkg_dict.sszBemerkungen) %}
+  {% else %}
+    {% for extra in h.sorted_extras(pkg_dict.extras) %}
+      {% set key, value = extra %}
+      {% if key == "sszBemerkungen" and value %}
+        {% do comments.append(value) %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+  {% if comments %}
     <h3>{{ _("Comments") }}</h3>
     <div class="package-comments">
-      {{ h.render_markdown(pkg_dict.sszBemerkungen) }}
+      {{ h.render_markdown(comments[0]) }}
     </div>
   {% endif %}
 
+  {% set attribs = [] %}
   {% if pkg_dict.sszFields %}
-    {% set attribs = h.load_json(pkg_dict.sszFields) %}
-    {% if attribs %}
-      <h3>Attribute</h3>
-      <div class="package-attributes">
-        <table class="table table-striped table-bordered table-condensed">
-          <tbody>
-            {% for key, value in attribs %}
-              <tr><th>{{key}}</th></tr>
-              <tr><td>{{value}}</td></tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    {% endif %}
+    {% do attribs.append(pkg_dict.sszFields) %}
+  {% else %}
+    {% for extra in h.sorted_extras(pkg_dict.extras) %}
+      {% set key, value = extra %}
+      {% if key == "sszFields" and value %}
+        {% do attribs.append(value) %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+  {% if h.load_json(attribs[0]) %}
+    <h3>Attribute</h3>
+    <div class="package-attributes">
+      <table class="table table-striped table-bordered table-condensed">
+        <tbody>
+          {% for key, value in h.load_json(attribs[0]) %}
+            <tr><th>{{key}}</th></tr>
+            <tr><td>{{value}}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   {% endif %}
 </section>
