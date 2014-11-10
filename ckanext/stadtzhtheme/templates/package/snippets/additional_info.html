@@ -140,21 +140,21 @@
 
   {% set attribs = [] %}
   {% if pkg_dict.sszFields %}
-    {% do attribs.append(h.load_json(pkg_dict.sszFields)) %}
+    {% do attribs.append(pkg_dict.sszFields) %}
   {% else %}
     {% for extra in h.sorted_extras(pkg_dict.extras) %}
       {% set key, value = extra %}
       {% if key == "sszFields" and value %}
-        {% do attribs.append(h.load_json(value)) %}
+        {% do attribs.append(value) %}
       {% endif %}
     {% endfor %}
   {% endif %}
-  {% if attribs %}
+  {% if h.load_json(attribs[0]) %}
     <h3>Attribute</h3>
     <div class="package-attributes">
       <table class="table table-striped table-bordered table-condensed">
         <tbody>
-          {% for key, value in attribs[0] %}
+          {% for key, value in h.load_json(attribs[0]) %}
             <tr><th>{{key}}</th></tr>
             <tr><td>{{value}}</td></tr>
           {% endfor %}
