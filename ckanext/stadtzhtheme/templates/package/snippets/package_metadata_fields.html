@@ -124,7 +124,7 @@
   {% endif %}
   {{ form.markdown('sszBemerkungen', label=_('Comments'), id='field-sszBemerkungen', placeholder=_('Comments'), value=value, error=errors.sszBemerkungen) }}
   
-  {{ form.textarea('dataQuality', label=_('Data quality'), id='field-dataQuality', placeholder=_('Data quality'), value=data.dataQuality, error=errors.dataQuality, classes=['control-full']) }}
+  {{ form.markdown('dataQuality', label=_('Data quality'), id='field-dataQuality', placeholder=_('Data quality'), value=data.dataQuality, error=errors.dataQuality, classes=['control-full']) }}
 
   {% set fields = [] %}
   {% if data.sszFields %}
