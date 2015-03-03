@@ -63,6 +63,7 @@ def create_dataType():
         vocab = tk.get_action('vocabulary_create')(context, data)
         for tag in (
             u'   ',
+            u'Bilddatei',
             u'Einzeldaten',
             u'Datenaggregat',
             u'Web-Service'
