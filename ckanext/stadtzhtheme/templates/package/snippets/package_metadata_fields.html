@@ -54,7 +54,7 @@
 
   {{ form.input('spatialRelationship', label=_('Spatial relationship'), id='field-spatialRelationship', placeholder=_('Spatial relationship'), value=data.spatialRelationship, error=errors.spatialRelationship, classes=['control-medium']) }}
 
-  {{ form.input('dateFirstPublished', label=_('Date first published'), id='field-dateFirstPublished', placeholder=_('Date first published'), value=data.dateFirstPublished, error=errors.dateFirstPublished, classes=['control-medium'], type="datetime") }}
+  {{ form.input('dateFirstPublished', label=_('Date first published'), id='field-dateFirstPublished', placeholder=_('DD.MM.YYYY, HH:MM'), value=data.dateFirstPublished, error=errors.dateFirstPublished, classes=['control-medium'], type="datetime") }}
 
   {{ form.input('timeRange', label=_('Time range'), id='field-timeRange', placeholder=_('Time range'), value=data.timeRange, error=errors.timeRange, classes=['control-medium']) }}
 
@@ -81,7 +81,7 @@
 
   {{ form.input('version', label=_('Version'), id='field-version', placeholder=_('Version'), value=data.version, error=errors.version, classes=['control-medium']) }}
 
-  {{ form.input('dateLastUpdated', label=_('Date last updated')|safe, id='field-dateLastUpdated', placeholder=_('Date last updated')|safe, value=data.dateLastUpdated, error=errors.dateLastUpdated, classes=['control-medium'], type="datetime") }}
+  {{ form.input('dateLastUpdated', label=_('Date last updated')|safe, id='field-dateLastUpdated', placeholder=_('DD.MM.YYYY, HH:MM')|safe, value=data.dateLastUpdated, error=errors.dateLastUpdated, classes=['control-medium'], type="datetime") }}
 
 <div class="control-group">
   <label class="control-label" for="field-dataType">{{ _("Data type") }}</label>
