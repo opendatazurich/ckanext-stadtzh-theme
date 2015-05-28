@@ -4,7 +4,7 @@
       <td>
         <p class="heading">{{ _("Author") }}</p>
         {% if pkg_dict.author_email %}
-          <p class="metadata">{{ h.mail_to(email_address=pkg_dict.author_email, name=pkg_dict.author) }}</p>
+          <p class="metadata">{{ h.mail_to(email_address=h.validate_email(pkg_dict.author_email), name=pkg_dict.author) }}</p>
         {% elif pkg_dict.author %}
           <p class="metadata">{{ pkg_dict.author }}</p>
         {% endif %}
@@ -24,7 +24,7 @@
       <td>
         <p class="heading">{{ _('Maintainer') }}</p>
         {% if pkg_dict.maintainer_email %}
-          <p class="metadata">{{ h.mail_to(email_address=pkg_dict.maintainer_email, name=pkg_dict.maintainer) }}</p>
+          <p class="metadata">{{ h.mail_to(email_address=h.validate_email(pkg_dict.maintainer_email), name=pkg_dict.maintainer) }}</p>
         {% elif pkg_dict.maintainer %}
           <p class="metadata">{{ pkg_dict.maintainer }}</p>
         {% endif %}

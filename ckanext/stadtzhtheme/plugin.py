@@ -3,6 +3,7 @@
 import logging
 import json
 import re
+import lepl.apps.rfc3696
 
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as tk
@@ -156,6 +157,13 @@ def validate_date(datestring):
         return datestring
     else:
         return False
+
+def validate_email(email):
+    email_validator = lepl.apps.rfc3696.Email()
+    if email_validator(email):
+        return email
+    else:
+        return ''
         
 
 class IFacetPlugin(plugins.SingletonPlugin):
@@ -206,7 +214,8 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'package_has_group': package_has_group,
             'get_tag_vocab_values': get_tag_vocab_values,
             'get_package_dict': get_package_dict,
-            'validate_date': validate_date
+            'validate_date': validate_date,
+            'validate_email': validate_email
         }
 
     def is_fallback(self):
