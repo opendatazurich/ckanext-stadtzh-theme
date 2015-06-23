@@ -79,7 +79,12 @@
   </div>
 </div>
 
-  {{ form.input('version', label=_('Version'), id='field-version', placeholder=_('Version'), value=data.version, error=errors.version, classes=['control-medium']) }}
+  {% if data.version %}
+    {% set version = data.version %}
+  {% else %}
+    {% set version = "1.0" %}
+  {% endif %}
+  {{ form.input('version', label=_('Version'), id='field-version', placeholder=_('Version'), value=version, error=errors.version, classes=['control-medium']) }}
 
   {{ form.input('dateLastUpdated', label=_('Date last updated')|safe, id='field-dateLastUpdated', placeholder=_('DD.MM.YYYY, HH:MM')|safe, value=data.dateLastUpdated, error=errors.dateLastUpdated, classes=['control-medium'], type="datetime") }}
 
