@@ -9,3 +9,7 @@
 {# Get rid of info block (package title, follower count and follow button) #}
 {% block package_info %}
 {% endblock %}
+
+{# Get rid of organization block, as long as it is not displayed correctly (see issue https://github.com/ckan/ckan/issues/1934 #}
+{% block package_organization %}
+{% endblock %}
