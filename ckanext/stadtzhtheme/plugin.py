@@ -30,6 +30,8 @@ def create_updateInterval():
             u'monatlich',
             u'woechentlich',
             u'taeglich',
+            u'stuendlich',
+            u'Echtzeit',
             u'sporadisch oder unregelmaessig',
             u'keines'
         ):
