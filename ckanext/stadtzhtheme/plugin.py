@@ -152,6 +152,13 @@ def get_package_dict(datasetID):
     context = {'user': user['name']}
     return tk.get_action('package_show')(context, {'id': datasetID})
 
+def get_organization_dict(org=None):
+    if org is None:
+        return {}
+    try:
+        return tk.get_action('organization_show')({}, {'id': org})
+    except Exception:
+        return {}
 
 def validate_date(datestring):
     m = re.match('^[0-9]{2}\.[0-9]{2}\.[0-9]{4}(, [0-9]{2}:[0-9]{2})?$', datestring)
@@ -217,7 +224,8 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'get_tag_vocab_values': get_tag_vocab_values,
             'get_package_dict': get_package_dict,
             'validate_date': validate_date,
-            'validate_email': validate_email
+            'validate_email': validate_email,
+            'get_organization_dict': get_organization_dict,
         }
 
     def is_fallback(self):
