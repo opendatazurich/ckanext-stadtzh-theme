@@ -8,6 +8,8 @@ import lepl.apps.rfc3696
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as tk
 from ckan import model
+from ckan.common import request
+from routes import url_for
 
 def create_updateInterval():
     '''Create update interval vocab and tags, if they don't exist already.'''
@@ -160,6 +162,12 @@ def get_organization_dict(org=None):
     except Exception:
         return {}
 
+def full_external_url():
+    ''' Returns the fully qualified current external url (eg http://...) useful
+    for sharing etc '''
+    return (url_for(request.environ['CKAN_CURRENT_URL'], host='data.stadt-zuerich.ch', protocol='https', qualified=True))
+
+
 def validate_date(datestring):
     m = re.match('^[0-9]{2}\.[0-9]{2}\.[0-9]{4}(, [0-9]{2}:[0-9]{2})?$', datestring)
     if m:
@@ -226,6 +234,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'validate_date': validate_date,
             'validate_email': validate_email,
             'get_organization_dict': get_organization_dict,
+            'full_external_url': full_external_url,
         }
 
     def is_fallback(self):

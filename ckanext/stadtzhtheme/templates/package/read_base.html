@@ -1,5 +1,9 @@
 {% ckan_extends %}
 
+{% block links -%}
+  <link rel="alternate" type="application/rdf+xml" href="{{ h.url_for(controller='package', action='read', id=pkg.id, format='rdf', host='data.stadt-zuerich.ch', protocol='https', qualified=True) }}"/>
+{% endblock -%}
+
 {% block content_primary_nav %}
   {{ h.build_nav_icon('dataset_read', _('Dataset'), id=pkg.name) }}
   {{ h.build_nav_icon('dataset_groups', _('Groups'), id=pkg.name) }}
