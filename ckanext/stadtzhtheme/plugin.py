@@ -3,8 +3,10 @@
 import logging
 import json
 import re
+import urlparse
 import lepl.apps.rfc3696
 
+from pylons import config
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as tk
 from ckan import model
@@ -165,8 +167,22 @@ def get_organization_dict(org=None):
 def full_external_url():
     ''' Returns the fully qualified current external url (eg http://...) useful
     for sharing etc '''
-    return (url_for(request.environ['CKAN_CURRENT_URL'], host='data.stadt-zuerich.ch', protocol='https', qualified=True))
+    return url_for(
+        request.environ['CKAN_CURRENT_URL'],
+        host=get_site_host(),
+        protocol=get_site_protocol(),
+        qualified=True
+    )
 
+def get_site_protocol():
+    site_url = config.get('site_url', 'https://data.stadt-zuerich.ch')
+    parsed_url = urlparse.urlparse(site_url)
+    return parsed_url.scheme
+
+def get_site_host():
+    site_url = config.get('site_url', 'https://data.stadt-zuerich.ch')
+    parsed_url = urlparse.urlparse(site_url)
+    return parsed_url.netloc
 
 def validate_date(datestring):
     m = re.match('^[0-9]{2}\.[0-9]{2}\.[0-9]{4}(, [0-9]{2}:[0-9]{2})?$', datestring)
@@ -235,6 +251,8 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'validate_email': validate_email,
             'get_organization_dict': get_organization_dict,
             'full_external_url': full_external_url,
+            'get_site_protocol': get_site_protocol,
+            'get_site_host': get_site_host,
         }
 
     def is_fallback(self):
