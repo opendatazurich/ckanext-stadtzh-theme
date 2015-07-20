@@ -13,4 +13,4 @@
   {% resource 'stadtzhtheme/stadtzhtheme.css' %}
 {% endblock %}
 
-{% block bodytag %} data-site-root="https://data.stadt-zuerich.ch/" data-locale-root="https://data.stadt-zuerich.ch/" {% endblock %}
+{% block bodytag %} data-site-root="{{ g.site_url }}/" data-locale-root="{{ g.site_url }}/" {% endblock %}
