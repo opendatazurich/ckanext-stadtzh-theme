@@ -177,12 +177,12 @@ def full_external_url():
 def get_site_protocol():
     site_url = config.get('ckan.site_url', 'https://data.stadt-zuerich.ch')
     parsed_url = urlparse.urlparse(site_url)
-    return parsed_url.scheme
+    return parsed_url.scheme.encode('utf-8')
 
 def get_site_host():
     site_url = config.get('ckan.site_url', 'https://data.stadt-zuerich.ch')
     parsed_url = urlparse.urlparse(site_url)
-    return parsed_url.netloc
+    return parsed_url.netloc.encode('utf-8')
 
 def validate_date(datestring):
     m = re.match('^[0-9]{2}\.[0-9]{2}\.[0-9]{4}(, [0-9]{2}:[0-9]{2})?$', datestring)
