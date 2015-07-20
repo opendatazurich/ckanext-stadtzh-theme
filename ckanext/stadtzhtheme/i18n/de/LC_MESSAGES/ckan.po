@@ -2912,7 +2912,7 @@ msgstr "Zeitstempel"
 #: ckan/templates_legacy/package/read_core.html:68
 #: ckan/templates_legacy/snippets/revision_list.html:11
 msgid "Author"
-msgstr "Datenherr"
+msgstr "Datenowner"
 
 #: ckan/templates/group/snippets/revisions_table.html:10
 #: ckan/templates/package/snippets/revisions_table.html:10
@@ -3675,7 +3675,7 @@ msgstr "Erika Mustermann"
 
 #: ckan/templates/package/snippets/package_metadata_fields.html:16
 msgid "Author Email"
-msgstr "E-Mail des Datenherrs"
+msgstr "E-Mail des Datenowners"
 
 #: ckan/templates/package/snippets/package_metadata_fields.html:16
 #: ckan/templates/package/snippets/package_metadata_fields.html:22
@@ -5199,7 +5199,7 @@ msgstr "Zusammenfassung (Eine kurze Zusammenfassung der Änderungen)"
 #: ckan/templates_legacy/package/new_package_form.html:293
 #: ckan/templates_legacy/revision/read.html:36
 msgid "Author:"
-msgstr "Datenherr:"
+msgstr "Datenowner:"
 
 #: ckan/templates_legacy/importer/preview.html:34
 msgid "Import"
@@ -5402,7 +5402,7 @@ msgstr "Der Name des primären Kontakts für Anfragen zu diesem Datensatz. Anfra
 
 #: ckan/templates_legacy/package/new_package_form.html:198
 msgid "Author email"
-msgstr "Datenherr E-Mail"
+msgstr "Datenowner E-Mail"
 
 #: ckan/templates_legacy/package/new_package_form.html:208
 msgid ""
