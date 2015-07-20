@@ -175,12 +175,12 @@ def full_external_url():
     )
 
 def get_site_protocol():
-    site_url = config.get('site_url', 'https://data.stadt-zuerich.ch')
+    site_url = config.get('ckan.site_url', 'https://data.stadt-zuerich.ch')
     parsed_url = urlparse.urlparse(site_url)
     return parsed_url.scheme
 
 def get_site_host():
-    site_url = config.get('site_url', 'https://data.stadt-zuerich.ch')
+    site_url = config.get('ckan.site_url', 'https://data.stadt-zuerich.ch')
     parsed_url = urlparse.urlparse(site_url)
     return parsed_url.netloc
 
