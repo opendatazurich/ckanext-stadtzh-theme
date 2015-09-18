@@ -1,0 +1,12 @@
+{% ckan_extends %}
+
+{% block resource_item_description %}
+{% set file_format = res.format.lower() or 'data' %}
+    <p class="description">
+        {% if res.description %}
+            {{ h.markdown_extract(res.description, extract_length=80) }}
+        {% elif file_format in c.descr_config %}
+            {{ h.markdown_extract(c.descr_config[file_format], extract_length=80) }}
+        {% endif %}
+    </p>
+{% endblock %}
