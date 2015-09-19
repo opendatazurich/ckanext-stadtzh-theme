@@ -221,7 +221,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     def update_config(self, config):
         try:
             with open(config.get('ckanext.stadtzh-theme.descr_file'), 'r') as descr_file:
-                self.descr_config = yaml.load(descr_file))
+                self.descr_config = yaml.load(descr_file)
         except IOError:
             self.descr_config = {}
 
