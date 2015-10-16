@@ -1,4 +1,28 @@
 {% ckan_extends %}
 
+{% block resource_content %}
+  {% block resource_read_title %}<h1 class="page-heading">{{ h.resource_display_name(res) | truncate(50) }}</h1>{% endblock %}
+  {% block resource_read_url %}
+    {% if res.url %}
+      <p class="muted ellipsis">{{ _('URL:') }} <a href="{{ res.url }}" title="{{ res.url }}">{{ res.url }}</a></p>
+    {% endif %}
+  {% endblock %}
+  <div class="prose notes" property="rdfs:label">
+
+    {% set file_format = res.format.lower() or 'data' %}
+    {% set descr_config = h.get_descr_config() %}
+    {% if res.description %}
+        {{ h.render_markdown(res.description) }}
+    {% elif file_format in descr_config and 'description' in descr_config[file_format] and 'link' in descr_config[file_format] %}
+        <p>{{ h.render_markdown(descr_config[file_format]['description']) }}</p>
+        <p>{{ h.render_markdown(descr_config[file_format]['link']) }}</p>
+    {% else %}
+      <h3>{{ _('From the dataset abstract') }}</h3>
+      <blockquote>{{ h.markdown_extract(c.package.get('notes')) }}</blockquote>
+      <p>{% trans dataset=c.package.title, url=h.url_for(controller='package', action='read', id=c.package['name']) %}Source: <a href="{{ url }}">{{ dataset }}</a>{% endtrans %}
+    {% endif %}
+  </div>
+{% endblock %}
+
 {% block data_preview %}
 {% endblock %}
