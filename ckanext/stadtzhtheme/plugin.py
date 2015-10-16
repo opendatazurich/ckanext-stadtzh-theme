@@ -231,6 +231,9 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
 
         config['ckan.site_logo'] = '/logo.png'
 
+    def get_descr_config(self):
+        return self.descr_config
+
     def get_helpers(self):
         return {
             'updateInterval': updateInterval,
@@ -247,6 +250,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'full_external_url': full_external_url,
             'get_site_protocol': get_site_protocol,
             'get_site_host': get_site_host,
+            'get_descr_config': self.get_descr_config,
         }
 
     def is_fallback(self):
