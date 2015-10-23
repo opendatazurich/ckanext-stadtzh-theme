@@ -165,6 +165,20 @@ def get_organization_dict(org=None):
     except Exception:
         return {}
 
+def is_url(*args, **kw):
+    '''
+    Returns True if argument parses as a http, https or ftp URL
+    '''
+    if not args:
+        return False
+    try:
+        url = urlparse.urlparse(args[0])
+    except ValueError:
+        return False
+
+    valid_schemes = ('http', 'https', 'ftp')
+    return url.scheme in valid_schemes
+
 def full_external_url():
     ''' Returns the fully qualified current external url (eg http://...) useful
     for sharing etc '''
@@ -248,6 +262,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'validate_email': validate_email,
             'get_organization_dict': get_organization_dict,
             'full_external_url': full_external_url,
+            'is_url': is_url,
             'get_site_protocol': get_site_protocol,
             'get_site_host': get_site_host,
             'get_descr_config': self.get_descr_config,
