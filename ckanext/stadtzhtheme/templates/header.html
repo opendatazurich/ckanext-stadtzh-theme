@@ -3,9 +3,6 @@
 
 {% block header_account_container_content %}
   <nav class="section navigation">
-    {% block top_header_logo %}
-      <a class="logo" href="/"><img class="logo" src="/logo@2x.png" alt="CKAN Logo" title="CKAN Logo"></a>
-    {% endblock %}
     {% if c.userobj %}
       {{ super() }}
     {% else %}
@@ -35,6 +32,7 @@
 
 {% block header_site_navigation %}
   <nav class="section navigation">
+    <a class="site-logo" href="/"><img src="/opendatazurichlogo.png" alt="Open Data Zürich" title="Open Data Zürich"></a>
     <ul class="nav nav-pills">
       {% block header_site_navigation_tabs %}
         {{ h.build_nav_main(

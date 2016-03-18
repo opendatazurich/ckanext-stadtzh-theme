@@ -12,31 +12,55 @@ html,
 .masthead .navigation .nav-pills li a:hover,
 .masthead .navigation .nav-pills li.active a,
 .homepage .module-search .tags,
-.hero .tags {
+.hero .tags, .stadtzh-footer {
     background-color: #0E2B56;
     color: #FFF;
 }
+
+.masthead a {
+    font-size: 18px;
+}
+
 
 .account-masthead .navigation .nav-pills li a:hover,
 .account-masthead .navigation .nav-pills li a:active {
     background-color: #1F52A3;
 }
 
+.masthead .nav-pills {
+    display: inline-block;
+    margin-top: 30px;
+    margin-left: 40px;
+}
+
 .masthead,
 .hero .module-dark .module-content,
 .homepage .module-search .module-content,
-.site-footer {
+.site-footer, stadtzh-footer {
     background-color: #1F52A3;
+}
+
+.site-footer a:hover {
+    color: #ccdee3;
+}
+
+.account-masthead {
+    min-height: 20px;
+}
+.masthead {
+    min-height: 90px;
 }
 
 .masthead .content {
     left: 0px;
+    top: 0px;
     width: 100%;
 }
 
 .masthead .site-search {
     position: absolute;
     right: 0px;
+    top: 30px;
 }
 
 .account-masthead .nav-tabs:after,
@@ -47,8 +71,8 @@ html,
 .account-masthead .nav,
 .account-masthead .account {
     float: right;
-    margin-bottom: 10px;
-    margin-top: 10px;
+    margin-bottom: 0px;
+    margin-top: 0px;
 }
 
 .additional-info {
@@ -115,16 +139,23 @@ html,
 }
 
 .header-icon {
-    margin-top: -10px;
+    margin-top: -5px;
     height: 20px;
     width: 20px;
 }
 
-.navigation .logo img {
+.stadtzh-footer .logo img {
     padding-top: 10px;
     padding-bottom: 10px;
     height: 41px;
     width: 185px;
+}
+
+.site-logo img {
+    display: inline;
+    padding-top: 10px;
+    height: 65px;
+    float: left;
 }
 
 .module-content .search-form {
