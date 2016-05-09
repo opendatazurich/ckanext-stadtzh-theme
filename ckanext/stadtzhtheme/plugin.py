@@ -231,6 +231,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     plugins.implements(plugins.IConfigurer, inherit=False)
     plugins.implements(plugins.IDatasetForm, inherit=False)
     plugins.implements(plugins.ITemplateHelpers, inherit=False)
+    plugins.implements(plugins.IPackageController, inherit=True)
 
     def update_config(self, config):
         try:
@@ -447,3 +448,9 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         context['descr_config'] = self.descr_config
         return super(StadtzhThemePlugin, self).setup_template_variables(
             context, data_dict)
+
+    # IPackageController
+
+    def after_show(self, context, pkg_dict):
+        # set value of new field data_publisher with value of url
+        pkg_dict['data_publisher'] = pkg_dict['url']
