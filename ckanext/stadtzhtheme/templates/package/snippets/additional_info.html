@@ -65,8 +65,8 @@
     <tr>
       <td>
         <p class="heading">{{ _('Source') }}</p>
-        {% if pkg_dict.url %}
-          <p class="metadata">{{ pkg_dict.url }}</p>
+        {% if pkg_dict.data_publisher %}
+          <p class="metadata">{{ pkg_dict.data_publisher }}</p>
         {% else %}
           <p class="metadata">{{ pkg_dict.author }}</p>
         {% endif %}
