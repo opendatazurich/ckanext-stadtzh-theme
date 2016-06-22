@@ -113,9 +113,9 @@ def biggest_groups(n):
     }
     groups = tk.get_action('group_list')(context, data_dict)
     if len(groups) > n:
-        return sorted(groups, key=lambda group: group['packages'])[-1:-(n+1):-1]
+        return sorted(groups, key=lambda group: group.get('packages', 0))[-1:-(n+1):-1]
     else:
-        return sorted(groups, key=lambda group: group['packages'])[::-1]
+        return sorted(groups, key=lambda group: group.get('packages', 0))[::-1]
 
 
 def package_has_group(group_name, groups):
