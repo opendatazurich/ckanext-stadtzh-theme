@@ -102,7 +102,10 @@ def groups():
     data_dict = {
         'all_fields': True,
     }
-    return tk.get_action('group_list')(context, data_dict)
+    try:
+        return tk.get_action('group_list')(context, data_dict)
+    except tk.ObjectNotFound:
+        return None
     
     
 def biggest_groups(n):
@@ -140,32 +143,31 @@ def load_json(json_data):
 
 def get_tag_vocab_values(package_dict):
     try:
-        extras = package_dict['extras']
-        results = {
-            'dataType': '   ',
-            'updateInterval': '   '
+        return {
+            'dataType': package_dict['dataType'],
+            'updateInterval': package_dict['updateInterval']
         }
-        for extra in extras:
-            if extra['key'] == u'dataType':
-                results['dataType'] = extra['value']
-            if extra['key'] == u'updateInterval':
-                results['updateInterval'] = extra['value']
-        return results
     except KeyError:
-        return results
+        return {
+            'dataType': '   ',
+            'updateInterval': '   ',
+        }
 
 
 def get_package_dict(datasetID):
     user = tk.get_action('get_site_user')({}, {})
     context = {'user': user['name']}
-    return tk.get_action('package_show')(context, {'id': datasetID})
+    try:
+        return tk.get_action('package_show')(context, {'id': datasetID})
+    except:
+        return {}
 
 def get_organization_dict(org=None):
     if org is None:
         return {}
     try:
         return tk.get_action('organization_show')({}, {'id': org})
-    except Exception:
+    except tk.ObjectNotFound:
         return {}
 
 def is_url(*args, **kw):
