@@ -5,6 +5,7 @@ import json
 import yaml
 import re
 import urlparse
+import traceback
 import lepl.apps.rfc3696
 
 from pylons import config
@@ -14,6 +15,8 @@ from ckan import model
 from ckan.common import request
 from routes import url_for
 
+log = logging.getLogger(__name__)
+
 def create_updateInterval():
     '''Create update interval vocab and tags, if they don't exist already.'''
     user = tk.get_action('get_site_user')({'ignore_auth': True}, {})
@@ -21,9 +24,9 @@ def create_updateInterval():
     try:
         data = {'id': 'updateInterval'}
         tk.get_action('vocabulary_show')(context, data)
-        logging.info("Update interval vocabulary already exists, skipping.")
+        log.info("Update interval vocabulary already exists, skipping.")
     except tk.ObjectNotFound:
-        logging.info("Creating vocab 'updateInterval'")
+        log.info("Creating vocab 'updateInterval'")
         data = {'name': 'updateInterval'}
         vocab = tk.get_action('vocabulary_create')(context, data)
         for tag in (
@@ -40,7 +43,7 @@ def create_updateInterval():
             u'sporadisch oder unregelmaessig',
             u'keines'
         ):
-            logging.info(
+            log.info(
                 "Adding tag {0} to vocab 'updateInterval'".format(tag))
             data = {'name': tag, 'vocabulary_id': vocab['id']}
             tk.get_action('tag_create')(context, data)
@@ -64,9 +67,9 @@ def create_dataType():
     try:
         data = {'id': 'dataType'}
         tk.get_action('vocabulary_show')(context, data)
-        logging.info("Data type vocabulary already exists, skipping.")
+        log.info("Data type vocabulary already exists, skipping.")
     except tk.ObjectNotFound:
-        logging.info("Creating vocab 'dataType'")
+        log.info("Creating vocab 'dataType'")
         data = {'name': 'dataType'}
         vocab = tk.get_action('vocabulary_create')(context, data)
         for tag in (
@@ -76,7 +79,7 @@ def create_dataType():
             u'Datenaggregat',
             u'Web-Service'
         ):
-            logging.info(
+            log.info(
                 "Adding tag {0} to vocab 'dataType'".format(tag))
             data = {'name': tag, 'vocabulary_id': vocab['id']}
             tk.get_action('tag_create')(context, data)
@@ -99,7 +102,10 @@ def groups():
     data_dict = {
         'all_fields': True,
     }
-    return tk.get_action('group_list')(context, data_dict)
+    try:
+        return tk.get_action('group_list')(context, data_dict)
+    except tk.ObjectNotFound:
+        return None
     
     
 def biggest_groups(n):
@@ -137,32 +143,31 @@ def load_json(json_data):
 
 def get_tag_vocab_values(package_dict):
     try:
-        extras = package_dict['extras']
-        results = {
-            'dataType': '   ',
-            'updateInterval': '   '
+        return {
+            'dataType': package_dict['dataType'],
+            'updateInterval': package_dict['updateInterval']
         }
-        for extra in extras:
-            if extra['key'] == u'dataType':
-                results['dataType'] = extra['value']
-            if extra['key'] == u'updateInterval':
-                results['updateInterval'] = extra['value']
-        return results
     except KeyError:
-        return results
+        return {
+            'dataType': '   ',
+            'updateInterval': '   ',
+        }
 
 
 def get_package_dict(datasetID):
     user = tk.get_action('get_site_user')({}, {})
     context = {'user': user['name']}
-    return tk.get_action('package_show')(context, {'id': datasetID})
+    try:
+        return tk.get_action('package_show')(context, {'id': datasetID})
+    except:
+        return {}
 
 def get_organization_dict(org=None):
     if org is None:
         return {}
     try:
         return tk.get_action('organization_show')({}, {'id': org})
-    except Exception:
+    except tk.ObjectNotFound:
         return {}
 
 def is_url(*args, **kw):
