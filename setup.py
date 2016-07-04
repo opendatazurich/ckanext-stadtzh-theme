@@ -25,5 +25,8 @@ setup(
     """
     [ckan.plugins]
     stadtzhtheme=ckanext.stadtzhtheme.plugin:StadtzhThemePlugin
+
+    [ckan.rdf.profiles]
+    stadtzh_swiss_dcat=ckanext.stadtzhtheme.dcat.profiles:StadtzhSwissDcatProfile
     """,
 )
