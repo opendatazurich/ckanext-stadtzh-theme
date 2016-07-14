@@ -46,33 +46,20 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
         g = self.g
 
-
-
         # BaseNode
-        catalog_ref = BNode()
-        dataset_ref = BNode()
-        dataset_main_node = BNode()
-        g.add((catalog_ref, RDF.type, DCAT.Catalog))
-        # g.add((catalog_ref, RDF.type, DCAT.dataset))
-        # g.add((catalog_ref, RDF.type, DCAT.Dataset))
-        # g.add((Dataset_ref, RDF.type, DCAT.Dataset))
+        # dataset_node = BNode()
+        # g.add((dataset_node, RDF.type, DCAT.dataset))
+
+
+        dataset_outer_node = BNode()
+        dataset_node = BNode()
+        catalog_node = BNode()
+        g.add((dataset_node, RDF.type, DCAT.Dataset))
+        g.add((dataset_outer_node, DCAT.dataset, dataset_node))
+        g.add((catalog_node, DCAT.Catalog, dataset_outer_node))
 
 
         # self.add((dataset_dict, catalog_ref, DCAT.dataset)) !!!!
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         for prefix, namespace in namespaces.iteritems():
             g.bind(prefix, namespace)
@@ -90,7 +77,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
             ('metadata_modified', DCT.modified, None),
             ('maintainer_email', DCAT.contactPoint, None),
         ]
-        self._add_triples_from_dict(dataset_dict, catalog_ref, basic_items)
+        self._add_triples_from_dict(dataset_dict, dataset_node, basic_items)
 
         # Contact details
         if any([
@@ -110,7 +97,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
                 contact_details = BNode()
 
             g.add((contact_details, RDF.type, VCARD.Organization))
-            g.add((catalog_ref, DCAT.contactPoint, contact_details))
+            g.add((dataset_node, DCAT.contactPoint, contact_details))
 
             items = [
                 ('contact_name', VCARD.fn, ['maintainer', 'author']),
@@ -135,7 +122,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
                 publisher_details = BNode()
 
             g.add((publisher_details, RDF.type, RDF.Description))
-            g.add((dataset_ref, DCT.publisher, publisher_details))
+            g.add((dataset_node, DCT.publisher, publisher_details))
 
             publisher_name = self._get_dataset_value(dataset_dict, 'publisher_name')
             if not publisher_name and dataset_dict.get('organization'):
@@ -159,7 +146,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
             distribution = URIRef(resource_uri(resource_dict))
 
-            g.add((dataset_ref, DCAT.distribution, distribution))
+            g.add((dataset_node, DCAT.distribution, distribution))
 
             g.add((distribution, RDF.type, DCAT.Distribution))
 
