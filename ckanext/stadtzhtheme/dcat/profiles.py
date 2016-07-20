@@ -46,18 +46,11 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
         g = self.g
 
-        # BaseNode
-        # dataset_node = BNode()
-        # g.add((dataset_node, RDF.type, DCAT.dataset))
-
-
-        dataset_outer_node = BNode()
-        dataset_node = BNode()
-        catalog_node = BNode()
+        catalog_node = URIRef("http://example.org/Catalog")
+        dataset_node = URIRef("http://example.org/dataset")  # dcat:dataset
+        g.add((catalog_node, RDF.type, DCAT.Catalog))
+        g.add((catalog_node, DCAT.dataset, dataset_node))
         g.add((dataset_node, RDF.type, DCAT.Dataset))
-        g.add((dataset_outer_node, DCAT.dataset, dataset_node))
-        g.add((catalog_node, DCAT.Catalog, dataset_outer_node))
-
 
         # self.add((dataset_dict, catalog_ref, DCAT.dataset)) !!!!
 
@@ -75,8 +68,9 @@ class StadtzhSwissDcatProfile(RDFProfile):
             # ('frequency', DCT.accrualPeriodicity, None),
             # ('data_publisher', DCT.publisher, None),
             ('metadata_modified', DCT.modified, None),
-            ('maintainer_email', DCAT.contactPoint, None),
+            # ('maintainer_email', DCAT.contactPoint, None),
         ]
+
         self._add_triples_from_dict(dataset_dict, dataset_node, basic_items)
 
         # Contact details
@@ -107,48 +101,15 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
             self._add_triples_from_dict(dataset_dict, contact_details, items)
 
-        # Publisher
-        if any([
-            self._get_dataset_value(dataset_dict, 'publisher_uri'),
-            self._get_dataset_value(dataset_dict, 'publisher_name'),
-            dataset_dict.get('organization'),
-        ]):
-
-            publisher_uri = publisher_uri_from_dataset_dict(dataset_dict)
-            if publisher_uri:
-                publisher_details = URIRef(publisher_uri)
-            else:
-                # No organization nor publisher_uri
-                publisher_details = BNode()
-
-            g.add((publisher_details, RDF.type, RDF.Description))
-            g.add((dataset_node, DCT.publisher, publisher_details))
-
-            publisher_name = self._get_dataset_value(dataset_dict, 'publisher_name')
-            if not publisher_name and dataset_dict.get('organization'):
-                publisher_name = dataset_dict['organization']['title']
-
-            g.add((publisher_details, RDFS.label, Literal(publisher_name)))
-            # TODO: It would make sense to fallback these to organization
-            # fields but they are not in the default schema and the
-            # `organization` object in the dataset_dict does not include
-            # custom fields
-            items = [
-                ('publisher_email', FOAF.mbox, None),
-                ('publisher_url', FOAF.homepage, None),
-                ('publisher_type', DCT.type, None),
-            ]
-
-            self._add_triples_from_dict(dataset_dict, publisher_details, items)
-
         # Resources
         for resource_dict in dataset_dict.get('resources', []):
 
-            distribution = URIRef(resource_uri(resource_dict))
+            # distribution = URIRef(resource_uri(resource_dict))
+            distribution = BNode()
 
             g.add((dataset_node, DCAT.distribution, distribution))
-
             g.add((distribution, RDF.type, DCAT.Distribution))
+
 
             #  Simple values
             items = [
@@ -222,3 +183,39 @@ class StadtzhSwissDcatProfile(RDFProfile):
                         g.add((checksum, SPDX.algorithm,
                                Literal(resource_dict['hash_algorithm'])))
                 g.add((distribution, SPDX.checksum, checksum))
+
+        # Publisher
+        if any([
+            self._get_dataset_value(dataset_dict, 'publisher_uri'),
+            self._get_dataset_value(dataset_dict, 'publisher_name'),
+            dataset_dict.get('organization'),
+        ]):
+
+            publisher_uri = publisher_uri_from_dataset_dict(dataset_dict)
+            # if publisher_uri:
+            #     publisher_details = URIRef(publisher_uri)
+            # else:
+            #     # No organization nor publisher_uri
+            #     publisher_details = BNode()
+            publisher_details = BNode()
+
+            g.add((publisher_details, RDF.type, RDF.Description))
+            # g.add((dataset_node, DCT.publisher, publisher_details))
+            g.add((dataset_node, DCT.publisher, publisher_details))
+
+            publisher_name = self._get_dataset_value(dataset_dict, 'publisher_name')
+            if not publisher_name and dataset_dict.get('organization'):
+                publisher_name = dataset_dict['organization']['title']
+
+            g.add((publisher_details, RDFS.label, Literal(publisher_name)))
+            # TODO: It would make sense to fallback these to organization
+            # fields but they are not in the default schema and the
+            # `organization` object in the dataset_dict does not include
+            # custom fields
+            items = [
+                ('publisher_email', FOAF.mbox, None),
+                ('publisher_url', FOAF.homepage, None),
+                ('publisher_type', DCT.type, None),
+            ]
+
+            self._add_triples_from_dict(dataset_dict, publisher_details, items)
