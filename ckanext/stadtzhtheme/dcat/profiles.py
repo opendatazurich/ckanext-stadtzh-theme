@@ -21,6 +21,8 @@ LOCN = Namespace('http://www.w3.org/ns/locn#')
 GSP = Namespace('http://www.opengis.net/ont/geosparql#')
 OWL = Namespace('http://www.w3.org/2002/07/owl#')
 SPDX = Namespace('http://spdx.org/rdf/terms#')
+XML = Namespace('http://www.w3.org/2001/XMLSchema')
+ODRS = Namespace('http://schema.theodi.org/odrs#')
 
 GEOJSON_IMT = 'https://www.iana.org/assignments/media-types/application/vnd.geo+json'
 
@@ -49,7 +51,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
         g = self.g
 
         catalog_node = URIRef("http://example.org/Catalog")
-        dataset_node = URIRef("http://example.org/dataset")  # dcat:dataset
+        dataset_node = URIRef("http://example.org/dataset")  # dcat:Dataset
         g.add((catalog_node, RDF.type, DCAT.Catalog))
         g.add((catalog_node, DCAT.dataset, dataset_node))
         g.add((dataset_node, RDF.type, DCAT.Dataset))
