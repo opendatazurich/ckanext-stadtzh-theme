@@ -63,10 +63,10 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
         # Basic fields
         basic_items = [
-            ('title', DCT.title, None),
-            ('notes', DCT.description, None),
+            # ('title', DCT.title, Literal("donna")),
+            # ('notes', DCT.description, None),
             ('url', DCAT.landingPage, None),
-            ('identifier', DCT.identifier, ['guid', 'id']),
+            # ('identifier', DCT.identifier, ['guid', 'id']),
             # ('version', OWL.versionInfo, ['dcat_version']),
             # ('version_notes', ADMS.versionNotes, None),
             # ('frequency', DCT.accrualPeriodicity, None),
@@ -76,6 +76,13 @@ class StadtzhSwissDcatProfile(RDFProfile):
         ]
 
         self._add_triples_from_dict(dataset_dict, dataset_node, basic_items)
+
+        id = self._get_dataset_value(dataset_dict, 'id')
+        title = self._get_dataset_value(dataset_dict, 'title')
+        description = self._get_dataset_value(dataset_dict, 'notes')
+        g.add((dataset_node, DCT.identifier, Literal(title + '@statistik-stadt-zurich')))
+        g.add((dataset_node, DCT.title, Literal(id, lang='de')))
+        g.add((dataset_node, DCT.description, Literal(description, lang='de')))
 
         # Contact details
         if any([
