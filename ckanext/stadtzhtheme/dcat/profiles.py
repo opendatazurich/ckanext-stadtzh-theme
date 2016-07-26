@@ -36,6 +36,8 @@ namespaces = {
     'locn': LOCN,
     'gsp': GSP,
     'owl': OWL,
+    'xml': XML,
+    'odrs': ODRS,
 }
 
 
