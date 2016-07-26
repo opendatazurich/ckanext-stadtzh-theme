@@ -127,11 +127,23 @@ class StadtzhSwissDcatProfile(RDFProfile):
                 ('name', DCT.title, None),
                 ('description', DCT.description, None),
                 ('status', ADMS.status, None),
-                ('rights', DCT.rights, None),
-                ('license', DCT.license, None),
+                # ('rights', DCT.rights, None),
+                # ('license', DCT.license, None),
             ]
 
             self._add_triples_from_dict(resource_dict, distribution, items)
+
+            license_id = self._get_dataset_value(dataset_dict, 'license_id')
+            license_title = self._get_dataset_value(dataset_dict, 'license_title')
+
+            # parent_node = BNode()
+            # # g.add((dataset_node, DCT.something, parent_node))
+            # g.add((distribution, RDF.type, DCT.rights))
+            # g.add((distribution, ODRS.dataLicence, Literal(license_title)))
+
+            licenceNode = BNode()
+            g.add((distribution, DCT.rights, licenceNode))
+            g.add((licenceNode, ODRS.dataLicence, Literal(license_title)))
 
             #  Lists
             items = [
