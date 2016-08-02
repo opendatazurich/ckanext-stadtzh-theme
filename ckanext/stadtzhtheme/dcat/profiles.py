@@ -5,6 +5,7 @@ import rdflib
 from rdflib import URIRef, BNode, Literal
 from rdflib.namespace import Namespace, RDF, XSD, SKOS, RDFS
 
+import pylons
 import logging
 log = logging.getLogger(__name__)
 
@@ -22,7 +23,6 @@ GSP = Namespace('http://www.opengis.net/ont/geosparql#')
 OWL = Namespace('http://www.w3.org/2002/07/owl#')
 SPDX = Namespace('http://spdx.org/rdf/terms#')
 XML = Namespace('http://www.w3.org/2001/XMLSchema')
-ODRS = Namespace('http://schema.theodi.org/odrs#')
 
 GEOJSON_IMT = 'https://www.iana.org/assignments/media-types/application/vnd.geo+json'
 
@@ -39,50 +39,82 @@ namespaces = {
     'gsp': GSP,
     'owl': OWL,
     'xml': XML,
-    'odrs': ODRS,
 }
 
-
+ogd_theme_base_url = 'http://opendata.swiss/themes/'
+mapping_groups_dict = {
+    'arbeit-und-erwerb': ['work'],
+    'finanzen': ['finances'],
+    'preise': ['prices'],
+    'tourismus': ['tourism'],
+    'volkswirtschaft': ['national-economy'],
+    'wirtschaft': ['national-economy'],
+    'verwaltung': ['administration'],
+    'soziales': ['social-security'],
+    'freizeit': ['territory'],
+    'umwelt': ['territory'],
+    'politik': ['politics'],
+    'mobilitat': ['mobility'],
+    'kultur': ['culture'],
+    'kriminalitat': ['crime', 'public-order'],
+    'gesundheit': ['health'],
+    'basiskarten': ['territory', 'geography'],
+    'energie': ['energy'],
+    'bildung': ['education'],
+    'bevolkerung': ['population'],
+    'bauen-und-wohnen': ['construction'],
+}
+mapping_rights_dict = {
+    'cc-by-sa': 'NonCommercialAllow - CommercialAllow - ReferenceRequired',
+    'cc-zero': 'NonCommercialAllow - CommercialAllow - ReferenceNotRequired',
+}
 
 class StadtzhSwissDcatProfile(RDFProfile):
+
+    def _rights(self, ckan_license_id):
+        return mapping_rights_dict.get(ckan_license_id)
+
+    def _themes(self, group_id):
+        return mapping_groups_dict.get(group_id)
 
     def graph_from_dataset(self, dataset_dict, dataset_ref):
 
         g = self.g
 
-        catalog_node = URIRef("http://example.org/Catalog")
-        dataset_node = URIRef("http://example.org/dataset")  # dcat:Dataset
+        catalog_node = BNode()
+        dataset_node = BNode()
         g.add((catalog_node, RDF.type, DCAT.Catalog))
         g.add((catalog_node, DCAT.dataset, dataset_node))
         g.add((dataset_node, RDF.type, DCAT.Dataset))
-
-        # self.add((dataset_dict, catalog_ref, DCAT.dataset)) !!!!
 
         for prefix, namespace in namespaces.iteritems():
             g.bind(prefix, namespace)
 
         # Basic fields
         basic_items = [
-            # ('title', DCT.title, Literal("donna")),
-            # ('notes', DCT.description, None),
             ('url', DCAT.landingPage, None),
-            # ('identifier', DCT.identifier, ['guid', 'id']),
-            # ('version', OWL.versionInfo, ['dcat_version']),
+            ('version', OWL.versionInfo, ['dcat_version']),
             # ('version_notes', ADMS.versionNotes, None),
             # ('frequency', DCT.accrualPeriodicity, None),
-            # ('data_publisher', DCT.publisher, None),
             ('metadata_modified', DCT.modified, None),
-            # ('maintainer_email', DCAT.contactPoint, None),
+            ('metadata_created', DCT.issued, None),
         ]
 
         self._add_triples_from_dict(dataset_dict, dataset_node, basic_items)
 
+        organization_id = pylons.config.get('ckan.organization_id', None)
         id = self._get_dataset_value(dataset_dict, 'id')
         title = self._get_dataset_value(dataset_dict, 'title')
         description = self._get_dataset_value(dataset_dict, 'notes')
-        g.add((dataset_node, DCT.identifier, Literal(title + '@statistik-stadt-zurich')))
+        g.add((dataset_node, DCT.identifier, Literal(title + '@' + organization_id)))
         g.add((dataset_node, DCT.title, Literal(id, lang='de')))
         g.add((dataset_node, DCT.description, Literal(description, lang='de')))
+
+        # Themes
+        groups = self._get_dataset_value(dataset_dict, 'groups')[0].get('id')
+        theme_ids = self._themes(groups[0].get('id'))
+        for theme_id in theme_ids:
+            g.add((dataset_node, DCAT.theme, URIRef(ogd_theme_base_url + theme_id)))
 
         # Contact details
         if any([
@@ -112,41 +144,34 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
             self._add_triples_from_dict(dataset_dict, contact_details, items)
 
+        # Tags
+        for tag in dataset_dict.get('tags', []):
+            g.add((dataset_node, DCAT.keyword, Literal(tag['name'])))
+
         # Resources
         for resource_dict in dataset_dict.get('resources', []):
-
-            # distribution = URIRef(resource_uri(resource_dict))
             distribution = BNode()
 
             g.add((dataset_node, DCAT.distribution, distribution))
             g.add((distribution, RDF.type, DCAT.Distribution))
-
 
             #  Simple values
             items = [
                 ('name', DCT.title, None),
                 ('description', DCT.description, None),
                 ('status', ADMS.status, None),
-                # ('rights', DCT.rights, None),
-                # ('license', DCT.license, None),
             ]
 
             self._add_triples_from_dict(resource_dict, distribution, items)
 
             license_id = self._get_dataset_value(dataset_dict, 'license_id')
-            license_title = self._get_dataset_value(dataset_dict, 'license_title')
-
-            # parent_node = BNode()
-            # # g.add((dataset_node, DCT.something, parent_node))
-            # g.add((distribution, RDF.type, DCT.rights))
-            # g.add((distribution, ODRS.dataLicence, Literal(license_title)))
-
-            licenceNode = BNode()
-            g.add((distribution, DCT.rights, licenceNode))
-            g.add((licenceNode, ODRS.dataLicence, Literal(license_title)))
+            license_title = self._rights(license_id)
+            g.add((distribution, DCT.rights, Literal(license_title)))
+            g.add((distribution, DCT.license, Literal(license_title)))
 
             #  Lists
             items = [
+                ('theme', DCAT.theme, None),
                 ('documentation', FOAF.page, None),
                 ('language', DCT.language, None),
                 ('conforms_to', DCT.conformsTo, None),
@@ -176,8 +201,8 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
             # Dates
             items = [
-                ('issued', DCT.issued, None),
-                ('modified', DCT.modified, None),
+                ('created', DCT.issued, None),
+                ('last_modified', DCT.modified, None),
             ]
 
             self._add_date_triples_from_dict(resource_dict, distribution, items)
@@ -214,16 +239,9 @@ class StadtzhSwissDcatProfile(RDFProfile):
             dataset_dict.get('organization'),
         ]):
 
-            publisher_uri = publisher_uri_from_dataset_dict(dataset_dict)
-            # if publisher_uri:
-            #     publisher_details = URIRef(publisher_uri)
-            # else:
-            #     # No organization nor publisher_uri
-            #     publisher_details = BNode()
             publisher_details = BNode()
 
             g.add((publisher_details, RDF.type, RDF.Description))
-            # g.add((dataset_node, DCT.publisher, publisher_details))
             g.add((dataset_node, DCT.publisher, publisher_details))
 
             publisher_name = self._get_dataset_value(dataset_dict, 'publisher_name')
