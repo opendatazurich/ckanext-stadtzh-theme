@@ -69,6 +69,21 @@ mapping_rights_dict = {
     'cc-zero': 'NonCommercialAllow - CommercialAllow - ReferenceNotRequired',
 }
 
+# Values 'sporadisch oder unregelmaessig' and 'keines'
+# do not have an equivalent in OGD and are ignored
+mapping_accrualPerdiodicty = {
+    'halbjaehrlich': 'semiannual',
+    'jaehrlich': 'annual',
+    'laufend': 'continuous',
+    'monatlich': 'monthly',
+    'quartalsweise': 'quarterly',
+    'stuendlich': 'continuous',
+    'taeglich': 'daily',
+    'woechentlich': 'weekly',
+}
+
+ckan_locale_default = pylons.config.get('ckan.locale_default', None)
+
 class StadtzhSwissDcatProfile(RDFProfile):
 
     def _rights(self, ckan_license_id):
@@ -94,19 +109,33 @@ class StadtzhSwissDcatProfile(RDFProfile):
         basic_items = [
             ('url', DCAT.landingPage, None),
             ('version', OWL.versionInfo, ['dcat_version']),
+        ]
+        self._add_triples_from_dict(dataset_dict, dataset_node, basic_items)
+
+        # Language
+        g.add((dataset_node, DCT.language, Literal(ckan_locale_default)))
+
+        # Basic date fields
+        date_items = [
             ('metadata_modified', DCT.modified, None),
             ('metadata_created', DCT.issued, None),
         ]
+        self._add_date_triples_from_dict(dataset_dict, dataset_node, date_items)
 
-        self._add_triples_from_dict(dataset_dict, dataset_node, basic_items)
-
+        # Organization
         organization_id = pylons.config.get('ckan.organization_id', None)
         id = self._get_dataset_value(dataset_dict, 'id')
         title = self._get_dataset_value(dataset_dict, 'title')
         description = self._get_dataset_value(dataset_dict, 'notes')
-        g.add((dataset_node, DCT.identifier, Literal(title + '@' + organization_id)))
-        g.add((dataset_node, DCT.title, Literal(id, lang='de')))
-        g.add((dataset_node, DCT.description, Literal(description, lang='de')))
+        g.add((dataset_node, DCT.identifier, Literal(id + '@' + organization_id)))
+        g.add((dataset_node, DCT.title, Literal(title, lang=ckan_locale_default)))
+        g.add((dataset_node, DCT.description, Literal(description, lang=ckan_locale_default)))
+
+        # Update Interval
+        update_interval = self._get_dataset_value(dataset_dict, 'updateInterval')
+        accrualPeriodicity = mapping_accrualPerdiodicty.get(update_interval[0])
+        if accrualPeriodicity:
+            g.add((dataset_node, DCT.accrualPeriodicity, Literal(accrualPeriodicity)))
 
         # Themes
         groups = self._get_dataset_value(dataset_dict, 'groups')
@@ -114,6 +143,10 @@ class StadtzhSwissDcatProfile(RDFProfile):
         theme_ids = self._themes(group_id)
         for theme_id in theme_ids:
             g.add((dataset_node, DCAT.theme, URIRef(ogd_theme_base_url + theme_id)))
+
+        # Legal Information
+        legal_information = self._get_dataset_value(dataset_dict, 'legalInformation')
+        g.add((dataset_node, DCT.accessRights, Literal(legal_information)))
 
         # Contact details
         if any([
@@ -126,21 +159,17 @@ class StadtzhSwissDcatProfile(RDFProfile):
             self._get_dataset_value(dataset_dict, 'author_email'),
         ]):
 
-            contact_uri = self._get_dataset_value(dataset_dict, 'contact_uri')
-            if contact_uri:
-                contact_details = URIRef(contact_uri)
-            else:
-                contact_details = BNode()
+            contact_details = BNode()
 
             g.add((contact_details, RDF.type, VCARD.Organization))
             g.add((dataset_node, DCAT.contactPoint, contact_details))
 
+            maintainer_email = self._get_dataset_value(dataset_dict, 'maintainer_email')
+            g.add((contact_details, VCARD.hasEmail, URIRef(maintainer_email)))
+
             items = [
                 ('contact_name', VCARD.fn, ['maintainer', 'author']),
-                ('contact_email', VCARD.hasEmail, ['maintainer_email',
-                                                   'author_email']),
             ]
-
             self._add_triples_from_dict(dataset_dict, contact_details, items)
 
         # Tags
@@ -231,21 +260,13 @@ class StadtzhSwissDcatProfile(RDFProfile):
                 g.add((distribution, SPDX.checksum, checksum))
 
         # Publisher
-        if any([
-            self._get_dataset_value(dataset_dict, 'publisher_uri'),
-            self._get_dataset_value(dataset_dict, 'publisher_name'),
-            dataset_dict.get('organization'),
-        ]):
+        if dataset_dict.get('organization'):
+
+            publisher_name = dataset_dict['organization']['title']
 
             publisher_details = BNode()
+            publisher_description = URIRef('http://ssz.org')
 
             g.add((publisher_details, RDF.type, RDF.Description))
-            g.add((dataset_node, DCT.publisher, publisher_details))
-
-            publisher_name = self._get_dataset_value(dataset_dict, 'publisher_name')
-            if not publisher_name and dataset_dict.get('organization'):
-                publisher_name = dataset_dict['organization']['title']
-
             g.add((publisher_details, RDFS.label, Literal(publisher_name)))
-
-            self._add_triples_from_dict(dataset_dict, publisher_details, items)
+            g.add((dataset_node, DCT.publisher, publisher_details))
