@@ -94,8 +94,6 @@ class StadtzhSwissDcatProfile(RDFProfile):
         basic_items = [
             ('url', DCAT.landingPage, None),
             ('version', OWL.versionInfo, ['dcat_version']),
-            # ('version_notes', ADMS.versionNotes, None),
-            # ('frequency', DCT.accrualPeriodicity, None),
             ('metadata_modified', DCT.modified, None),
             ('metadata_created', DCT.issued, None),
         ]
@@ -111,8 +109,9 @@ class StadtzhSwissDcatProfile(RDFProfile):
         g.add((dataset_node, DCT.description, Literal(description, lang='de')))
 
         # Themes
-        groups = self._get_dataset_value(dataset_dict, 'groups')[0].get('id')
-        theme_ids = self._themes(groups[0].get('id'))
+        groups = self._get_dataset_value(dataset_dict, 'groups')
+        group_id = groups[0].get('id')
+        theme_ids = self._themes(group_id)
         for theme_id in theme_ids:
             g.add((dataset_node, DCAT.theme, URIRef(ogd_theme_base_url + theme_id)))
 
@@ -159,7 +158,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
             items = [
                 ('name', DCT.title, None),
                 ('description', DCT.description, None),
-                ('status', ADMS.status, None),
+                ('state', ADMS.status, None),
             ]
 
             self._add_triples_from_dict(resource_dict, distribution, items)
@@ -172,7 +171,6 @@ class StadtzhSwissDcatProfile(RDFProfile):
             #  Lists
             items = [
                 ('theme', DCAT.theme, None),
-                ('documentation', FOAF.page, None),
                 ('language', DCT.language, None),
                 ('conforms_to', DCT.conformsTo, None),
             ]
@@ -249,14 +247,5 @@ class StadtzhSwissDcatProfile(RDFProfile):
                 publisher_name = dataset_dict['organization']['title']
 
             g.add((publisher_details, RDFS.label, Literal(publisher_name)))
-            # TODO: It would make sense to fallback these to organization
-            # fields but they are not in the default schema and the
-            # `organization` object in the dataset_dict does not include
-            # custom fields
-            items = [
-                ('publisher_email', FOAF.mbox, None),
-                ('publisher_url', FOAF.homepage, None),
-                ('publisher_type', DCT.type, None),
-            ]
 
             self._add_triples_from_dict(dataset_dict, publisher_details, items)
