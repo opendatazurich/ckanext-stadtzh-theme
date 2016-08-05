@@ -72,14 +72,16 @@ mapping_rights_dict = {
 # Values 'sporadisch oder unregelmaessig' and 'keines'
 # do not have an equivalent in OGD and are ignored
 mapping_accrualPerdiodicty = {
-    'halbjaehrlich': 'semiannual',
-    'jaehrlich': 'annual',
-    'laufend': 'continuous',
-    'monatlich': 'monthly',
-    'quartalsweise': 'quarterly',
-    'stuendlich': 'continuous',
-    'taeglich': 'daily',
-    'woechentlich': 'weekly',
+    'halbjaehrlich': 'http://purl.org/cld/freq/semiannual',
+    'jaehrlich': 'http://purl.org/cld/freq/annual',
+    'laufend': 'http://purl.org/cld/freq/continuous',
+    'monatlich': 'http://purl.org/cld/freq/monthly',
+    'quartalsweise': 'http://purl.org/cld/freq/quarterly',
+    'stuendlich': 'http://purl.org/cld/freq/continuous',
+    'taeglich': 'http://purl.org/cld/freq/daily',
+    'woechentlich': 'http://purl.org/cld/freq/weekly',
+    'keines': 'http://purl.org/cld/freq/completelyIrregular',
+    'sporadisch oder unregelmaessig': 'http://purl.org/cld/freq/completelyIrregular',
 }
 
 ckan_locale_default = pylons.config.get('ckan.locale_default', None)
@@ -135,7 +137,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
         update_interval = self._get_dataset_value(dataset_dict, 'updateInterval')
         accrualPeriodicity = mapping_accrualPerdiodicty.get(update_interval[0])
         if accrualPeriodicity:
-            g.add((dataset_node, DCT.accrualPeriodicity, Literal(accrualPeriodicity)))
+            g.add((dataset_node, DCT.accrualPeriodicity, URIRef(accrualPeriodicity)))
 
         # Themes
         groups = self._get_dataset_value(dataset_dict, 'groups')
