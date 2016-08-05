@@ -65,8 +65,8 @@ mapping_groups_dict = {
     'bauen-und-wohnen': ['construction'],
 }
 mapping_rights_dict = {
-    'cc-by-sa': 'NonCommercialAllow - CommercialAllow - ReferenceRequired',
-    'cc-zero': 'NonCommercialAllow - CommercialAllow - ReferenceNotRequired',
+    'cc-by-sa': 'NonCommercialAllowed-CommercialAllowed-ReferenceRequired',
+    'cc-zero': 'NonCommercialAllowed-CommercialAllowed-ReferenceNotRequired',
 }
 
 # Values 'sporadisch oder unregelmaessig' and 'keines'
