@@ -94,6 +94,22 @@ class StadtzhSwissDcatProfile(RDFProfile):
     def _themes(self, group_id):
         return mapping_groups_dict.get(group_id)
 
+    def _time_interval(self, dataset_dict):
+        time_range = self._get_dataset_value(dataset_dict, 'timeRange')
+        time_interval = {}
+        dates = str(time_range).replace(' ', '').split('-', 1)
+        if len(dates) > 0 and dates[0].isdigit() and len(dates[0]) == 4:
+            time_interval['start_date'] = dates[0] + '-01-01'
+            if len(dates) > 1 and dates[1].isdigit() and len(dates[1] == 4):
+                end_year = dates[1]
+            else:
+                end_year = dates[0]
+            time_interval['end_date'] = end_year + '-12-31'
+        else:
+            return None
+
+        return time_interval
+
     def graph_from_dataset(self, dataset_dict, dataset_ref):
 
         g = self.g
@@ -141,6 +157,19 @@ class StadtzhSwissDcatProfile(RDFProfile):
         accrualPeriodicity = mapping_accrualPerdiodicty.get(update_interval[0])
         if accrualPeriodicity:
             g.add((dataset_node, DCT.accrualPeriodicity, URIRef(accrualPeriodicity)))
+        # Temporal
+        time_range = self._time_interval(dataset_dict)
+        if time_range.get('start_date') and time_range.get('end_date'):
+            start = time_range.get('start_date')
+            end = time_range.get('end_date')
+
+            temporal_extent = BNode()
+            g.add((temporal_extent, RDF.type, DCT.PeriodOfTime))
+            g.add((temporal_extent, SCHEMA.startDate, Literal(start,
+                                                    datatype=XSD.date)))
+            g.add((temporal_extent, SCHEMA.endDate, Literal(end,
+                                                    datatype=XSD.date)))
+            g.add((dataset_ref, DCT.temporal, temporal_extent))
 
         # Themes
         groups = self._get_dataset_value(dataset_dict, 'groups')
