@@ -272,11 +272,9 @@ class StadtzhSwissDcatProfile(RDFProfile):
         # Publisher
         if dataset_dict.get('organization'):
 
-            publisher_name = dataset_dict['organization']['title']
+            publisher_name = dataset_dict.get('author')
 
             publisher_details = BNode()
-            publisher_description = URIRef('http://ssz.org')
 
             g.add((publisher_details, RDF.type, RDF.Description))
             g.add((publisher_details, RDFS.label, Literal(publisher_name)))
-            g.add((dataset_node, DCT.publisher, publisher_details))
