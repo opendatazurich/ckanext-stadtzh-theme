@@ -125,7 +125,10 @@ class StadtzhSwissDcatProfile(RDFProfile):
         self._add_date_triples_from_dict(dataset_dict, dataset_node, date_items)
 
         # Organization
-        organization_id = pylons.config.get('ckan.organization_id', None)
+        organization_id = pylons.config.get(
+            'ckanext.stadtzh-theme.dcat_ap_organization_slug',
+            None,
+        )
         id = self._get_dataset_value(dataset_dict, 'id')
         title = self._get_dataset_value(dataset_dict, 'title')
         description = self._get_dataset_value(dataset_dict, 'notes')
