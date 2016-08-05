@@ -176,7 +176,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
         # Tags
         for tag in dataset_dict.get('tags', []):
-            g.add((dataset_node, DCAT.keyword, Literal(tag['name'])))
+            g.add((dataset_node, DCAT.keyword, Literal(tag['name'], lang=ckan_locale_default)))
 
         # Resources
         for resource_dict in dataset_dict.get('resources', []):
