@@ -10,7 +10,6 @@ import logging
 log = logging.getLogger(__name__)
 
 
-
 DCT = Namespace("http://purl.org/dc/terms/")
 DCAT = Namespace("http://www.w3.org/ns/dcat#")
 ADMS = Namespace("http://www.w3.org/ns/adms#")
@@ -23,8 +22,6 @@ GSP = Namespace('http://www.opengis.net/ont/geosparql#')
 OWL = Namespace('http://www.w3.org/2002/07/owl#')
 SPDX = Namespace('http://spdx.org/rdf/terms#')
 XML = Namespace('http://www.w3.org/2001/XMLSchema')
-
-GEOJSON_IMT = 'https://www.iana.org/assignments/media-types/application/vnd.geo+json'
 
 namespaces = {
     'dct': DCT,
@@ -81,7 +78,8 @@ mapping_accrualPerdiodicty = {
     'taeglich': 'http://purl.org/cld/freq/daily',
     'woechentlich': 'http://purl.org/cld/freq/weekly',
     'keines': 'http://purl.org/cld/freq/completelyIrregular',
-    'sporadisch oder unregelmaessig': 'http://purl.org/cld/freq/completelyIrregular',
+    'sporadisch oder unregelmaessig':
+        'http://purl.org/cld/freq/completelyIrregular',
 }
 
 ckan_locale_default = pylons.config.get('ckan.locale_default', None)
@@ -138,7 +136,11 @@ class StadtzhSwissDcatProfile(RDFProfile):
             ('metadata_modified', DCT.modified, None),
             ('metadata_created', DCT.issued, None),
         ]
-        self._add_date_triples_from_dict(dataset_dict, dataset_node, date_items)
+        self._add_date_triples_from_dict(
+            dataset_dict,
+            dataset_node,
+            date_items
+        )
 
         # Organization
         organization_id = pylons.config.get(
@@ -148,15 +150,35 @@ class StadtzhSwissDcatProfile(RDFProfile):
         id = self._get_dataset_value(dataset_dict, 'id')
         title = self._get_dataset_value(dataset_dict, 'title')
         description = self._get_dataset_value(dataset_dict, 'notes')
-        g.add((dataset_node, DCT.identifier, Literal(id + '@' + organization_id)))
-        g.add((dataset_node, DCT.title, Literal(title, lang=ckan_locale_default)))
-        g.add((dataset_node, DCT.description, Literal(description, lang=ckan_locale_default)))
+        g.add((
+            dataset_node,
+            DCT.identifier,
+            Literal(id + '@' + organization_id)
+        ))
+        g.add((
+            dataset_node,
+            DCT.title,
+            Literal(title, lang=ckan_locale_default)
+        ))
+        g.add((
+            dataset_node,
+            DCT.description,
+            Literal(description, lang=ckan_locale_default)
+        ))
 
         # Update Interval
-        update_interval = self._get_dataset_value(dataset_dict, 'updateInterval')
+        update_interval = self._get_dataset_value(
+            dataset_dict,
+            'updateInterval'
+        )
         accrualPeriodicity = mapping_accrualPerdiodicty.get(update_interval[0])
         if accrualPeriodicity:
-            g.add((dataset_node, DCT.accrualPeriodicity, URIRef(accrualPeriodicity)))
+            g.add((
+                dataset_node,
+                DCT.accrualPeriodicity,
+                URIRef(accrualPeriodicity)
+            ))
+
         # Temporal
         time_range = self._time_interval(dataset_dict)
         if time_range.get('start_date') and time_range.get('end_date'):
@@ -176,10 +198,17 @@ class StadtzhSwissDcatProfile(RDFProfile):
         group_id = groups[0].get('id')
         theme_ids = self._themes(group_id)
         for theme_id in theme_ids:
-            g.add((dataset_node, DCAT.theme, URIRef(ogd_theme_base_url + theme_id)))
+            g.add((
+                dataset_node,
+                DCAT.theme,
+                URIRef(ogd_theme_base_url + theme_id)
+            ))
 
         # Legal Information
-        legal_information = self._get_dataset_value(dataset_dict, 'legalInformation')
+        legal_information = self._get_dataset_value(
+            dataset_dict,
+            'legalInformation'
+        )
         g.add((dataset_node, DCT.accessRights, Literal(legal_information)))
 
         # Contact details
@@ -198,7 +227,10 @@ class StadtzhSwissDcatProfile(RDFProfile):
             g.add((contact_details, RDF.type, VCARD.Organization))
             g.add((dataset_node, DCAT.contactPoint, contact_details))
 
-            maintainer_email = self._get_dataset_value(dataset_dict, 'maintainer_email')
+            maintainer_email = self._get_dataset_value(
+                dataset_dict,
+                'maintainer_email'
+            )
             g.add((contact_details, VCARD.hasEmail, URIRef(maintainer_email)))
 
             items = [
@@ -208,7 +240,11 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
         # Tags
         for tag in dataset_dict.get('tags', []):
-            g.add((dataset_node, DCAT.keyword, Literal(tag['name'], lang=ckan_locale_default)))
+            g.add((
+                dataset_node,
+                DCAT.keyword,
+                Literal(tag['name'], lang=ckan_locale_default)
+            ))
 
         # Resources
         for resource_dict in dataset_dict.get('resources', []):
@@ -237,7 +273,11 @@ class StadtzhSwissDcatProfile(RDFProfile):
                 ('language', DCT.language, None),
                 ('conforms_to', DCT.conformsTo, None),
             ]
-            self._add_list_triples_from_dict(resource_dict, distribution, items)
+            self._add_list_triples_from_dict(
+                resource_dict,
+                distribution,
+                items
+            )
 
             # Format
             if '/' in resource_dict.get('format', ''):
@@ -257,13 +297,17 @@ class StadtzhSwissDcatProfile(RDFProfile):
             if url:
                 g.add((distribution, DCAT.accessURL, Literal(url)))
 
-            # if resource has the following format, the distribution is a download
-            # and therefore needs a downloadURL
+            # if resource has the following format, the distribution is a
+            # download and therefore needs a downloadURL
             format = resource_dict.get('format')
             if format in ['xml', 'wms', 'wmts', 'wfs']:
                 download_url = resource_dict.get('url')
                 if download_url:
-                    g.add((distribution, DCAT.downloadURL, Literal(download_url)))
+                    g.add((
+                        distribution,
+                        DCAT.downloadURL,
+                        Literal(download_url)
+                    ))
 
             # Dates
             items = [
@@ -271,7 +315,11 @@ class StadtzhSwissDcatProfile(RDFProfile):
                 ('last_modified', DCT.modified, None),
             ]
 
-            self._add_date_triples_from_dict(resource_dict, distribution, items)
+            self._add_date_triples_from_dict(
+                resource_dict,
+                distribution,
+                items
+            )
 
             # Numbers
             if resource_dict.get('size'):
@@ -307,3 +355,5 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
             g.add((publisher_details, RDF.type, RDF.Description))
             g.add((publisher_details, RDFS.label, Literal(publisher_name)))
+            g.add((dataset_node, DCT.publisher, publisher_details))
+
