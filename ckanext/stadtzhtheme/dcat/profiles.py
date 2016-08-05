@@ -223,13 +223,18 @@ class StadtzhSwissDcatProfile(RDFProfile):
                     g.add((distribution, DCAT.mediaType,
                            Literal(resource_dict['mimetype'])))
 
-            # URL
+            # URLs
             url = resource_dict.get('url')
-            download_url = resource_dict.get('download_url')
-            if download_url:
-                g.add((distribution, DCAT.downloadURL, Literal(download_url)))
-            if (url and not download_url) or (url and url != download_url):
+            if url:
                 g.add((distribution, DCAT.accessURL, Literal(url)))
+
+            # if resource has the following format, the distribution is a download
+            # and therefore needs a downloadURL
+            format = resource_dict.get('format')
+            if format in ['xml', 'wms', 'wmts', 'wfs']:
+                download_url = resource_dict.get('url')
+                if download_url:
+                    g.add((distribution, DCAT.downloadURL, Literal(download_url)))
 
             # Dates
             items = [
