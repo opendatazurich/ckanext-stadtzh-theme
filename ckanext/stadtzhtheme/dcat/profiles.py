@@ -96,14 +96,17 @@ class StadtzhSwissDcatProfile(RDFProfile):
         time_range = self._get_dataset_value(dataset_dict, 'timeRange')
         time_interval = {}
         dates = str(time_range).replace(' ', '').split('-', 1)
-        if len(dates) > 0 and dates[0].isdigit() and len(dates[0]) == 4:
-            time_interval['start_date'] = dates[0] + '-01-01'
-            if len(dates) > 1 and dates[1].isdigit() and len(dates[1] == 4):
-                end_year = dates[1]
+        try:
+            if len(dates) > 0 and dates[0].isdigit() and len(dates[0]) == 4:
+                time_interval['start_date'] = dates[0] + '-01-01'
+                if len(dates) > 1 and dates[1].isdigit() and len(dates[1] == 4):
+                    end_year = dates[1]
+                else:
+                    end_year = dates[0]
+                time_interval['end_date'] = end_year + '-12-31'
             else:
-                end_year = dates[0]
-            time_interval['end_date'] = end_year + '-12-31'
-        else:
+                return None
+        except TypeError:
             return None
 
         return time_interval
@@ -112,11 +115,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
         g = self.g
 
-        catalog_node = BNode()
-        dataset_node = BNode()
-        g.add((catalog_node, RDF.type, DCAT.Catalog))
-        g.add((catalog_node, DCAT.dataset, dataset_node))
-        g.add((dataset_node, RDF.type, DCAT.Dataset))
+        g.add((dataset_ref, RDF.type, DCAT.Dataset))
 
         for prefix, namespace in namespaces.iteritems():
             g.bind(prefix, namespace)
@@ -126,10 +125,10 @@ class StadtzhSwissDcatProfile(RDFProfile):
             ('url', DCAT.landingPage, None),
             ('version', OWL.versionInfo, ['dcat_version']),
         ]
-        self._add_triples_from_dict(dataset_dict, dataset_node, basic_items)
+        self._add_triples_from_dict(dataset_dict, dataset_ref, basic_items)
 
         # Language
-        g.add((dataset_node, DCT.language, Literal(ckan_locale_default)))
+        g.add((dataset_ref, DCT.language, Literal(ckan_locale_default)))
 
         # Basic date fields
         date_items = [
@@ -138,7 +137,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
         ]
         self._add_date_triples_from_dict(
             dataset_dict,
-            dataset_node,
+            dataset_ref,
             date_items
         )
 
@@ -151,17 +150,17 @@ class StadtzhSwissDcatProfile(RDFProfile):
         title = self._get_dataset_value(dataset_dict, 'title')
         description = self._get_dataset_value(dataset_dict, 'notes')
         g.add((
-            dataset_node,
+            dataset_ref,
             DCT.identifier,
             Literal(id + '@' + organization_id)
         ))
         g.add((
-            dataset_node,
+            dataset_ref,
             DCT.title,
             Literal(title, lang=ckan_locale_default)
         ))
         g.add((
-            dataset_node,
+            dataset_ref,
             DCT.description,
             Literal(description, lang=ckan_locale_default)
         ))
@@ -174,14 +173,14 @@ class StadtzhSwissDcatProfile(RDFProfile):
         accrualPeriodicity = mapping_accrualPerdiodicty.get(update_interval[0])
         if accrualPeriodicity:
             g.add((
-                dataset_node,
+                dataset_ref,
                 DCT.accrualPeriodicity,
                 URIRef(accrualPeriodicity)
             ))
 
         # Temporal
         time_range = self._time_interval(dataset_dict)
-        if time_range.get('start_date') and time_range.get('end_date'):
+        if time_range is not None and time_range.get('start_date') and time_range.get('end_date'):
             start = time_range.get('start_date')
             end = time_range.get('end_date')
 
@@ -195,21 +194,24 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
         # Themes
         groups = self._get_dataset_value(dataset_dict, 'groups')
-        group_id = groups[0].get('id')
-        theme_ids = self._themes(group_id)
-        for theme_id in theme_ids:
-            g.add((
-                dataset_node,
-                DCAT.theme,
-                URIRef(ogd_theme_base_url + theme_id)
-            ))
+        try:
+            group_id = groups[0].get('id')
+            theme_ids = self._themes(group_id)
+            for theme_id in theme_ids:
+                g.add((
+                    dataset_ref,
+                    DCAT.theme,
+                    URIRef(ogd_theme_base_url + theme_id)
+                ))
+        except IndexError:
+            pass
 
         # Legal Information
         legal_information = self._get_dataset_value(
             dataset_dict,
             'legalInformation'
         )
-        g.add((dataset_node, DCT.accessRights, Literal(legal_information)))
+        g.add((dataset_ref, DCT.accessRights, Literal(legal_information)))
 
         # Contact details
         if any([
@@ -225,7 +227,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
             contact_details = BNode()
 
             g.add((contact_details, RDF.type, VCARD.Organization))
-            g.add((dataset_node, DCAT.contactPoint, contact_details))
+            g.add((dataset_ref, DCAT.contactPoint, contact_details))
 
             maintainer_email = self._get_dataset_value(
                 dataset_dict,
@@ -241,7 +243,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
         # Tags
         for tag in dataset_dict.get('tags', []):
             g.add((
-                dataset_node,
+                dataset_ref,
                 DCAT.keyword,
                 Literal(tag['name'], lang=ckan_locale_default)
             ))
@@ -250,7 +252,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
         for resource_dict in dataset_dict.get('resources', []):
             distribution = BNode()
 
-            g.add((dataset_node, DCAT.distribution, distribution))
+            g.add((dataset_ref, DCAT.distribution, distribution))
             g.add((distribution, RDF.type, DCAT.Distribution))
 
             #  Simple values
@@ -355,5 +357,8 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
             g.add((publisher_details, RDF.type, RDF.Description))
             g.add((publisher_details, RDFS.label, Literal(publisher_name)))
-            g.add((dataset_node, DCT.publisher, publisher_details))
+            g.add((dataset_ref, DCT.publisher, publisher_details))
 
+    def graph_from_catalog(self, catalog_dict, catalog_ref):
+        g = self.g
+        g.add((catalog_ref, RDF.type, DCAT.Catalog))
