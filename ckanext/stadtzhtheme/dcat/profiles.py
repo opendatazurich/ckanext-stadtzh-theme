@@ -82,7 +82,7 @@ mapping_accrualPerdiodicty = {
         'http://purl.org/cld/freq/completelyIrregular',
 }
 
-ckan_locale_default = pylons.config.get('ckan.locale_default', None)
+ckan_locale_default = pylons.config.get('ckan.locale_default', 'de')
 
 class StadtzhSwissDcatProfile(RDFProfile):
 
