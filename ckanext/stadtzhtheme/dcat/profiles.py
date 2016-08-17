@@ -308,7 +308,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
                 g.add((distribution, DCAT.accessURL, Literal(url)))
 
             # if resource has the following format, the distribution is a
-            # service and therefore doesn't needs a downloadURL
+            # service and therefore doesn't need a downloadURL
             format = resource_dict.get('format').lower()
             if format not in ['xml', 'wms', 'wmts', 'wfs']:
                 download_url = resource_dict.get('url')
