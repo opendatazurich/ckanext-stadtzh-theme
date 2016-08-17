@@ -90,13 +90,15 @@ class StadtzhSwissDcatProfile(RDFProfile):
         return mapping_rights_dict.get(ckan_license_id)
 
     def _themes(self, group_id):
-        return mapping_groups_dict.get(group_id)
+        return mapping_groups_dict.get(group_id, [])
 
     def _time_interval(self, dataset_dict):
         time_range = self._get_dataset_value(dataset_dict, 'timeRange')
+        if time_range is None:
+            return None
         time_interval = {}
-        dates = str(time_range).replace(' ', '').split('-', 1)
         try:
+            dates = time_range.encode('utf-8').strip().split('-', 1)
             if len(dates) > 0 and dates[0].isdigit() and len(dates[0]) == 4:
                 time_interval['start_date'] = dates[0] + '-01-01'
                 if len(dates) > 1 and dates[1].isdigit() and len(dates[1] == 4):
@@ -106,7 +108,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
                 time_interval['end_date'] = end_year + '-12-31'
             else:
                 return None
-        except TypeError:
+        except (TypeError, IndexError):
             return None
 
         return time_interval
@@ -122,10 +124,13 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
         # Basic fields
         basic_items = [
-            ('url', DCAT.landingPage, None),
             ('version', OWL.versionInfo, ['dcat_version']),
         ]
         self._add_triples_from_dict(dataset_dict, dataset_ref, basic_items)
+
+        # landingPage is the original portal page
+        site_url = pylons.config.get('ckan.site_url', '')
+        g.add((dataset_ref, DCAT.landingPage, Literal(site_url + '/dataset/' + dataset_dict['name'])))
 
         # Language
         g.add((dataset_ref, DCT.language, Literal(ckan_locale_default)))
@@ -144,7 +149,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
         # Organization
         organization_id = pylons.config.get(
             'ckanext.stadtzh-theme.dcat_ap_organization_slug',
-            None,
+            '',
         )
         id = self._get_dataset_value(dataset_dict, 'id')
         title = self._get_dataset_value(dataset_dict, 'title')
@@ -166,11 +171,14 @@ class StadtzhSwissDcatProfile(RDFProfile):
         ))
 
         # Update Interval
-        update_interval = self._get_dataset_value(
-            dataset_dict,
-            'updateInterval'
-        )
-        accrualPeriodicity = mapping_accrualPerdiodicty.get(update_interval[0])
+        try:
+            update_interval = self._get_dataset_value(
+                dataset_dict,
+                'updateInterval'
+            )
+            accrualPeriodicity = mapping_accrualPerdiodicty.get(update_interval[0])
+        except IndexError:
+            accrualPeriodicity = None
         if accrualPeriodicity:
             g.add((
                 dataset_ref,
@@ -300,9 +308,9 @@ class StadtzhSwissDcatProfile(RDFProfile):
                 g.add((distribution, DCAT.accessURL, Literal(url)))
 
             # if resource has the following format, the distribution is a
-            # download and therefore needs a downloadURL
-            format = resource_dict.get('format')
-            if format in ['xml', 'wms', 'wmts', 'wfs']:
+            # service and therefore doesn't need a downloadURL
+            format = resource_dict.get('format').lower()
+            if format not in ['xml', 'wms', 'wmts', 'wfs']:
                 download_url = resource_dict.get('url')
                 if download_url:
                     g.add((
