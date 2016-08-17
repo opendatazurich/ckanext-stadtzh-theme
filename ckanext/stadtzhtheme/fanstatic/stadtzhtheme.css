@@ -29,7 +29,7 @@ html,
 
 .masthead .nav-pills {
     display: inline-block;
-    margin-top: 20px;
+    margin-top: 15px;
     margin-left: 60px;
 }
 
@@ -60,7 +60,7 @@ html,
 .masthead .site-search {
     position: absolute;
     right: 0px;
-    top: 30px;
+    top: 27px;
 }
 @media (min-width: 980px) {
     .masthead .nav-collapse {
@@ -159,7 +159,7 @@ html,
 .site-logo img {
     display: inline;
     padding-top: 15px;
-    height: 45px;
+    height: 35px;
     float: left;
 }
 
