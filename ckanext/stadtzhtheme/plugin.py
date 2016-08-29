@@ -189,6 +189,20 @@ def is_url(*args, **kw):
     valid_schemes = ('http', 'https', 'ftp')
     return url.scheme in valid_schemes
 
+def get_ajax_api_endpoint():
+    '''
+    Returns the URL endpoint for AJAX calls.
+    Depending on the request, it could be the internal or external site URL
+    '''
+    try:
+        request_url = urlparse.urlparse(request.url)
+        internal_url = urlparse.urlparse(config.get('ckan.site_url_internal', 'https://ogd.global.szh.loc'))
+        if request_url.netloc == internal_url.netloc:
+            return config.get('ckan.site_url_internal')
+    except ValueError:
+        pass
+    return config.get('ckan.site_url')
+
 def full_external_url():
     ''' Returns the fully qualified current external url (eg http://...) useful
     for sharing etc '''
@@ -274,6 +288,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'validate_email': validate_email,
             'get_organization_dict': get_organization_dict,
             'full_external_url': full_external_url,
+            'get_ajax_api_endpoint': get_ajax_api_endpoint,
             'is_url': is_url,
             'get_site_protocol': get_site_protocol,
             'get_site_host': get_site_host,
