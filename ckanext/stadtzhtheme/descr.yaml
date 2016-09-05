@@ -23,5 +23,5 @@ csv:
     description: Comma-Separated Values.
     link: Weitere Informationen zu CSV finden sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/csv.html)
 gpkg:    
-    description: GeoPackage. Projektion CH1903+ / LV95 (EPSG:2056)
+    description: GeoPackage. Projektion CH1903+ / LV95 (EPSG:2056).
     link: Weitere Informationen zu GeoPackage finden sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/gpkg.html)
