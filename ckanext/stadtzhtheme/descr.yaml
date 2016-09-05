@@ -5,7 +5,7 @@ wms:
     description: Web Map Service. Projektion WGS84 (EPSG:4326).
     link: Weitere Informationen zu WMS finden sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/wms_wmts.html)
 wmts:
-    description: Web Map Tile Service.  Projektion CH1903+ / LV95 (EPSG:2056).
+    description: Web Map Tile Service. Projektion CH1903+ / LV95 (EPSG:2056).
     link: Weitere Informationen zu WMTS finden sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/wms_wmts.html)
 wfs: 
     description: Web Feature Service. Projektion CH1903+ / LV95 (EPSG:2056).
