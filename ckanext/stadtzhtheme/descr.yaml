@@ -1,24 +1,27 @@
 zip:
-    description: Shapefile. Projektion CH1903.
+    description: Shapefile. Projektion CH1903+ / LV95 (EPSG:2056).
     link: Weitere Informationen zu Shapefiles finden sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/shp_shapefile.html)
 wms: 
-    description: Web Map Service. Projektion WGS84.
+    description: Web Map Service. Projektion WGS84 (EPSG:4326).
     link: Weitere Informationen zu WMS finden sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/wms_wmts.html)
 wmts:
-    description: Web Map Tile Service. Projektion CH1903.
+    description: Web Map Tile Service.  Projektion CH1903+ / LV95 (EPSG:2056).
     link: Weitere Informationen zu WMTS finden sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/wms_wmts.html)
 wfs: 
-    description: Web Feature Service. Projektion CH1903.
+    description: Web Feature Service. Projektion CH1903+ / LV95 (EPSG:2056).
     link: Weitere Informationen zu WFS finden sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/wfs.html)
 kml: 
-    description: Keyhole Markup Language (KML). Projektion WGS84.
+    description: Keyhole Markup Language (KML). Projektion WGS84 (EPSG:4326).
     link: Weitere Informationen zu KML finden sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/kml.html)
 kmz:
-    description: Keyhole Markup Language (KML). Projektion WGS84.
+    description: Keyhole Markup Language (KML). Projektion WGS84 (EPSG:4326).
     link: Weitere Informationen zu KMZ finden sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/kmz.html)
 json: 
-    description: GeoJSON. Projektion WGS84.
+    description: GeoJSON. Projektion WGS84 (EPSG:4326).
     link: Weitere Informationen zu GeoJSON finden sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/json_geojson.html)
 csv:
     description: Comma-Separated Values.
     link: Weitere Informationen zu CSV  finden sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/csv.html)
+gpkg:    
+    description: GeoPackage. Projektion CH1903+ / LV95 (EPSG:2056)
+    link: Weitere Informationen zu GeoPackage  finden sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/gpkg.html)
