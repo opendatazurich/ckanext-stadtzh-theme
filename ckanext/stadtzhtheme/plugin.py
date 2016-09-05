@@ -481,6 +481,18 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         # set value of new field data_publisher with value of url
         pkg_dict['data_publisher'] = pkg_dict['url']
 
+    def before_index(self, search_data):
+        if not self.is_supported_package_type(search_data):
+            return search_data
+
+        validated_dict = json.loads(search_data['validated_data_dict'])
+        search_data['res_format'] = list(set([r['format'].lower() for r in validated_dict[u'resources'] if 'format' in r]))
+        return search_data
+
+    def is_supported_package_type(self, pkg_dict):
+        # only package type 'dataset' is supported (not harvesters!)
+        return pkg_dict.get('type') == 'dataset'
+
     # IUploader
 
     def get_uploader(self, upload_to, old_filename=None):
