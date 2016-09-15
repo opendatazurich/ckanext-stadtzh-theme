@@ -192,16 +192,12 @@ def is_url(*args, **kw):
 def get_ajax_api_endpoint():
     '''
     Returns the URL endpoint for AJAX calls.
-    Depending on the request, it could be the internal or external site URL
+    Depending on the environment variable 'ssz' set by apache,
+    the internal or external URL is returned.
     '''
-    try:
-        request_url = urlparse.urlparse(request.url)
-        internal_url = urlparse.urlparse(config.get('ckan.site_url_internal', 'https://ogd.global.szh.loc'))
-        if request_url.netloc == internal_url.netloc:
-            return config.get('ckan.site_url_internal')
-    except ValueError:
-        pass
-    return config.get('ckan.site_url')
+    if request.environ.get('ssz', None) is not None:
+        return config.get('ckan.site_url_internal', '')
+    return config.get('ckan.site_url', '')
 
 def full_external_url():
     ''' Returns the fully qualified current external url (eg http://...) useful
