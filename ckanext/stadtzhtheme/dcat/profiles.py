@@ -137,8 +137,8 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
         # Basic date fields
         date_items = [
-            ('metadata_modified', DCT.modified, None),
-            ('metadata_created', DCT.issued, None),
+            ('dateLastUpdated', DCT.modified, 'metadata_modified'),
+            ('dateFirstPublished', DCT.issued, 'metadata_created'),
         ]
         self._add_date_triples_from_dict(
             dataset_dict,
