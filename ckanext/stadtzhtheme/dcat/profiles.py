@@ -223,15 +223,21 @@ class StadtzhSwissDcatProfile(RDFProfile):
         # Themes
         groups = self._get_dataset_value(dataset_dict, 'groups')
         try:
+            theme_ids = []
             for group in groups:
                 group_id = group.get('id')
-                theme_ids = self._themes(group_id)
-                for theme_id in theme_ids:
-                    g.add((
-                        dataset_ref,
-                        DCAT.theme,
-                        URIRef(ogd_theme_base_url + theme_id)
-                    ))
+                if self._themes(group_id)[0]:
+                    theme_ids.append(str(self._themes(group_id)[0]))
+
+            # make sure that themes are unique
+            theme_ids_set = set(theme_ids)
+
+            for theme_id in theme_ids_set:
+                g.add((
+                    dataset_ref,
+                    DCAT.theme,
+                    URIRef(ogd_theme_base_url + theme_id)
+                ))
         except IndexError:
             pass
 
@@ -300,8 +306,6 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
             #  Lists
             items = [
-                ('theme', DCAT.theme, None),
-                ('language', DCT.language, None),
                 ('conforms_to', DCT.conformsTo, None),
             ]
             self._add_list_triples_from_dict(
