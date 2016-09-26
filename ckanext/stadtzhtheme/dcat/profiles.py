@@ -7,6 +7,7 @@ import rdflib
 from rdflib import URIRef, BNode, Literal
 from rdflib.namespace import Namespace, RDF, XSD, SKOS, RDFS
 
+import itertools
 import pylons
 import logging
 log = logging.getLogger(__name__)
@@ -223,16 +224,11 @@ class StadtzhSwissDcatProfile(RDFProfile):
         # Themes
         groups = self._get_dataset_value(dataset_dict, 'groups')
         try:
-            theme_ids = []
-            for group in groups:
-                group_id = group.get('id')
-                if self._themes(group_id)[0]:
-                    theme_ids.append(str(self._themes(group_id)[0]))
+            theme_ids = set(itertools.chain.from_iterable(
+                [self._themes(group.get('id')) for group in
+                 groups]))
 
-            # make sure that themes are unique
-            theme_ids_set = set(theme_ids)
-
-            for theme_id in theme_ids_set:
+            for theme_id in theme_ids:
                 g.add((
                     dataset_ref,
                     DCAT.theme,
