@@ -224,15 +224,15 @@ class StadtzhSwissDcatProfile(RDFProfile):
         # Themes
         groups = self._get_dataset_value(dataset_dict, 'groups')
         try:
-            theme_ids = set(itertools.chain.from_iterable(
-                [self._themes(group.get('id')) for group in
+            theme_names = set(itertools.chain.from_iterable(
+                [self._themes(group.get('name')) for group in
                  groups]))
 
-            for theme_id in theme_ids:
+            for theme_name in theme_names:
                 g.add((
                     dataset_ref,
                     DCAT.theme,
-                    URIRef(ogd_theme_base_url + theme_id)
+                    URIRef(ogd_theme_base_url + theme_name)
                 ))
         except IndexError:
             pass
