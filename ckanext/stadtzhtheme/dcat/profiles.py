@@ -1,6 +1,8 @@
 from ckanext.dcat.profiles import RDFProfile
 from ckanext.dcat.utils import resource_uri, publisher_uri_from_dataset_dict
 
+import datetime
+from dateutil.parser import parse as parse_date
 import rdflib
 from rdflib import URIRef, BNode, Literal
 from rdflib.namespace import Namespace, RDF, XSD, SKOS, RDFS
@@ -113,6 +115,24 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
         return time_interval
 
+    def _add_date_triple(self, subject, predicate, value, _type=Literal):
+        '''
+        Adds a new triple with a date object
+        Dates are parsed using dateutil, and if the date obtained is correct,
+        added to the graph as an XSD.dateTime value.
+        If there are parsing errors, the literal string value is added.
+        '''
+        if not value:
+            return
+        try:
+            default_datetime = datetime.datetime(1, 1, 1, 0, 0, 0)
+            _date = parse_date(value, default=default_datetime, dayfirst=True)
+
+            self.g.add((subject, predicate, _type(_date.isoformat(),
+                                                  datatype=XSD.dateTime)))
+        except ValueError:
+            self.g.add((subject, predicate, _type(value)))
+
     def graph_from_dataset(self, dataset_dict, dataset_ref):
 
         g = self.g
@@ -137,8 +157,8 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
         # Basic date fields
         date_items = [
-            ('metadata_modified', DCT.modified, None),
-            ('metadata_created', DCT.issued, None),
+            ('dateLastUpdated', DCT.modified, 'metadata_modified'),
+            ('dateFirstPublished', DCT.issued, 'metadata_created'),
         ]
         self._add_date_triples_from_dict(
             dataset_dict,
