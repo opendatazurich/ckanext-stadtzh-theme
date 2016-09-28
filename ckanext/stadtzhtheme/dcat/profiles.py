@@ -285,6 +285,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
             g.add((dataset_ref, DCAT.distribution, distribution))
             g.add((distribution, RDF.type, DCAT.Distribution))
+            g.add((distribution, DCT.language, Literal(ckan_locale_default)))
 
             #  Simple values
             items = [
