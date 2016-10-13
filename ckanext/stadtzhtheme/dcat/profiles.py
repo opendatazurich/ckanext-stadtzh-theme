@@ -7,6 +7,7 @@ import rdflib
 from rdflib import URIRef, BNode, Literal
 from rdflib.namespace import Namespace, RDF, XSD, SKOS, RDFS
 
+import itertools
 import pylons
 import logging
 log = logging.getLogger(__name__)
@@ -223,13 +224,18 @@ class StadtzhSwissDcatProfile(RDFProfile):
         # Themes
         groups = self._get_dataset_value(dataset_dict, 'groups')
         try:
-            group_id = groups[0].get('id')
-            theme_ids = self._themes(group_id)
-            for theme_id in theme_ids:
+            theme_names = set(itertools.chain.from_iterable(
+                [self._themes(group.get('name')) for group in
+                 groups]))
+            if any(tag['name'] == 'geodaten'
+                   for tag in dataset_dict.get('tags', [])):
+                theme_names.add('geography')
+
+            for theme_name in theme_names:
                 g.add((
                     dataset_ref,
                     DCAT.theme,
-                    URIRef(ogd_theme_base_url + theme_id)
+                    URIRef(ogd_theme_base_url + theme_name)
                 ))
         except IndexError:
             pass
@@ -282,6 +288,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
             g.add((dataset_ref, DCAT.distribution, distribution))
             g.add((distribution, RDF.type, DCAT.Distribution))
+            g.add((distribution, DCT.language, Literal(ckan_locale_default)))
 
             #  Simple values
             items = [
@@ -299,8 +306,6 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
             #  Lists
             items = [
-                ('theme', DCAT.theme, None),
-                ('language', DCT.language, None),
                 ('conforms_to', DCT.conformsTo, None),
             ]
             self._add_list_triples_from_dict(
