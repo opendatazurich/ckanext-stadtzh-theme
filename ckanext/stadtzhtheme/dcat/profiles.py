@@ -227,19 +227,15 @@ class StadtzhSwissDcatProfile(RDFProfile):
             theme_names = set(itertools.chain.from_iterable(
                 [self._themes(group.get('name')) for group in
                  groups]))
+            if any(tag['name'] == 'geodaten'
+                   for tag in dataset_dict.get('tags', [])):
+                theme_names.add('geography')
 
             for theme_name in theme_names:
                 g.add((
                     dataset_ref,
                     DCAT.theme,
                     URIRef(ogd_theme_base_url + theme_name)
-                ))
-            if any(tag['name'] == 'geodaten'
-                   for tag in dataset_dict.get('tags', [])):
-                g.add((
-                    dataset_ref,
-                    DCAT.theme,
-                    URIRef(ogd_theme_base_url + 'geography')
                 ))
         except IndexError:
             pass
