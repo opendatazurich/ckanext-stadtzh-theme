@@ -234,6 +234,13 @@ class StadtzhSwissDcatProfile(RDFProfile):
                     DCAT.theme,
                     URIRef(ogd_theme_base_url + theme_name)
                 ))
+            if any(tag['name'] == 'geodaten'
+                   for tag in dataset_dict.get('tags', [])):
+                g.add((
+                    dataset_ref,
+                    DCAT.theme,
+                    URIRef(ogd_theme_base_url + 'geography')
+                ))
         except IndexError:
             pass
 
@@ -278,14 +285,6 @@ class StadtzhSwissDcatProfile(RDFProfile):
                 DCAT.keyword,
                 Literal(tag['name'], lang=ckan_locale_default)
             ))
-            # if dataset has the tag 'geodaten' it is added to group: geography
-            if 'geodaten' == tag['name']:
-                g.add((
-                    dataset_ref,
-                    DCAT.theme,
-                    URIRef(ogd_theme_base_url + 'geography')
-                ))
-
 
         # Resources
         for resource_dict in dataset_dict.get('resources', []):
