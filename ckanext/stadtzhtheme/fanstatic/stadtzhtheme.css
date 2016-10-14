@@ -244,11 +244,6 @@ a.tag:hover {
     display: none;
 }
 
-[role="main"] .span12 {
-    width: 938px;
-    float: right;
-}
-
 table.package-metadata {
     margin-bottom: 0px;
 }
