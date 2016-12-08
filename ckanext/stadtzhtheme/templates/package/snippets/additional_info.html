@@ -134,7 +134,7 @@
   {% if comments %}
     <h3>{{ _("Comments") }}</h3>
     <div class="package-comments">
-      {{ h.render_markdown(comments[0]) }}
+      {{ h.render_markdown(comments[0], allow_html=True) }}
     </div>
   {% endif %}
 
