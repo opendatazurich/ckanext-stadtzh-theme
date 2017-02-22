@@ -13,6 +13,7 @@ import lepl.apps.rfc3696
 
 from pylons import config
 import ckan.plugins as plugins
+import ckanext.datapusher.interfaces as dpi
 import ckan.plugins.toolkit as tk
 from ckan import model
 from ckan.common import request
@@ -253,7 +254,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     plugins.implements(plugins.ITemplateHelpers, inherit=False)
     plugins.implements(plugins.IPackageController, inherit=True)
     plugins.implements(plugins.IUploader, inherit=True)
-    plugins.implements(plugins.IDataPusher, inherit=True)
+    plugins.implements(dpi.IDataPusher, inherit=True)
 
     def update_config(self, config):
         try:
@@ -502,7 +503,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
 
     def after_upload(self, context, resource_dict, dataset_dict):
         # create resource views after a successful upload to the DataStore
-        logic.get_action('resource_create_default_resource_views')(
+        tk.get_action('resource_create_default_resource_views')(
             context,
             {
 	        'resource': resource_dict,
@@ -585,7 +586,7 @@ class StadtzhUpload(DefaultUpload, StadtzhFileHelper):
                 output_file.write(data)
                 if current_size > max_size:
                     os.remove(self.tmp_filepath)
-                    raise logic.ValidationError(
+                    raise tk.ValidationError(
                         {self.file_field: ['File upload too large']}
                     )
             output_file.close()
@@ -648,7 +649,7 @@ class StadtzhResourceUpload(DefaultResourceUpload, StadtzhFileHelper):
                 output_file.write(data)
                 if current_size > max_size:
                     os.remove(tmp_filepath)
-                    raise logic.ValidationError(
+                    raise tk.ValidationError(
                         {'upload': ['File upload too large']}
                     )
             output_file.close()
