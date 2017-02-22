@@ -253,6 +253,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     plugins.implements(plugins.ITemplateHelpers, inherit=False)
     plugins.implements(plugins.IPackageController, inherit=True)
     plugins.implements(plugins.IUploader, inherit=True)
+    plugins.implements(plugins.IDataPusher, inherit=True)
 
     def update_config(self, config):
         try:
@@ -496,6 +497,19 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
 
     def get_resource_uploader(self, data_dict):
         return StadtzhResourceUpload(data_dict)
+
+    # IDataPusher
+
+    def after_upload(self, context, resource_dict, dataset_dict):
+        # create resource views after a successful upload to the DataStore
+        logic.get_action('resource_create_default_resource_views')(
+            context,
+            {
+	        'resource': resource_dict,
+                'package': dataset_dict,
+            }
+        )
+
 
 class StadtzhFileHelper(object):
     def chown_path(self, path, user=None, group=None):
