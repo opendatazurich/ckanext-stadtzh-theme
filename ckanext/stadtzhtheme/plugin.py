@@ -487,6 +487,33 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         search_data['res_format'] = list(set([r['format'].lower() for r in validated_dict[u'resources'] if 'format' in r]))
         return search_data
 
+    def before_view(self, pkg_dict):
+        if not self.is_supported_package_type(pkg_dict):
+            return pkg_dict
+
+        # create resource views if necessary
+        user = tk.get_action('get_site_user')({'ignore_auth': True}, {})
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': user['name']
+        }
+        logic.check_access('package_create_default_resource_views', context)
+
+        # get the dataset via API, as the pkg_dict does not contain all fields
+        dataset = tk.get_action('package_show')(
+            context,
+            {'id': pkg_dict['id']}
+        )
+
+        # Make sure resource views are created before showing a dataset
+        tk.get_action('package_create_default_resource_views')(
+            context,
+            {'package': dataset}
+        )
+
+        return pkg_dict
+
     def is_supported_package_type(self, pkg_dict):
         # only package type 'dataset' is supported (not harvesters!)
         return pkg_dict.get('type') == 'dataset'
