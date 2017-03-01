@@ -498,7 +498,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'session': model.Session,
             'user': user['name']
         }
-        logic.check_access('package_create_default_resource_views', context)
+        tk.check_access('package_create_default_resource_views', context)
 
         # get the dataset via API, as the pkg_dict does not contain all fields
         dataset = tk.get_action('package_show')(
