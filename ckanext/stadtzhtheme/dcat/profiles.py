@@ -284,7 +284,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
         # Resources
         for resource_dict in dataset_dict.get('resources', []):
-            distribution = BNode()
+            distribution = URIRef(resource_uri(resource_dict))
 
             g.add((dataset_ref, DCAT.distribution, distribution))
             g.add((distribution, RDF.type, DCAT.Distribution))
@@ -292,6 +292,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
             #  Simple values
             items = [
+                ('id', DCT.identifier, None),
                 ('name', DCT.title, None),
                 ('description', DCT.description, None),
                 ('state', ADMS.status, None),
