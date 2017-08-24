@@ -66,6 +66,7 @@ mapping_groups_dict = {
 }
 mapping_rights_dict = {
     'cc-by-sa': 'NonCommercialAllowed-CommercialAllowed-ReferenceRequired',
+    'cc-by':'NonCommercialAllowed-CommercialAllowed-ReferenceRequired',
     'cc-zero': 'NonCommercialAllowed-CommercialAllowed-ReferenceNotRequired',
 }
 
