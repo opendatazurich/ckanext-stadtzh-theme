@@ -4,11 +4,6 @@ import logging
 import json
 import yaml
 import re
-import os
-import pwd
-import grp
-import urlparse
-import traceback
 import lepl.apps.rfc3696
 
 from pylons import config
@@ -16,8 +11,6 @@ import ckan.plugins as plugins
 import ckanext.datapusher.interfaces as dpi
 import ckan.plugins.toolkit as tk
 from ckan import model
-from ckan.common import request
-from routes import url_for
 
 log = logging.getLogger(__name__)
 
