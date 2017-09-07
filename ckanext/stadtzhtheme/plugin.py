@@ -18,8 +18,6 @@ import ckan.plugins.toolkit as tk
 from ckan import model
 from ckan.common import request
 from routes import url_for
-from ckan.lib.uploader import Upload as DefaultUpload
-from ckan.lib.uploader import ResourceUpload as DefaultResourceUpload
 
 log = logging.getLogger(__name__)
 
@@ -209,7 +207,6 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     plugins.implements(plugins.IDatasetForm, inherit=False)
     plugins.implements(plugins.ITemplateHelpers, inherit=False)
     plugins.implements(plugins.IPackageController, inherit=True)
-    plugins.implements(plugins.IUploader, inherit=True)
     plugins.implements(dpi.IDataPusher, inherit=True)
 
     def update_config(self, config):
@@ -469,14 +466,6 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         # only package type 'dataset' is supported (not harvesters!)
         return pkg_dict.get('type') == 'dataset'
 
-    # IUploader
-
-    def get_uploader(self, upload_to, old_filename=None):
-        return StadtzhUpload(upload_to, old_filename)
-
-    def get_resource_uploader(self, data_dict):
-        return StadtzhResourceUpload(data_dict)
-
     # IDataPusher
 
     def after_upload(self, context, resource_dict, dataset_dict):
@@ -488,160 +477,3 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
                 'package': dataset_dict,
             }
         )
-
-
-class StadtzhFileHelper(object):
-    def chown_path(self, path, user=None, group=None):
-        # try to get uid and guid
-        try:
-            if user is None:
-                uid = self._get_uid(config.get('ckanext.stadtzh-theme.upload_user', None))
-            else:
-                uid = self._get_uid(user)
-        except (KeyError, TypeError):
-            uid = -1  # if user cannot be found, use -1 => chown keeps the current user
-
-        try:
-            if group is None:    
-                gid = self._get_gid(config.get('ckanext.stadtzh-theme.upload_group', None))
-            else:
-                gid = self._get_gid(group)
-        except (KeyError, TypeError):
-            gid = -1  # if group cannot be found, use -1 => chown keeps the current group
-
-        # chown file or directory
-        if os.path.isfile(path):
-            try:
-                os.chown(path, uid, gid)
-            except OSError:
-                log.exception('Tried to change ownership (%s/%s) of %s' % (uid, gid, path))
-        else:
-            for root, dirs, files in os.walk(path):
-                try:
-                    current_path = None
-                    for name in dirs: 
-                        current_path = os.path.join(root, name)
-                        os.chown(current_path, uid, gid)
-                    for name in files:
-                        current_path = os.path.join(root, name)
-                        os.chown(current_path, uid, gid)
-                except OSError:
-                    log.exception('Tried to change ownership (%s/%s) of %s' % (uid, gid, current_path))
-
-    def _get_uid(self, user):
-        try:
-            return int(user)
-        except (ValueError, TypeError):
-            return pwd.getpwnam(user).pw_uid
-
-    def _get_gid(self, group):
-        try:
-            return int(group)
-        except (ValueError, TypeError):
-            return grp.getgrnam(group).gr_gid
-
-
-class StadtzhUpload(DefaultUpload, StadtzhFileHelper):
-    # copy from https://github.com/ckan/ckan/blob/ckan-2.5.2/ckan/lib/uploader.py
-    # add code to change ownership after upload (self.chown_path)
-    def upload(self, max_size=2):
-        ''' Actually upload the file.
-        This should happen just before a commit but after the data has
-        been validated and flushed to the db. This is so we do not store
-        anything unless the request is actually good.
-        max_size is size in MB maximum of the file'''
-
-        if self.filename:
-            output_file = open(self.tmp_filepath, 'wb')
-            self.upload_file.seek(0)
-            current_size = 0
-            while True:
-                current_size = current_size + 1
-                # MB chunks
-                data = self.upload_file.read(2 ** 20)
-                if not data:
-                    break
-                output_file.write(data)
-                if current_size > max_size:
-                    os.remove(self.tmp_filepath)
-                    raise tk.ValidationError(
-                        {self.file_field: ['File upload too large']}
-                    )
-            output_file.close()
-            os.rename(self.tmp_filepath, self.filepath)
-            self.chown_path(self.filepath)
-            self.clear = True
-
-        if (self.clear and self.old_filename
-                and not self.old_filename.startswith('http')):
-            try:
-                os.remove(self.old_filepath)
-            except OSError:
-                pass
-
-
-class StadtzhResourceUpload(DefaultResourceUpload, StadtzhFileHelper):
-    # copy from https://github.com/ckan/ckan/blob/ckan-2.5.2/ckan/lib/uploader.py
-    # add code to change ownership after upload (self.chown_path)
-    def upload(self, id, max_size=10):
-        '''Actually upload the file.
-
-        :returns: ``'file uploaded'`` if a new file was successfully uploaded
-            (whether it overwrote a previously uploaded file or not),
-            ``'file deleted'`` if an existing uploaded file was deleted,
-            or ``None`` if nothing changed
-        :rtype: ``string`` or ``None``
-
-        '''
-        if not self.storage_path:
-            return
-
-        # Get directory and filepath on the system
-        # where the file for this resource will be stored
-        directory = self.get_directory(id)
-        filepath = self.get_path(id)
-
-        # If a filename has been provided (a file is being uploaded)
-        # we write it to the filepath (and overwrite it if it already
-        # exists). This way the uploaded file will always be stored
-        # in the same location
-        if self.filename:
-            try:
-                os.makedirs(directory)
-            except OSError, e:
-                # errno 17 is file already exists
-                if e.errno != 17:
-                    raise
-            self.chown_path(self.storage_path)
-
-            tmp_filepath = filepath + '~'
-            output_file = open(tmp_filepath, 'wb+')
-            self.upload_file.seek(0)
-            current_size = 0
-            while True:
-                current_size = current_size + 1
-                # MB chunks
-                data = self.upload_file.read(2 ** 20)
-                if not data:
-                    break
-                output_file.write(data)
-                if current_size > max_size:
-                    os.remove(tmp_filepath)
-                    raise tk.ValidationError(
-                        {'upload': ['File upload too large']}
-                    )
-            output_file.close()
-            os.rename(tmp_filepath, filepath)
-            self.chown_path(filepath)
-            return
-
-        # The resource form only sets self.clear (via the input clear_upload)
-        # to True when an uploaded file is not replaced by another uploaded
-        # file, only if it is replaced by a link to file.
-        # If the uploaded file is replaced by a link, we should remove the
-        # previously uploaded file to clean up the file system.
-        if self.clear:
-            try:
-                os.remove(filepath)
-            except OSError, e:
-                pass
