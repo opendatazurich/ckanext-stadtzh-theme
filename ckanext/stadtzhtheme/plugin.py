@@ -176,50 +176,6 @@ def get_organization_dict(org=None):
     except tk.ObjectNotFound:
         return {}
 
-def is_url(*args, **kw):
-    '''
-    Returns True if argument parses as a http, https or ftp URL
-    '''
-    if not args:
-        return False
-    try:
-        url = urlparse.urlparse(args[0])
-    except ValueError:
-        return False
-
-    valid_schemes = ('http', 'https', 'ftp')
-    return url.scheme in valid_schemes
-
-def get_ajax_api_endpoint():
-    '''
-    Returns the URL endpoint for AJAX calls.
-    Depending on the environment variable 'ssz' set by apache,
-    the internal or external URL is returned.
-    '''
-    if request.environ.get('ssz', None) is not None:
-        return config.get('ckan.site_url_internal', '')
-    return config.get('ckan.site_url', '')
-
-def full_external_url():
-    ''' Returns the fully qualified current external url (eg http://...) useful
-    for sharing etc '''
-    return url_for(
-        request.environ['CKAN_CURRENT_URL'],
-        host=get_site_host(),
-        protocol=get_site_protocol(),
-        qualified=True
-    )
-
-def get_site_protocol():
-    site_url = config.get('ckan.site_url', 'https://data.stadt-zuerich.ch')
-    parsed_url = urlparse.urlparse(site_url)
-    return parsed_url.scheme.encode('utf-8')
-
-def get_site_host():
-    site_url = config.get('ckan.site_url', 'https://data.stadt-zuerich.ch')
-    parsed_url = urlparse.urlparse(site_url)
-    return parsed_url.netloc.encode('utf-8')
-
 def validate_date(datestring):
     m = re.match('^[0-9]{2}\.[0-9]{2}\.[0-9]{4}(, [0-9]{2}:[0-9]{2})?$', datestring)
     if m:
@@ -285,11 +241,6 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'validate_date': validate_date,
             'validate_email': validate_email,
             'get_organization_dict': get_organization_dict,
-            'full_external_url': full_external_url,
-            'get_ajax_api_endpoint': get_ajax_api_endpoint,
-            'is_url': is_url,
-            'get_site_protocol': get_site_protocol,
-            'get_site_host': get_site_host,
             'get_descr_config': self.get_descr_config,
         }
 

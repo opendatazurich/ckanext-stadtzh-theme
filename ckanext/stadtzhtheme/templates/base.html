@@ -12,5 +12,3 @@
 {{ super() }}
   {% resource 'stadtzhtheme/stadtzhtheme.css' %}
 {% endblock %}
-
-{% block bodytag %} data-site-root="{{ h.get_ajax_api_endpoint() }}/" data-locale-root="{{ h.get_ajax_api_endpoint() }}/" {% endblock %}
