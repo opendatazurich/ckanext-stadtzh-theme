@@ -5,6 +5,7 @@ import json
 import yaml
 import re
 import lepl.apps.rfc3696
+import os.path
 
 from pylons import config
 import ckan.plugins as plugins
@@ -13,6 +14,9 @@ import ckan.plugins.toolkit as tk
 from ckan import model
 
 log = logging.getLogger(__name__)
+
+__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+
 
 def create_updateInterval():
     '''Create update interval vocab and tags, if they don't exist already.'''
@@ -204,7 +208,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
 
     def update_config(self, config):
         try:
-            with open(config.get('ckanext.stadtzh-theme.descr_file'), 'r') as descr_file:
+            with open(os.path.join(__location__, 'descr.yaml'), 'r') as descr_file:
                 self.descr_config = yaml.load(descr_file)
         except IOError:
             self.descr_config = {}
