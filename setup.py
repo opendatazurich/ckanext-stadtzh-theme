@@ -28,5 +28,9 @@ setup(
 
     [ckan.rdf.profiles]
     stadtzh_swiss_dcat=ckanext.stadtzhtheme.dcat.profiles:StadtzhSwissDcatProfile
+    
+    [paste.paster_command]
+    stadtzhtheme=ckanext.stadtzhtheme.commands:StadtzhCommand
+        
     """,
 )
