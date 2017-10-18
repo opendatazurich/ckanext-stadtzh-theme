@@ -70,8 +70,6 @@ mapping_rights_dict = {
     'cc-zero': 'NonCommercialAllowed-CommercialAllowed-ReferenceNotRequired',
 }
 
-# Values 'sporadisch oder unregelmaessig' and 'keines'
-# do not have an equivalent in OGD and are ignored
 mapping_accrualPerdiodicty = {
     'halbjaehrlich': 'http://purl.org/cld/freq/semiannual',
     'jaehrlich': 'http://purl.org/cld/freq/annual',
@@ -81,7 +79,9 @@ mapping_accrualPerdiodicty = {
     'stuendlich': 'http://purl.org/cld/freq/continuous',
     'taeglich': 'http://purl.org/cld/freq/daily',
     'woechentlich': 'http://purl.org/cld/freq/weekly',
+    'vierzehntäglich': 'http://purl.org/cld/freq/bimonthly',
     'keines': 'http://purl.org/cld/freq/completelyIrregular',
+    'alle 4 Jahre': 'http://purl.org/cld/freq/completelyIrregular',
     'sporadisch oder unregelmaessig':
         'http://purl.org/cld/freq/completelyIrregular',
 }
