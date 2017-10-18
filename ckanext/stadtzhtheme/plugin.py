@@ -33,6 +33,7 @@ def create_updateInterval():
         for tag in (
             u'   ',
             u'laufend',
+            u'alle 4 Jahre',
             u'jaehrlich',
             u'halbjaehrlich',
             u'quartalsweise',
