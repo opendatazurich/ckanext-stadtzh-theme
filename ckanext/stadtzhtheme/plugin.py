@@ -38,6 +38,7 @@ def create_updateInterval():
             u'halbjaehrlich',
             u'quartalsweise',
             u'monatlich',
+            u'vierzehntäglich',
             u'woechentlich',
             u'taeglich',
             u'stuendlich',
