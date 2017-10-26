@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from ckanext.dcat.profiles import RDFProfile
 from ckanext.dcat.utils import resource_uri, publisher_uri_from_dataset_dict
 
