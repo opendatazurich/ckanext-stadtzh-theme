@@ -44,7 +44,9 @@ def create_updateInterval():
             u'stuendlich',
             u'Echtzeit',
             u'sporadisch oder unregelmaessig',
-            u'keines'
+            u'keines',
+            u'laufende Nachfuehrung',
+            u'keine Nachfuehrung',
         ):
             log.info(
                 "Adding tag {0} to vocab 'updateInterval'".format(tag))
