@@ -6,6 +6,7 @@ import yaml
 import re
 import lepl.apps.rfc3696
 import os.path
+from datetime import datetime
 
 from pylons import config
 import ckan.plugins as plugins
@@ -434,6 +435,16 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
 
         validated_dict = json.loads(search_data['validated_data_dict'])
         search_data['res_format'] = list(set([r['format'].lower() for r in validated_dict[u'resources'] if 'format' in r]))
+
+        attributes = load_json(search_data['sszFields'])
+        if attributes:
+            search_data['attribute_names'] = [k for k, v in attributes]
+            search_data['attribute_descriptions'] = [v for k, v in attributes]
+        try:
+            search_data['date_first_published'] = datetime.strptime(search_data['dateFirstPublished'], '%d.%m.%Y').isoformat() + 'Z'
+            search_data['date_last_modified'] = datetime.strptime(search_data['dateLastUpdated'], '%d.%m.%Y').isoformat() + 'Z'
+        except ValueError:
+            pass
         return search_data
 
     def before_view(self, pkg_dict):
