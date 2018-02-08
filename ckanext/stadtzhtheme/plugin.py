@@ -425,6 +425,11 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
 
     # IPackageController
 
+    def before_search(self, data_dict):
+        if not data_dict.get('sort'):
+            data_dict['sort'] = 'score desc, date_last_modified desc'
+        return data_dict
+
     def after_show(self, context, pkg_dict):
         # set value of new field data_publisher with value of url
         pkg_dict['data_publisher'] = pkg_dict['url']
