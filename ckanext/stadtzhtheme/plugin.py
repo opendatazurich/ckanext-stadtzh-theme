@@ -452,7 +452,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         try:
             search_data['date_first_published'] = datetime.strptime(search_data['dateFirstPublished'], '%d.%m.%Y').isoformat() + 'Z'
             search_data['date_last_modified'] = datetime.strptime(search_data['dateLastUpdated'], '%d.%m.%Y').isoformat() + 'Z'
-        except ValueError:
+        except (KeyError, ValueError):
             pass
         return search_data
 
