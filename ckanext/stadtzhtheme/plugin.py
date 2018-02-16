@@ -445,6 +445,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         if attributes:
             search_data['attribute_names'] = [k for k, v in attributes]
             search_data['attribute_descriptions'] = [v for k, v in attributes]
+        del search_data['sszFields']
         try:
             search_data['date_first_published'] = datetime.strptime(search_data['dateFirstPublished'], '%d.%m.%Y').isoformat() + 'Z'
             search_data['date_last_modified'] = datetime.strptime(search_data['dateLastUpdated'], '%d.%m.%Y').isoformat() + 'Z'
