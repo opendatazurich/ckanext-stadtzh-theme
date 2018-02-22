@@ -279,54 +279,78 @@ ul.resource-list,
 }
 
 .format-label[data-format=wms], .format-label[data-format*=wms] {
-    background-position: -352px -62px; 
+    background-position: -352px -62px;
     width: 32px;
     height: 35px;
 }
 
 .format-label[data-format=wfs], .format-label[data-format*=wfs] {
-    background-position: -384px -62px; 
+    background-position: -384px -62px;
     width: 32px;
     height: 35px;
 }
 
 .format-label[data-format=kmz], .format-label[data-format*=kmz] {
-    background-position: -416px -62px; 
+    background-position: -416px -62px;
     width: 32px;
     height: 35px;
 }
 
 .format-label[data-format=kml], .format-label[data-format*=kml] {
-    background-position: -448px -62px; 
+    background-position: -448px -62px;
     width: 32px;
     height: 35px;
 }
 
 .format-label[data-format=wmts], .format-label[data-format*=wmts] {
-    background-position: -480px -62px; 
+    background-position: -480px -62px;
     width: 32px;
     height: 35px;
 }
 
 .format-label[data-format=gpkg], .format-label[data-format*=gpkg] {
-    background-position: -512px -62px; 
+    background-position: -512px -62px;
     width: 32px;
     height: 35px;
 }
 
 .format-label[data-format=ods], .format-label[data-format*=ods] {
-    background-position: -544px -62px; 
+    background-position: -544px -62px;
     width: 32px;
     height: 35px;
 }
 
 .format-label[data-format=odt], .format-label[data-format*=odt] {
-    background-position: -576px -62px; 
+    background-position: -576px -62px;
     width: 32px;
     height: 35px;
+}
+
+.label[data-format=wms], .label[data-format*=wms] {
+    background-color: #e4c80a;
+}
+
+.label[data-format=wfs], .label[data-format*=wfs] {
+    background-color: #df7661;
 }
 
 .label[data-format=kmz], .label[data-format*=kmz],
 .label[data-format=kml], .label[data-format*=kml] {
     background-color: #4472de;
+}
+
+.label[data-format=wmts], .label[data-format*=wmts] {
+    background-color: #75b285;
+}
+
+.label[data-format=gpkg], .label[data-format*=gpkg] {
+    background-color: #808cb7;
+}
+
+.label[data-format=ods], .label[data-format*=ods] {
+    background-color: #1c7143;
+}
+
+.label[data-format=odt], .label[data-format*=odt] {
+    background-color: #325598;
 }
