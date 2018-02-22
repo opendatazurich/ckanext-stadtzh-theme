@@ -276,54 +276,40 @@ ul.resource-list,
 
 .format-label {
     background: url(/icons.png) no-repeat 0 0;
+    width: 32px;
+    height: 35px;
 }
 
 .format-label[data-format=wms], .format-label[data-format*=wms] {
     background-position: -352px -62px;
-    width: 32px;
-    height: 35px;
 }
 
 .format-label[data-format=wfs], .format-label[data-format*=wfs] {
     background-position: -384px -62px;
-    width: 32px;
-    height: 35px;
 }
 
 .format-label[data-format=kmz], .format-label[data-format*=kmz] {
     background-position: -416px -62px;
-    width: 32px;
-    height: 35px;
 }
 
 .format-label[data-format=kml], .format-label[data-format*=kml] {
     background-position: -448px -62px;
-    width: 32px;
-    height: 35px;
 }
 
 .format-label[data-format=wmts], .format-label[data-format*=wmts] {
     background-position: -480px -62px;
-    width: 32px;
-    height: 35px;
 }
 
 .format-label[data-format=gpkg], .format-label[data-format*=gpkg] {
     background-position: -512px -62px;
-    width: 32px;
-    height: 35px;
 }
 
 .format-label[data-format=ods], .format-label[data-format*=ods] {
     background-position: -544px -62px;
-    width: 32px;
-    height: 35px;
 }
 
 .format-label[data-format=odt], .format-label[data-format*=odt] {
     background-position: -576px -62px;
-    width: 32px;
-    height: 35px;
 }
 
 .label[data-format=wms], .label[data-format*=wms] {
