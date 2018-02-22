@@ -226,6 +226,7 @@ a.tag:hover {
     background-image: none;
     background-color: white;
     margin-top: 20px;
+    margin-left: -24px;
 }
 
 .follow_button {
