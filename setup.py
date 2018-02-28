@@ -25,6 +25,8 @@ setup(
     """
     [ckan.plugins]
     stadtzhtheme=ckanext.stadtzhtheme.plugin:StadtzhThemePlugin
+    [babel.extractors]
+    ckan = ckan.lib.extract:extract_ckan
 
     [ckan.rdf.profiles]
     stadtzh_swiss_dcat=ckanext.stadtzhtheme.dcat.profiles:StadtzhSwissDcatProfile
@@ -33,4 +35,11 @@ setup(
     stadtzhtheme=ckanext.stadtzhtheme.commands:StadtzhCommand
         
     """,
+    message_extractors={
+        'ckanext': [
+            ('**.py', 'python', None),
+            ('**.js', 'javascript', None),
+            ('**/templates/**.html', 'ckan', None),
+        ],
+    }
 )

@@ -1,5 +1,5 @@
 *.pyc
 *.egg-info
-ckan.mo
+ckanext/stadtzhtheme/i18n/de/LC_MESSAGES/ckanext-stadtzhtheme.mo
 build/
 dist/

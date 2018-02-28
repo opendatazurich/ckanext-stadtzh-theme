@@ -12,6 +12,7 @@ from pylons import config
 import ckan.plugins as plugins
 import ckanext.datapusher.interfaces as dpi
 import ckan.plugins.toolkit as tk
+from ckan.lib.plugins import DefaultTranslation
 from ckan import model
 
 log = logging.getLogger(__name__)
@@ -203,10 +204,12 @@ class IFacetPlugin(plugins.SingletonPlugin):
 
 
 class StadtzhThemePlugin(plugins.SingletonPlugin,
-                         tk.DefaultDatasetForm):
+                         tk.DefaultDatasetForm,
+                         DefaultTranslation):
 
     plugins.implements(plugins.IConfigurer, inherit=False)
     plugins.implements(plugins.IDatasetForm, inherit=False)
+    plugins.implements(plugins.ITranslation, inherit=False)
     plugins.implements(plugins.ITemplateHelpers, inherit=False)
     plugins.implements(plugins.IPackageController, inherit=True)
     plugins.implements(dpi.IDataPusher, inherit=True)
