@@ -15,7 +15,7 @@ class TestPlugin(helpers.FunctionalTestBase):
         return
 
     def test_descr_file(self):
-        theme_plugin = plugin.StadzhThemePlugin()
+        theme_plugin = plugin.StadtzhThemePlugin()
 
         descr = theme_plugin.get_descr_config()
-        eq_(desc, {})
+        eq_(descr.keys(), ['zip', 'wms', 'wmts', 'wfs', 'kml', 'kmz', 'json', 'csv', 'gpkg'])
