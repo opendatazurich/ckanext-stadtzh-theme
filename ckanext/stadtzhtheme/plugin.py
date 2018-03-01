@@ -234,7 +234,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     def update_config(self, config):
         try:
             with open(os.path.join(__location__, 'descr.yaml'), 'r') as descr_file:  # noqa
-                self.descr_config = yaml.load(descr_file)
+                self.descr_config = yaml.safe_load(descr_file)
         except IOError:
             self.descr_config = {}
 
