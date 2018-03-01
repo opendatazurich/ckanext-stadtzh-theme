@@ -16,6 +16,8 @@
 
 {# This is a "backport" of a bugfix in CKAN 2.2.1 (see issue https://github.com/ckan/ckan/issues/1934 #}
 {% block package_organization %}
-    {% set org = h.get_organization_dict(pkg.organization.name) %}
-    {% snippet "snippets/organization.html", organization=org, has_context_title=true %}
+    {% if pkg.organization %}
+      {% set org = h.get_organization_dict(pkg.organization.name) %}
+      {% snippet "snippets/organization.html", organization=org, has_context_title=true %}
+    {% endif %}
 {% endblock %}

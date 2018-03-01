@@ -17,10 +17,18 @@ class TestPlugin(helpers.FunctionalTestBase):
         descr = theme_plugin.get_descr_config()
         assert all(k in descr.keys() for k in expected_keys), "Keys: %s" % descr.keys()
 
-    def test_translations(self):
-        dataset = factories.Dataset(
-            notes='Test dataset'
-        )
+    def test_translations_without_orgs(self):
+        dataset = factories.Dataset()
+
+        url = url_for('dataset_read', id=dataset['id'])
+        app = self._get_test_app()
+        response = app.get(url)
+
+        assert 'Aktualisierungsdatum' in response, response
+
+    def test_translations_with_org(self):
+        org = factories.Organization()
+        dataset = factories.Dataset(owner_org=org['id'])
 
         url = url_for('dataset_read', id=dataset['id'])
         app = self._get_test_app()
