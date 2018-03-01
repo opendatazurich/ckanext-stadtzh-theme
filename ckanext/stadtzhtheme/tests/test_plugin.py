@@ -24,7 +24,7 @@ class TestPlugin(helpers.FunctionalTestBase):
         app = self._get_test_app()
         response = app.get(url)
 
-        assert 'Aktualisierungsdatum' in response, response
+        assert 'Aktualisierungs&shy;datum' in response, response
         assert not 'Date last updated' in response, response
 
     def test_translations_with_org(self):
@@ -35,7 +35,7 @@ class TestPlugin(helpers.FunctionalTestBase):
         app = self._get_test_app()
         response = app.get(url)
 
-        assert 'Aktualisierungsdatum' in response, response
+        assert 'Aktualisierungs&shy;datum' in response, response
         assert not 'Date last updated' in response, response
 
     @helpers.change_config('ckan.locale_default', 'en')
@@ -47,5 +47,5 @@ class TestPlugin(helpers.FunctionalTestBase):
         app = self._get_test_app()
         response = app.get(url)
 
-        assert not 'Aktualisierungsdatum' in response, response
+        assert not 'Aktualisierungs&shy;datum' in response, response
         assert 'Date last updated' in response, response
