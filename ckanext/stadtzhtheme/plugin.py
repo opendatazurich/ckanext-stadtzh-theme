@@ -228,6 +228,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     plugins.implements(plugins.ITranslation, inherit=False)
     plugins.implements(plugins.ITemplateHelpers, inherit=False)
     plugins.implements(plugins.IPackageController, inherit=True)
+    plugins.implements(plugins.IRoutes, inherit=True)
     plugins.implements(dpi.IDataPusher, inherit=True)
 
     def update_config(self, config):
@@ -509,6 +510,12 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     def is_supported_package_type(self, pkg_dict):
         # only package type 'dataset' is supported (not harvesters!)
         return pkg_dict.get('type') == 'dataset'
+
+    # IRoutes
+    def before_map(self, map):
+        # add named route 'home' as this is removed in recent versions of CKAN
+        map.connect('home', '/', controller='home', action='index')
+        return map
 
     # IDataPusher
 
