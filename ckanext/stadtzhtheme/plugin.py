@@ -55,7 +55,7 @@ def create_updateInterval():
             u'laufende Nachfuehrung',
             u'keine Nachfuehrung',
         ):
-            log.info("Adding tag {0} to vocab 'updateInterval'".format(tag))
+            log.info("Adding tag %s to vocab 'updateInterval'" % tag)
             data = {'name': tag, 'vocabulary_id': vocab['id']}
             tk.get_action('tag_create')(context, data)
 
@@ -93,7 +93,7 @@ def create_dataType():
             u'Datenaggregat',
             u'Web-Service'
         ):
-            log.info("Adding tag {0} to vocab 'dataType'".format(tag))
+            log.info("Adding tag %s to vocab 'dataType'" % tag)
             data = {'name': tag, 'vocabulary_id': vocab['id']}
             tk.get_action('tag_create')(context, data)
 
