@@ -9,11 +9,6 @@ assert_true = nose.tools.assert_true
 
 
 class TestPlugin(helpers.FunctionalTestBase):
-    def setUp(self):
-        return
-
-    def tearDown(self):
-        return
 
     def test_descr_file(self):
         theme_plugin = plugin.StadtzhThemePlugin()
