@@ -46,6 +46,13 @@ cd ckan
 paster db init -c test-core.ini
 cd -
 
+echo "Installing ckanext-showcase and its requirements..."
+git clone https://github.com/ckan/ckanext-showcase
+cd ckanext-showcase
+python setup.py develop
+pip install -r dev-requirements.txt
+cd -
+
 echo "Installing ckanext-harvest and its requirements..."
 git clone https://github.com/ckan/ckanext-harvest
 cd ckanext-harvest
