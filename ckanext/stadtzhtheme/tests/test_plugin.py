@@ -38,12 +38,11 @@ class TestPlugin(helpers.FunctionalTestBase):
         assert 'Aktualisierungs&shy;datum' in response, response
         assert not 'Date last updated' in response, response
 
-    @helpers.change_config('ckan.locale_default', 'en')
     def test_translation_with_en_locale(self):
         org = factories.Organization()
         dataset = factories.Dataset(owner_org=org['id'])
 
-        url = url_for('dataset_read', id=dataset['id'])
+        url = url_for('dataset_read', id=dataset['id'], locale='en')
         app = self._get_test_app()
         response = app.get(url)
 
