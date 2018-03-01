@@ -29,7 +29,11 @@ def create_updateInterval():
         data = {'id': 'updateInterval'}
         tk.get_action('vocabulary_show')(context, data)
         log.info("Update interval vocabulary already exists, skipping.")
-    except tk.ObjectNotFound:
+    except (tk.ObjectNotFound, TypeError):
+        # when a NotFound error is raised, a translated error message is
+        # generated but it's possible no translator is defined, which leads
+        # to a TypeError ("No object (name: translator) has been registered
+        # for this thread"). This is the reason we catch TypeError here as well
         log.info("Creating vocab 'updateInterval'")
         data = {'name': 'updateInterval'}
         vocab = tk.get_action('vocabulary_create')(context, data)
@@ -51,8 +55,7 @@ def create_updateInterval():
             u'laufende Nachfuehrung',
             u'keine Nachfuehrung',
         ):
-            log.info(
-                "Adding tag {0} to vocab 'updateInterval'".format(tag))
+            log.info("Adding tag {0} to vocab 'updateInterval'".format(tag))
             data = {'name': tag, 'vocabulary_id': vocab['id']}
             tk.get_action('tag_create')(context, data)
 
@@ -75,7 +78,11 @@ def create_dataType():
         data = {'id': 'dataType'}
         tk.get_action('vocabulary_show')(context, data)
         log.info("Data type vocabulary already exists, skipping.")
-    except tk.ObjectNotFound:
+    except (tk.ObjectNotFound, TypeError):
+        # when a NotFound error is raised, a translated error message is
+        # generated but it's possible no translator is defined, which leads
+        # to a TypeError ("No object (name: translator) has been registered
+        # for this thread"). This is the reason we catch TypeError here as well
         log.info("Creating vocab 'dataType'")
         data = {'name': 'dataType'}
         vocab = tk.get_action('vocabulary_create')(context, data)
@@ -86,8 +93,7 @@ def create_dataType():
             u'Datenaggregat',
             u'Web-Service'
         ):
-            log.info(
-                "Adding tag {0} to vocab 'dataType'".format(tag))
+            log.info("Adding tag {0} to vocab 'dataType'".format(tag))
             data = {'name': tag, 'vocabulary_id': vocab['id']}
             tk.get_action('tag_create')(context, data)
 
