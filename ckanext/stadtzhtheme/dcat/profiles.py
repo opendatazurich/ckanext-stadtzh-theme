@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from ckanext.dcat.profiles import RDFProfile
-from ckanext.dcat.utils import resource_uri, publisher_uri_from_dataset_dict
+from ckanext.dcat.utils import resource_uri
 
 import datetime
 from dateutil.parser import parse as parse_date
-import rdflib
 from rdflib import URIRef, BNode, Literal
 from rdflib.namespace import Namespace, RDF, XSD, SKOS, RDFS
 
@@ -68,7 +67,7 @@ mapping_groups_dict = {
 }
 mapping_rights_dict = {
     'cc-by-sa': 'NonCommercialAllowed-CommercialAllowed-ReferenceRequired',
-    'cc-by':'NonCommercialAllowed-CommercialAllowed-ReferenceRequired',
+    'cc-by': 'NonCommercialAllowed-CommercialAllowed-ReferenceRequired',
     'cc-zero': 'NonCommercialAllowed-CommercialAllowed-ReferenceNotRequired',
 }
 
@@ -90,6 +89,7 @@ mapping_accrualPerdiodicty = {
 
 ckan_locale_default = pylons.config.get('ckan.locale_default', 'de')
 
+
 class StadtzhSwissDcatProfile(RDFProfile):
 
     def _rights(self, ckan_license_id):
@@ -107,7 +107,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
             dates = time_range.encode('utf-8').strip().split('-', 1)
             if len(dates) > 0 and dates[0].isdigit() and len(dates[0]) == 4:
                 time_interval['start_date'] = dates[0] + '-01-01'
-                if len(dates) > 1 and dates[1].isdigit() and len(dates[1] == 4):
+                if len(dates) > 1 and dates[1].isdigit() and len(dates[1] == 4):  # noqa
                     end_year = dates[1]
                 else:
                     end_year = dates[0]
@@ -137,7 +137,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
         except ValueError:
             self.g.add((subject, predicate, _type(value)))
 
-    def graph_from_dataset(self, dataset_dict, dataset_ref):
+    def graph_from_dataset(self, dataset_dict, dataset_ref):  # noqa: C90
 
         g = self.g
 
@@ -154,7 +154,11 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
         # landingPage is the original portal page
         site_url = pylons.config.get('ckan.site_url', '')
-        g.add((dataset_ref, DCAT.landingPage, Literal(site_url + '/dataset/' + dataset_dict['name'])))
+        g.add((
+            dataset_ref,
+            DCAT.landingPage,
+            Literal(site_url + '/dataset/' + dataset_dict['name'])
+        ))
 
         # Language
         g.add((dataset_ref, DCT.language, Literal(ckan_locale_default)))
@@ -200,7 +204,9 @@ class StadtzhSwissDcatProfile(RDFProfile):
                 dataset_dict,
                 'updateInterval'
             )
-            accrualPeriodicity = mapping_accrualPerdiodicty.get(update_interval[0])
+            accrualPeriodicity = mapping_accrualPerdiodicty.get(
+                update_interval[0]
+            )
         except IndexError:
             accrualPeriodicity = None
         if accrualPeriodicity:
@@ -212,16 +218,22 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
         # Temporal
         time_range = self._time_interval(dataset_dict)
-        if time_range is not None and time_range.get('start_date') and time_range.get('end_date'):
+        if time_range is not None and time_range.get('start_date') and time_range.get('end_date'):  # noqa
             start = time_range.get('start_date')
             end = time_range.get('end_date')
 
             temporal_extent = BNode()
             g.add((temporal_extent, RDF.type, DCT.PeriodOfTime))
-            g.add((temporal_extent, SCHEMA.startDate, Literal(start,
-                                                    datatype=XSD.date)))
-            g.add((temporal_extent, SCHEMA.endDate, Literal(end,
-                                                    datatype=XSD.date)))
+            g.add((
+                temporal_extent,
+                SCHEMA.startDate,
+                Literal(start, datatype=XSD.date)
+            ))
+            g.add((
+                temporal_extent,
+                SCHEMA.endDate,
+                Literal(end, datatype=XSD.date)
+            ))
             g.add((dataset_ref, DCT.temporal, temporal_extent))
 
         # Themes

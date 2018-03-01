@@ -8,7 +8,6 @@ import lepl.apps.rfc3696
 import os.path
 from datetime import datetime
 
-from pylons import config
 import ckan.plugins as plugins
 import ckanext.datapusher.interfaces as dpi
 import ckan.plugins.toolkit as tk
@@ -17,7 +16,9 @@ from ckan import model
 
 log = logging.getLogger(__name__)
 
-__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+__location__ = os.path.realpath(
+    os.path.join(os.getcwd(), os.path.dirname(__file__))
+)
 
 
 def create_updateInterval():
@@ -113,22 +114,22 @@ def groups():
         return tk.get_action('group_list')(context, data_dict)
     except tk.ObjectNotFound:
         return None
-    
-    
+
+
 def biggest_groups(n):
     '''
     Returns the n biggest groups, to display on start page.
     '''
-    user = tk.get_action('get_site_user')({'ignore_auth': True},{})
+    user = tk.get_action('get_site_user')({'ignore_auth': True}, {})
     context = {'user': user['name']}
     data_dict = {
         'all_fields': True,
     }
     groups = tk.get_action('group_list')(context, data_dict)
     if len(groups) > n:
-        return sorted(groups, key=lambda group: group.get('package_count'))[-1:-(n+1):-1]
+        return sorted(groups, key=lambda group: group.get('package_count'))[-1:-(n+1):-1]  # noqa
     else:
-        return sorted(groups, key=lambda group: group.get('package_count'))[::-1]
+        return sorted(groups, key=lambda group: group.get('package_count'))[::-1]  # noqa
 
 
 def package_has_group(group_name, groups):
@@ -169,6 +170,7 @@ def get_package_dict(datasetID):
     except:
         return {}
 
+
 def get_organization_dict(org=None):
     if org is None:
         return {}
@@ -177,12 +179,17 @@ def get_organization_dict(org=None):
     except tk.ObjectNotFound:
         return {}
 
+
 def validate_date(datestring):
-    m = re.match('^[0-9]{2}\.[0-9]{2}\.[0-9]{4}(, [0-9]{2}:[0-9]{2})?$', datestring)
+    m = re.match(
+        '^[0-9]{2}\.[0-9]{2}\.[0-9]{4}(, [0-9]{2}:[0-9]{2})?$',
+        datestring
+    )
     if m:
         return datestring
     else:
         return False
+
 
 def validate_email(email):
     email_validator = lepl.apps.rfc3696.Email()
@@ -190,7 +197,7 @@ def validate_email(email):
         return email
     else:
         return ''
-        
+
 
 class IFacetPlugin(plugins.SingletonPlugin):
 
@@ -198,7 +205,12 @@ class IFacetPlugin(plugins.SingletonPlugin):
 
     def dataset_facets(self, facets_dict, dataset_type):
 
-        facets_dict = {'extras_updateInterval': 'Update Interval', 'tags': 'Keywords', 'organization': 'Organizations', 'res_format': ('File Format')}
+        facets_dict = {
+            'extras_updateInterval': 'Update Interval',
+            'tags': 'Keywords',
+            'organization': 'Organizations',
+            'res_format': ('File Format')
+        }
 
         return facets_dict
 
@@ -216,7 +228,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
 
     def update_config(self, config):
         try:
-            with open(os.path.join(__location__, 'descr.yaml'), 'r') as descr_file:
+            with open(os.path.join(__location__, 'descr.yaml'), 'r') as descr_file:  # noqa
                 self.descr_config = yaml.load(descr_file)
         except IOError:
             self.descr_config = {}
@@ -279,7 +291,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         # Add update interval as extra field
         schema.update({
             'updateInterval': [tk.get_validator('ignore_missing'),
-                               tk.get_converter('convert_to_tags')('updateInterval')]
+                               tk.get_converter('convert_to_tags')('updateInterval')]  # noqa
         })
 
         # Add version as extra field
@@ -303,7 +315,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         # Add comments as extra field
         schema.update({
             'sszBemerkungen': [tk.get_validator('ignore_missing'),
-                         tk.get_converter('convert_to_extras')]
+                               tk.get_converter('convert_to_extras')]
         })
 
         # Add update interval as extra field
@@ -315,7 +327,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         # Add attributes as extra field
         schema.update({
             'sszFields': [tk.get_validator('ignore_missing'),
-                           tk.get_converter('convert_to_extras')]
+                          tk.get_converter('convert_to_extras')]
         })
 
         # Add data quality as extra field
@@ -368,7 +380,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
 
         # Add our updateInterval field to the dataset schema.
         schema.update({
-            'updateInterval': [tk.get_converter('convert_from_tags')('updateInterval'),
+            'updateInterval': [tk.get_converter('convert_from_tags')('updateInterval'),  # noqa
                                tk.get_validator('ignore_missing')]
         })
 
@@ -387,7 +399,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         # Add our comments field to the dataset schema.
         schema.update({
             'sszBemerkungen': [tk.get_converter('convert_from_extras'),
-                         tk.get_validator('ignore_missing')]
+                               tk.get_validator('ignore_missing')]
         })
 
         # Add our dataType field to the dataset schema.
@@ -405,7 +417,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         # Add our attributes field to the dataset schema.
         schema.update({
             'sszFields': [tk.get_converter('convert_from_extras'),
-                           tk.get_validator('ignore_missing')]
+                          tk.get_validator('ignore_missing')]
         })
 
         # Add our data quality field to the dataset schema.
@@ -442,7 +454,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             return search_data
 
         validated_dict = json.loads(search_data['validated_data_dict'])
-        search_data['res_format'] = list(set([r['format'].lower() for r in validated_dict[u'resources'] if 'format' in r]))
+        search_data['res_format'] = list(set([r['format'].lower() for r in validated_dict[u'resources'] if 'format' in r]))  # noqa
 
         try:
             attributes = load_json(search_data['sszFields'])
@@ -453,8 +465,8 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             pass
 
         try:
-            search_data['date_last_modified'] = datetime.strptime(search_data['dateLastUpdated'], '%d.%m.%Y').isoformat() + 'Z'
-            search_data['date_first_published'] = datetime.strptime(search_data['dateFirstPublished'], '%d.%m.%Y').isoformat() + 'Z'
+            search_data['date_last_modified'] = datetime.strptime(search_data['dateLastUpdated'], '%d.%m.%Y').isoformat() + 'Z'  # noqa
+            search_data['date_first_published'] = datetime.strptime(search_data['dateFirstPublished'], '%d.%m.%Y').isoformat() + 'Z'  # noqa
         except (KeyError, ValueError):
             pass
         return search_data
@@ -497,7 +509,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         tk.get_action('resource_create_default_resource_views')(
             context,
             {
-	        'resource': resource_dict,
+                'resource': resource_dict,
                 'package': dataset_dict,
             }
         )
