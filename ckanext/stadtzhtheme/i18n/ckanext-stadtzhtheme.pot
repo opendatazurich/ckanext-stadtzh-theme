@@ -1,0 +1,442 @@
+# Translations template for ckanext-stadtzh-theme.
+# Copyright (C) 2018 ORGANIZATION
+# This file is distributed under the same license as the ckanext-stadtzh-theme
+# project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: ckanext-stadtzh-theme 0.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2018-02-28 10:08+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: ckanext/stadtzhtheme/templates/error_document_template.html:3
+#, python-format
+msgid "Error %(error_code)s"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/header.html:38
+msgid "Homepage"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/group/read_base.html:4
+#: ckanext/stadtzhtheme/templates/group/snippets/info.html:18
+#: ckanext/stadtzhtheme/templates/header.html:39
+#: ckanext/stadtzhtheme/templates/organization/read_base.html:4
+#: ckanext/stadtzhtheme/templates/package/base.html:15
+#: ckanext/stadtzhtheme/templates/package/base.html:19
+#: ckanext/stadtzhtheme/templates/snippets/organization.html:39
+msgid "Datasets"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/header.html:40
+#: ckanext/stadtzhtheme/templates/package/read_base.html:9
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:40
+msgid "Groups"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/group/read_base.html:5
+#: ckanext/stadtzhtheme/templates/organization/read_base.html:5
+msgid "About"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/group/snippets/group_item.html:4
+msgid "{num} Dataset"
+msgid_plural "{num} Datasets"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ckanext/stadtzhtheme/templates/group/snippets/group_item.html:6
+msgid "0 Datasets"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/group/snippets/info.html:12
+msgid "read more"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/home/snippets/search.html:2
+msgid "Search datasets..."
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/home/snippets/search.html:9
+msgid "Search"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/home/snippets/search.html:13
+msgid "Popular tags"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/base.html:12
+msgid "Organizations"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/base.html:20
+msgid "Create Dataset"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/read_base.html:8
+msgid "Dataset"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/read_base.html:10
+msgid "Showcases"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/resource_read.html:7
+msgid "URL:"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/resource_read.html:20
+msgid "From the dataset abstract"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/resource_read.html:22
+#, python-format
+msgid "Source: <a href=\"%(url)s\">%(dataset)s</a>"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/resource_read.html:63
+msgid "There are no views created for this resource yet."
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/resource_read.html:67
+msgid "Not seeing the views you were expecting?"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/resource_read.html:69
+msgid "Click here for more information."
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/resource_read.html:72
+msgid "Here are some reasons you may not be seeing expected views:"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/resource_read.html:74
+msgid "No view has been created that is suitable for this resource"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/resource_read.html:75
+msgid "The site administrators may not have enabled the relevant view plugins"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/resource_read.html:76
+msgid ""
+"If a view requires the DataStore, the DataStore plugin may not be enabled, or"
+" the data may not have been pushed to the DataStore, or the DataStore hasn't "
+"finished processing the data yet"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/search.html:11
+msgid "Relevance"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/search.html:12
+msgid "Name Ascending"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/search.html:13
+msgid "Name Descending"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/search.html:14
+msgid "Last Modified"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/search.html:15
+#: ckanext/stadtzhtheme/templates/snippets/package_item.html:40
+msgid "Popular"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/additional_info.html:5
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:9
+msgid "Author"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/additional_info.html:13
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:57
+msgid "Date first published"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/additional_info.html:25
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:31
+msgid "Maintainer"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/additional_info.html:33
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:59
+msgid "Time range"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/additional_info.html:42
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:92
+msgid "Data type"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/additional_info.html:55
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:89
+msgid "Date last updated"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/additional_info.html:67
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:15
+msgid "Source"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/additional_info.html:75
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:87
+msgid "Version"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/additional_info.html:84
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:55
+msgid "Spatial relationship"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/additional_info.html:90
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:62
+msgid "Update interval"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/additional_info.html:106
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:112
+msgid "Legal information"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/additional_info.html:118
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:132
+msgid "Data quality"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/additional_info.html:135
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:130
+msgid "Comments"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/package_basic_fields.html:4
+msgid "Description of the dataset"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/package_basic_fields.html:4
+msgid "eg. Some useful notes about the data"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/package_basic_fields.html:10
+#: ckanext/stadtzhtheme/templates/snippets/license.html:21
+msgid "License"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/package_basic_fields.html:20
+msgid ""
+" License definitions and additional information can be found at <a "
+"href=\"http://opendefinition.org/licenses/\">opendefinition.org</a> "
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/package_basic_fields.html:31
+msgid "Visibility"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/package_basic_fields.html:34
+#: ckanext/stadtzhtheme/templates/snippets/package_item.html:28
+msgid "Private"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/package_basic_fields.html:34
+msgid "Public"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:9
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:31
+msgid "Joe Bloggs"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:11
+msgid "Author Email"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:11
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:33
+msgid "joe@example.com"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:15
+msgid "e.g. Statistik Stadt Zürich"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:33
+msgid "Maintainer Email"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:57
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:89
+msgid "DD.MM.YYYY, HH:MM"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:112
+msgid "legalInformation"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:150
+msgid "Attributes"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:152
+msgid ""
+"JSON-Format für Attribute: [[\"feldname1\", \"wert1\"], [\"feldname2\", "
+"\"wert2\"]]"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/resource_form.html:4
+msgid "Description of the resource"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/resource_form.html:4
+msgid "Some useful notes about the data"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/resource_item.html:28
+msgid "Explore"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/resource_item.html:37
+msgid "Preview"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/resource_item.html:40
+msgid "More information"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/resource_item.html:49
+msgid "Download"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/resource_item.html:52
+msgid "Go to resource"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/package/snippets/resource_item.html:61
+#: ckanext/stadtzhtheme/templates/related/snippets/related_item.html:38
+msgid "Edit"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/related/snippets/related_form.html:8
+msgid "Title"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/related/snippets/related_form.html:8
+msgid "My Related Item"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/related/snippets/related_form.html:9
+msgid "URL"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/related/snippets/related_form.html:9
+msgid "http://example.com/"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/related/snippets/related_form.html:10
+msgid "Image URL"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/related/snippets/related_form.html:10
+msgid "http://example.com/image.png"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/related/snippets/related_form.html:11
+msgid "Description"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/related/snippets/related_form.html:11
+msgid "A little information about the item..."
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/related/snippets/related_form.html:12
+msgid "Type"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/related/snippets/related_item.html:16
+msgid "Go to {related_item_type}"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/snippets/facet_list.html:73
+msgid "Show More {facet_type}"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/snippets/facet_list.html:75
+msgid "Show Only Popular {facet_type}"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/snippets/facet_list.html:79
+msgid "There are no {facet_type} that match this search"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/snippets/license.html:14
+msgid "No License Provided"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/snippets/license.html:28
+msgid "This dataset satisfies the Open Definition."
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/snippets/organization.html:20
+msgid "Organization"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/snippets/package_item.html:33
+msgid "Draft"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/snippets/package_item.html:35
+msgid "Deleted"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/snippets/package_item.html:45
+msgid "This dataset has no description"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/snippets/social.html:3
+msgid "Social"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/user/new_user_form.html:5
+#: ckanext/stadtzhtheme/templates/user/snippets/login_form.html:20
+msgid "Username"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/user/new_user_form.html:6
+msgid "Full Name"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/user/new_user_form.html:7
+msgid "Email"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/user/new_user_form.html:8
+#: ckanext/stadtzhtheme/templates/user/snippets/login_form.html:22
+msgid "Password"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/user/new_user_form.html:9
+msgid "Confirm"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/user/new_user_form.html:11
+msgid "Create Account"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/user/snippets/login_form.html:24
+msgid "Remember me"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/user/snippets/login_form.html:27
+msgid "Log in"
+msgstr ""
+

@@ -1,0 +1,20 @@
+sudo: required
+dist: precise
+
+language: python
+
+python:
+- '2.7'
+
+env:
+    - CKANVERSION=master
+    - CKANVERSION=2.7
+
+services:
+    - redis-server
+    - postgresql
+
+install:
+    - bash bin/travis-build.bash
+
+script: bin/travis-run.sh

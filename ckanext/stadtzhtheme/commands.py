@@ -9,7 +9,7 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
     '''Command for stadtzh
     Usage:
         # General usage
-        paster --plugin=ckanext-stadtzh-theme <command> -c <path to config file>
+        paster --plugin=ckanext-stadtzh-theme <command> -c <path to config>
         # Show this help
         paster stadtzh help
         # Cleanup datastore
