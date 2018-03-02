@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-stadtzh-theme 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-02-28 10:08+0000\n"
+"POT-Creation-Date: 2018-03-02 10:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgid "Homepage"
 msgstr ""
 
 #: ckanext/stadtzhtheme/templates/group/read_base.html:4
-#: ckanext/stadtzhtheme/templates/group/snippets/info.html:18
+#: ckanext/stadtzhtheme/templates/group/snippets/info.html:6
 #: ckanext/stadtzhtheme/templates/header.html:39
 #: ckanext/stadtzhtheme/templates/organization/read_base.html:4
 #: ckanext/stadtzhtheme/templates/package/base.html:15
@@ -46,20 +46,6 @@ msgstr ""
 #: ckanext/stadtzhtheme/templates/group/read_base.html:5
 #: ckanext/stadtzhtheme/templates/organization/read_base.html:5
 msgid "About"
-msgstr ""
-
-#: ckanext/stadtzhtheme/templates/group/snippets/group_item.html:4
-msgid "{num} Dataset"
-msgid_plural "{num} Datasets"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ckanext/stadtzhtheme/templates/group/snippets/group_item.html:6
-msgid "0 Datasets"
-msgstr ""
-
-#: ckanext/stadtzhtheme/templates/group/snippets/info.html:12
-msgid "read more"
 msgstr ""
 
 #: ckanext/stadtzhtheme/templates/home/snippets/search.html:2
@@ -254,6 +240,7 @@ msgstr ""
 
 #: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:9
 #: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:31
+#: ckanext/stadtzhtheme/templates/user/new_user_form.html:6
 msgid "Joe Bloggs"
 msgstr ""
 
@@ -263,6 +250,7 @@ msgstr ""
 
 #: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:11
 #: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:33
+#: ckanext/stadtzhtheme/templates/user/new_user_form.html:7
 msgid "joe@example.com"
 msgstr ""
 
@@ -402,13 +390,73 @@ msgstr ""
 msgid "This dataset has no description"
 msgstr ""
 
-#: ckanext/stadtzhtheme/templates/snippets/social.html:3
-msgid "Social"
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:15
+msgid "{number} dataset found for \"{query}\""
+msgid_plural "{number} datasets found for \"{query}\""
+msgstr[0] ""
+msgstr[1] ""
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:16
+msgid "No datasets found for \"{query}\""
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:17
+msgid "{number} dataset found"
+msgid_plural "{number} datasets found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:18
+msgid "No datasets found"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:21
+msgid "{number} group found for \"{query}\""
+msgid_plural "{number} groups found for \"{query}\""
+msgstr[0] ""
+msgstr[1] ""
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:22
+msgid "No groups found for \"{query}\""
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:23
+msgid "{number} group found"
+msgid_plural "{number} groups found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:24
+msgid "No groups found"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:27
+msgid "{number} organization found for \"{query}\""
+msgid_plural "{number} organizations found for \"{query}\""
+msgstr[0] ""
+msgstr[1] ""
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:28
+msgid "No organizations found for \"{query}\""
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:29
+msgid "{number} organization found"
+msgid_plural "{number} organizations found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:30
+msgid "No organizations found"
 msgstr ""
 
 #: ckanext/stadtzhtheme/templates/user/new_user_form.html:5
 #: ckanext/stadtzhtheme/templates/user/snippets/login_form.html:20
 msgid "Username"
+msgstr ""
+
+#: ckanext/stadtzhtheme/templates/user/new_user_form.html:5
+msgid "username"
 msgstr ""
 
 #: ckanext/stadtzhtheme/templates/user/new_user_form.html:6
@@ -428,7 +476,7 @@ msgstr ""
 msgid "Confirm"
 msgstr ""
 
-#: ckanext/stadtzhtheme/templates/user/new_user_form.html:11
+#: ckanext/stadtzhtheme/templates/user/new_user_form.html:17
 msgid "Create Account"
 msgstr ""
 
