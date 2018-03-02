@@ -9,8 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-stadtzh-theme 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-02-28 10:08+0000\n"
-"PO-Revision-Date: 2018-02-28 12:04+0100\n"
+"POT-Creation-Date: 2018-03-02 10:31+0000\n"
+"PO-Revision-Date: 2018-03-02 11:50+0100\n"
+"Last-Translator: \n"
 "Language: de\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -18,8 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
-"Last-Translator: \n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.0.6\n"
 
 #: ckanext/stadtzhtheme/templates/error_document_template.html:3
 #, python-format
@@ -31,7 +31,7 @@ msgid "Homepage"
 msgstr "Startseite"
 
 #: ckanext/stadtzhtheme/templates/group/read_base.html:4
-#: ckanext/stadtzhtheme/templates/group/snippets/info.html:18
+#: ckanext/stadtzhtheme/templates/group/snippets/info.html:6
 #: ckanext/stadtzhtheme/templates/header.html:39
 #: ckanext/stadtzhtheme/templates/organization/read_base.html:4
 #: ckanext/stadtzhtheme/templates/package/base.html:15
@@ -50,20 +50,6 @@ msgstr "Kategorie"
 #: ckanext/stadtzhtheme/templates/organization/read_base.html:5
 msgid "About"
 msgstr "Über"
-
-#: ckanext/stadtzhtheme/templates/group/snippets/group_item.html:4
-msgid "{num} Dataset"
-msgid_plural "{num} Datasets"
-msgstr[0] "{num} Datensatz"
-msgstr[1] "{num} Datensätze"
-
-#: ckanext/stadtzhtheme/templates/group/snippets/group_item.html:6
-msgid "0 Datasets"
-msgstr "Keine Datensätze"
-
-#: ckanext/stadtzhtheme/templates/group/snippets/info.html:12
-msgid "read more"
-msgstr "mehr erfahren"
 
 #: ckanext/stadtzhtheme/templates/home/snippets/search.html:2
 msgid "Search datasets..."
@@ -108,7 +94,7 @@ msgstr "Datensatz: <a href=\"%(url)s\">%(dataset)s</a>"
 
 #: ckanext/stadtzhtheme/templates/package/resource_read.html:63
 msgid "There are no views created for this resource yet."
-msgstr "Es gibt noch keine Darstellungen/Views für diese Ressource"
+msgstr "Es gibt noch keine Darstellungen/Views für diese Ressource."
 
 #: ckanext/stadtzhtheme/templates/package/resource_read.html:67
 msgid "Not seeing the views you were expecting?"
@@ -116,7 +102,7 @@ msgstr "Sehen Sie nicht die erwarteten Darstellungen/Views?"
 
 #: ckanext/stadtzhtheme/templates/package/resource_read.html:69
 msgid "Click here for more information."
-msgstr "Klick hier für mehr Informationen"
+msgstr "Klick hier für mehr Informationen."
 
 #: ckanext/stadtzhtheme/templates/package/resource_read.html:72
 msgid "Here are some reasons you may not be seeing expected views:"
@@ -248,9 +234,9 @@ msgid ""
 " License definitions and additional information can be found at <a href="
 "\"http://opendefinition.org/licenses/\">opendefinition.org</a> "
 msgstr ""
-"Lizenzdefinitionen und weiterführende Informationen können unter <a href="
+" Lizenzdefinitionen und weiterführende Informationen können unter <a href="
 "\"http://opendefinition.org/licenses/\">opendefinition.org</a> gefunden "
-"werden."
+"werden "
 
 #: ckanext/stadtzhtheme/templates/package/snippets/package_basic_fields.html:31
 msgid "Visibility"
@@ -267,6 +253,7 @@ msgstr "Öffentlich"
 
 #: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:9
 #: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:31
+#: ckanext/stadtzhtheme/templates/user/new_user_form.html:6
 msgid "Joe Bloggs"
 msgstr "Erika Mustermann"
 
@@ -276,6 +263,7 @@ msgstr "E-Mail des Datenowners"
 
 #: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:11
 #: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:33
+#: ckanext/stadtzhtheme/templates/user/new_user_form.html:7
 msgid "joe@example.com"
 msgstr "erika@example.com"
 
@@ -391,7 +379,7 @@ msgstr "Nur häufig nachgefragte {facet_type} anzeigen"
 
 #: ckanext/stadtzhtheme/templates/snippets/facet_list.html:79
 msgid "There are no {facet_type} that match this search"
-msgstr "Für diese Suche wurden keine {facet_type} gefunden."
+msgstr "Für diese Suche wurden keine {facet_type} gefunden"
 
 #: ckanext/stadtzhtheme/templates/snippets/license.html:14
 msgid "No License Provided"
@@ -417,13 +405,73 @@ msgstr "Gelöscht"
 msgid "This dataset has no description"
 msgstr "Dieser Datensatz hat keine Beschreibung"
 
-#: ckanext/stadtzhtheme/templates/snippets/social.html:3
-msgid "Social"
-msgstr "Sozial"
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:15
+msgid "{number} dataset found for \"{query}\""
+msgid_plural "{number} datasets found for \"{query}\""
+msgstr[0] "{number} Datensatz gefunden für \"{query}\""
+msgstr[1] "{number} Datensätze gefunden für \"{query}\""
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:16
+msgid "No datasets found for \"{query}\""
+msgstr "Keine Datensätze gefunden für “{query}”"
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:17
+msgid "{number} dataset found"
+msgid_plural "{number} datasets found"
+msgstr[0] "{number} Datensatz gefunden"
+msgstr[1] "{num} Datensätze"
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:18
+msgid "No datasets found"
+msgstr "Keine Datensätze gefunden"
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:21
+msgid "{number} group found for \"{query}\""
+msgid_plural "{number} groups found for \"{query}\""
+msgstr[0] "{number} Kategorie gefunden für \"{query}\""
+msgstr[1] "{number} Kategorien gefunden für \"{query}\""
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:22
+msgid "No groups found for \"{query}\""
+msgstr "Keine Kategorien gefunden für \"{query}\""
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:23
+msgid "{number} group found"
+msgid_plural "{number} groups found"
+msgstr[0] "{number} Kategorie gefunden"
+msgstr[1] "{number} Kategorien gefunden"
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:24
+msgid "No groups found"
+msgstr "Keine Kategorien gefunden"
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:27
+msgid "{number} organization found for \"{query}\""
+msgid_plural "{number} organizations found for \"{query}\""
+msgstr[0] "{number} Organisation gefunden für \"{query}\""
+msgstr[1] "{number} Organisationen gefunden für \"{query}\""
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:28
+msgid "No organizations found for \"{query}\""
+msgstr "Keine Organisation gefunden für \"{query}\""
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:29
+msgid "{number} organization found"
+msgid_plural "{number} organizations found"
+msgstr[0] "{number} Organisation gefunden"
+msgstr[1] "{number} Organisationen gefunden"
+
+#: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:30
+msgid "No organizations found"
+msgstr "Keine Organisationen gefunden"
 
 #: ckanext/stadtzhtheme/templates/user/new_user_form.html:5
 #: ckanext/stadtzhtheme/templates/user/snippets/login_form.html:20
 msgid "Username"
+msgstr "Benutzername"
+
+#: ckanext/stadtzhtheme/templates/user/new_user_form.html:5
+msgid "username"
 msgstr "Benutzername"
 
 #: ckanext/stadtzhtheme/templates/user/new_user_form.html:6
@@ -443,7 +491,7 @@ msgstr "Passwort"
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: ckanext/stadtzhtheme/templates/user/new_user_form.html:11
+#: ckanext/stadtzhtheme/templates/user/new_user_form.html:17
 msgid "Create Account"
 msgstr "Erstelle Benutzerkonto"
 
