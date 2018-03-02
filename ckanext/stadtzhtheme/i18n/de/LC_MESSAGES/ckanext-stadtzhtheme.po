@@ -44,7 +44,7 @@ msgstr "Datensätze"
 #: ckanext/stadtzhtheme/templates/package/read_base.html:9
 #: ckanext/stadtzhtheme/templates/package/snippets/package_metadata_fields.html:40
 msgid "Groups"
-msgstr "Kategorie"
+msgstr "Kategorien"
 
 #: ckanext/stadtzhtheme/templates/group/read_base.html:5
 #: ckanext/stadtzhtheme/templates/organization/read_base.html:5
