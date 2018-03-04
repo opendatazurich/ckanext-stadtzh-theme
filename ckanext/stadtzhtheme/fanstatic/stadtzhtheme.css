@@ -267,6 +267,7 @@ ul.resource-list,
     background: url(/icons.png) no-repeat 0 0;
     width: 32px;
     height: 35px;
+    background-position: 0px -62px;
 }
 
 .format-label[data-format=wms], .format-label[data-format*=wms] {
