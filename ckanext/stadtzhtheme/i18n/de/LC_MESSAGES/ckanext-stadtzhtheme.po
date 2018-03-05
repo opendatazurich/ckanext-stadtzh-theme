@@ -419,7 +419,7 @@ msgstr "Keine Datensätze gefunden für “{query}”"
 msgid "{number} dataset found"
 msgid_plural "{number} datasets found"
 msgstr[0] "{number} Datensatz gefunden"
-msgstr[1] "{num} Datensätze"
+msgstr[1] "{number} Datensätze"
 
 #: ckanext/stadtzhtheme/templates/snippets/search_result_text.html:18
 msgid "No datasets found"
