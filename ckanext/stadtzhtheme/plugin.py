@@ -9,7 +9,7 @@ import os.path
 from datetime import datetime
 
 import ckan.plugins as plugins
-import ckanext.datapusher.interfaces as dpi
+import ckanext.xloader.interfaces as xi
 import ckan.plugins.toolkit as tk
 from ckan.lib.plugins import DefaultTranslation
 from ckan import model
@@ -229,7 +229,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     plugins.implements(plugins.ITemplateHelpers, inherit=False)
     plugins.implements(plugins.IPackageController, inherit=True)
     plugins.implements(plugins.IRoutes, inherit=True)
-    plugins.implements(dpi.IDataPusher, inherit=True)
+    plugins.implements(xi.IXloader, inherit=True)
 
     def update_config(self, config):
         try:
@@ -517,7 +517,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         map.connect('home', '/', controller='home', action='index')
         return map
 
-    # IDataPusher
+    # IXloader
 
     def after_upload(self, context, resource_dict, dataset_dict):
         # create resource views after a successful upload to the DataStore

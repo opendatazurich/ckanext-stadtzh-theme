@@ -61,6 +61,13 @@ pip install -r pip-requirements.txt
 paster harvester initdb -c ../ckan/test-core.ini
 cd -
 
+echo "Installing ckanext-xloader and its requirements..."
+git clone https://github.com/davidread/ckanext-xloader
+cd ckanext-xloader
+python setup.py develop
+pip install -r requirements.txt
+cd -
+
 echo "Installing ckanext-dcat and its requirements..."
 git clone https://github.com/ckan/ckanext-dcat
 cd ckanext-dcat
