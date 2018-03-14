@@ -302,6 +302,10 @@ ul.resource-list,
     background-position: -576px -62px;
 }
 
+.label[data-format=xml], .label[data-format*=xml] {
+    background-color: #aad450;
+}
+
 .label[data-format=wms], .label[data-format*=wms] {
     background-color: #e4c80a;
 }
