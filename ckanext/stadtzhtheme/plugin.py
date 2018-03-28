@@ -350,6 +350,11 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'group': [tk.get_validator('ignore_missing')]
         })
 
+        # add a custom hash field
+        schema['resources'].update({
+            'zh_hash': [tk.get_validator('ignore_missing')]
+        })
+
         return schema
 
     def create_package_schema(self):
@@ -438,6 +443,11 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         # Add our groups field to the dataset schema.
         schema.update({
             'group': [tk.get_validator('ignore_missing')]
+        })
+
+        # add a custom hash field
+        schema['resources'].update({
+            'zh_hash': [tk.get_validator('ignore_missing')]
         })
 
         return schema
