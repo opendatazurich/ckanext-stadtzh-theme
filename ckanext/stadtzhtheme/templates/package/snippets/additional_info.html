@@ -116,7 +116,7 @@
   {% if pkg_dict.dataQuality %}
     <div class="package-dataquality">
     <h5>{{ _("Data quality") }}</h5>
-      {{ pkg_dict.dataQuality }}
+      {{ h.render_markdown(pkg_dict.dataQuality, allow_html=True) }}
     </div>
   {% endif %}
 

@@ -20,7 +20,7 @@ class TestPlugin(helpers.FunctionalTestBase):
     def test_translations_without_orgs(self):
         dataset = factories.Dataset()
 
-        url = url_for('dataset_read', id=dataset['id'])
+        url = url_for('dataset_read', id=dataset['name'])
         app = self._get_test_app()
         response = app.get(url)
 
@@ -31,7 +31,7 @@ class TestPlugin(helpers.FunctionalTestBase):
         org = factories.Organization()
         dataset = factories.Dataset(owner_org=org['id'])
 
-        url = url_for('dataset_read', id=dataset['id'])
+        url = url_for('dataset_read', id=dataset['name'])
         app = self._get_test_app()
         response = app.get(url)
 
@@ -42,7 +42,7 @@ class TestPlugin(helpers.FunctionalTestBase):
         org = factories.Organization()
         dataset = factories.Dataset(owner_org=org['id'])
 
-        url = url_for('dataset_read', id=dataset['id'], locale='en')
+        url = url_for('dataset_read', id=dataset['name'], locale='en')
         app = self._get_test_app()
         response = app.get(url)
 
