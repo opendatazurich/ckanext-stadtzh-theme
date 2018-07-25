@@ -210,6 +210,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
                          tk.DefaultDatasetForm,
                          DefaultTranslation):
 
+    plugins.implements(plugins.IConfigurable)
     plugins.implements(plugins.IConfigurer, inherit=False)
     plugins.implements(plugins.IDatasetForm, inherit=False)
     plugins.implements(plugins.ITranslation, inherit=False)
@@ -217,6 +218,11 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     plugins.implements(plugins.IPackageController, inherit=True)
     plugins.implements(plugins.IRoutes, inherit=True)
     plugins.implements(xi.IXloader, inherit=True)
+
+    def configure(self, config):
+        # create vocabularies if necessary
+        create_updateInterval()
+        create_dataType()
 
     def update_config(self, config):
         try:
@@ -230,10 +236,6 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         tk.add_resource('fanstatic', 'stadtzhtheme')
 
         config['ckan.site_logo'] = '/logo.png'
-
-        # create vocabularies if necessary
-        create_updateInterval()
-        create_dataType()
 
     def get_descr_config(self):
         return self.descr_config
