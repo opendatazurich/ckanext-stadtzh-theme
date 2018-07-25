@@ -45,7 +45,7 @@ def create_updateInterval():
             u'halbjaehrlich',
             u'quartalsweise',
             u'monatlich',
-            u'vierzehntäglich',
+            u'vierzehntaeglich',
             u'woechentlich',
             u'taeglich',
             u'stuendlich',
@@ -153,19 +153,6 @@ def load_json(json_data):
         return False
 
 
-def get_tag_vocab_values(package_dict):
-    try:
-        return {
-            'dataType': package_dict['dataType'],
-            'updateInterval': package_dict['updateInterval']
-        }
-    except KeyError:
-        return {
-            'dataType': '   ',
-            'updateInterval': '   ',
-        }
-
-
 def get_package_dict(datasetID):
     user = tk.get_action('get_site_user')({}, {})
     context = {'user': user['name']}
@@ -259,7 +246,6 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'groups': groups,
             'biggest_groups': biggest_groups,
             'package_has_group': package_has_group,
-            'get_tag_vocab_values': get_tag_vocab_values,
             'get_package_dict': get_package_dict,
             'validate_date': validate_date,
             'validate_email': validate_email,

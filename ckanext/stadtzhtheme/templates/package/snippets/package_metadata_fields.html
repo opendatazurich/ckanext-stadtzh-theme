@@ -69,7 +69,7 @@
         {% if interval == data.updateInterval[0] %}
           selected="selected"
         {% endif %}
-      {% elif interval == h.get_tag_vocab_values(p)['updateInterval'] %}
+      {% elif interval == p['updateInterval'] %}
         selected="selected"
       {% endif %}
 
@@ -99,7 +99,7 @@
         {% if interval == data.dataType[0] %}
           selected="selected"
         {% endif %}
-      {% elif interval == h.get_tag_vocab_values(p)['dataType'] %}
+      {% elif interval == p['dataType'] %}
         selected="selected"
       {% endif %}
 
