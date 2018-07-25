@@ -45,7 +45,7 @@ def create_updateInterval():
             u'halbjaehrlich',
             u'quartalsweise',
             u'monatlich',
-            u'vierzehntäglich',
+            u'vierzehntaeglich',
             u'woechentlich',
             u'taeglich',
             u'stuendlich',
@@ -153,19 +153,6 @@ def load_json(json_data):
         return False
 
 
-def get_tag_vocab_values(package_dict):
-    try:
-        return {
-            'dataType': package_dict['dataType'],
-            'updateInterval': package_dict['updateInterval']
-        }
-    except KeyError:
-        return {
-            'dataType': '   ',
-            'updateInterval': '   ',
-        }
-
-
 def get_package_dict(datasetID):
     user = tk.get_action('get_site_user')({}, {})
     context = {'user': user['name']}
@@ -223,6 +210,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
                          tk.DefaultDatasetForm,
                          DefaultTranslation):
 
+    plugins.implements(plugins.IConfigurable)
     plugins.implements(plugins.IConfigurer, inherit=False)
     plugins.implements(plugins.IDatasetForm, inherit=False)
     plugins.implements(plugins.ITranslation, inherit=False)
@@ -230,6 +218,11 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     plugins.implements(plugins.IPackageController, inherit=True)
     plugins.implements(plugins.IRoutes, inherit=True)
     plugins.implements(xi.IXloader, inherit=True)
+
+    def configure(self, config):
+        # create vocabularies if necessary
+        create_updateInterval()
+        create_dataType()
 
     def update_config(self, config):
         try:
@@ -244,10 +237,6 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
 
         config['ckan.site_logo'] = '/logo.png'
 
-        # create vocabularies if necessary
-        create_updateInterval()
-        create_dataType()
-
     def get_descr_config(self):
         return self.descr_config
 
@@ -259,7 +248,6 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'groups': groups,
             'biggest_groups': biggest_groups,
             'package_has_group': package_has_group,
-            'get_tag_vocab_values': get_tag_vocab_values,
             'get_package_dict': get_package_dict,
             'validate_date': validate_date,
             'validate_email': validate_email,
