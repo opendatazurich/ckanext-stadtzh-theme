@@ -12,7 +12,7 @@
     {% set file_format = res.format.lower() or 'data' %}
     {% set descr_config = h.get_descr_config() %}
     {% if res.description %}
-        {{ h.render_markdown(res.description) }}
+        {{ h.render_markdown(res.description, allow_html=True) }}
     {% elif file_format in descr_config and 'description' in descr_config[file_format] and 'link' in descr_config[file_format] %}
         <p>{{ h.render_markdown(descr_config[file_format]['description']) }}</p>
         <p>{{ h.render_markdown(descr_config[file_format]['link']) }}</p>
