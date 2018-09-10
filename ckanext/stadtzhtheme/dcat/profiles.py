@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from ckanext.dcat.profiles import RDFProfile
+from ckanext.dcat.profiles import RDFProfile, SchemaOrgProfile
 from ckanext.dcat.utils import resource_uri
 
 import datetime
@@ -71,7 +71,7 @@ mapping_rights_dict = {
     'cc-zero': 'NonCommercialAllowed-CommercialAllowed-ReferenceNotRequired',
 }
 
-mapping_accrualPerdiodicty = {
+mapping_accrualPeriodicity = {
     'halbjaehrlich': 'http://purl.org/cld/freq/semiannual',
     'jaehrlich': 'http://purl.org/cld/freq/annual',
     'laufend': 'http://purl.org/cld/freq/continuous',
@@ -89,9 +89,7 @@ mapping_accrualPerdiodicty = {
 
 ckan_locale_default = pylons.config.get('ckan.locale_default', 'de')
 
-
-class StadtzhSwissDcatProfile(RDFProfile):
-
+class StadtzhProfile(object):
     def _rights(self, ckan_license_id):
         return mapping_rights_dict.get(ckan_license_id)
 
@@ -119,6 +117,8 @@ class StadtzhSwissDcatProfile(RDFProfile):
 
         return time_interval
 
+
+class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
     def _add_date_triple(self, subject, predicate, value, _type=Literal):
         '''
         Adds a new triple with a date object
@@ -204,7 +204,7 @@ class StadtzhSwissDcatProfile(RDFProfile):
                 dataset_dict,
                 'updateInterval'
             )
-            accrualPeriodicity = mapping_accrualPerdiodicty.get(
+            accrualPeriodicity = mapping_accrualPeriodicity.get(
                 update_interval[0]
             )
         except IndexError:
@@ -411,3 +411,19 @@ class StadtzhSwissDcatProfile(RDFProfile):
     def graph_from_catalog(self, catalog_dict, catalog_ref):
         g = self.g
         g.add((catalog_ref, RDF.type, DCAT.Catalog))
+
+        
+class StadtzhSchemaOrgProfile(SchemaOrgProfile, StadtzhProfile):
+    def _temporal_graph(self, dataset_ref, dataset_dict):
+        time_range = self._time_interval(dataset_dict)
+        if time_range is not None and time_range.get('start_date') and time_range.get('end_date'):  # noqa
+            start = time_range.get('start_date')
+            end = time_range.get('end_date')
+            if start and end:
+                self.g.add((dataset_ref, SCHEMA.temporalCoverage, Literal('%s/%s' % (start, end))))
+            elif start:
+                self._add_date_triple(dataset_ref, SCHEMA.temporalCoverage, start)
+            elif end:
+                self._add_date_triple(dataset_ref, SCHEMA.temporalCoverage, end)
+
+
