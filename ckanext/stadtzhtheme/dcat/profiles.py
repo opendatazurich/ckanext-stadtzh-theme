@@ -2,7 +2,7 @@
 
 from ckanext.dcat.profiles import RDFProfile, SchemaOrgProfile
 from ckanext.dcat.utils import resource_uri
-from ckan.lib.helpers import url_for
+from ckan.lib.helpers import url_for, render_markdown
 
 import datetime
 from dateutil.parser import parse as parse_date
@@ -430,6 +430,9 @@ class StadtzhSchemaOrgProfile(SchemaOrgProfile, StadtzhProfile):
                               id=dataset_dict['name'],
                               qualified=True)
         self.g.add((dataset_ref, SCHEMA.identifier, Literal(dataset_url)))
+
+        bemerkungen = render_markdown(dataset_dict.get('sszBemerkungen', ''))
+        self.g.add((dataset_ref, SCHEMA.text, Literal(bemerkungen)))
 
     def _temporal_graph(self, dataset_ref, dataset_dict):
         time_range = self._time_interval_from_dataset(dataset_dict)
