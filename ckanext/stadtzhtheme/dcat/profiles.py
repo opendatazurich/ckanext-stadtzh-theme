@@ -2,6 +2,7 @@
 
 from ckanext.dcat.profiles import RDFProfile, SchemaOrgProfile
 from ckanext.dcat.utils import resource_uri
+from ckan.lib.helpers import url_for
 
 import datetime
 from dateutil.parser import parse as parse_date
@@ -90,6 +91,7 @@ mapping_accrualPeriodicity = {
 
 ckan_locale_default = pylons.config.get('ckan.locale_default', 'de')
 
+
 class StadtzhProfile(object):
     def _rights(self, ckan_license_id):
         return mapping_rights_dict.get(ckan_license_id)
@@ -168,8 +170,8 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
 
             # Basic date fields
             date_items = [
-                ('dateLastUpdated', DCT.modified, 'metadata_modified', Literal),
-                ('dateFirstPublished', DCT.issued, 'metadata_created', Literal),
+                ('dateLastUpdated', DCT.modified, 'metadata_modified', Literal),  # noqa
+                ('dateFirstPublished', DCT.issued, 'metadata_created', Literal),  # noqa
             ]
             self._add_date_triples_from_dict(
                 dataset_dict,
@@ -285,12 +287,12 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
                     dataset_dict,
                     'maintainer_email'
                 )
-                g.add((contact_details, VCARD.hasEmail, URIRef(maintainer_email)))
+                g.add((contact_details, VCARD.hasEmail, URIRef(maintainer_email)))  # noqa
 
                 items = [
-                    ('contact_name', VCARD.fn, ['maintainer', 'author'], Literal),
+                    ('contact_name', VCARD.fn, ['maintainer', 'author'], Literal),  # noqa
                 ]
-                self._add_triples_from_dict(dataset_dict, contact_details, items)
+                self._add_triples_from_dict(dataset_dict, contact_details, items)   # noqa
 
             # Tags
             for tag in dataset_dict.get('tags', []):
@@ -306,7 +308,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
 
                 g.add((dataset_ref, DCAT.distribution, distribution))
                 g.add((distribution, RDF.type, DCAT.Distribution))
-                g.add((distribution, DCT.language, Literal(ckan_locale_default)))
+                g.add((distribution, DCT.language, Literal(ckan_locale_default)))  # noqa
 
                 #  Simple values
                 items = [
@@ -318,7 +320,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
 
                 self._add_triples_from_dict(resource_dict, distribution, items)
 
-                license_id = self._get_dataset_value(dataset_dict, 'license_id')
+                license_id = self._get_dataset_value(dataset_dict, 'license_id')  # noqa
                 license_title = self._rights(license_id)
                 g.add((distribution, DCT.rights, Literal(license_title)))
                 g.add((distribution, DCT.license, Literal(license_title)))
@@ -411,25 +413,40 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
                 g.add((publisher_details, RDFS.label, Literal(publisher_name)))
                 g.add((dataset_ref, DCT.publisher, publisher_details))
         except Exception, e:
-            log.exception("Something went wrong: %s / %s" % (e, traceback.format_exc()))
+            log.exception(
+                "Something went wrong: %s / %s" % (e, traceback.format_exc())
+            )
             raise
 
     def graph_from_catalog(self, catalog_dict, catalog_ref):
         g = self.g
         g.add((catalog_ref, RDF.type, DCAT.Catalog))
 
-        
+
 class StadtzhSchemaOrgProfile(SchemaOrgProfile, StadtzhProfile):
+    def additional_fields(self, dataset_ref, dataset_dict):
+        # identifier
+        dataset_url = url_for('dataset_read',
+                              id=dataset_dict['name'],
+                              qualified=True)
+        self.g.add((dataset_ref, SCHEMA.identifier, Literal(dataset_url)))
+
     def _temporal_graph(self, dataset_ref, dataset_dict):
-        time_range = self._time_interval(dataset_dict)
+        time_range = self._time_interval_from_dataset(dataset_dict)
         if time_range is not None and time_range.get('start_date') and time_range.get('end_date'):  # noqa
             start = time_range.get('start_date')
             end = time_range.get('end_date')
             if start and end:
-                self.g.add((dataset_ref, SCHEMA.temporalCoverage, Literal('%s/%s' % (start, end))))
+                self.g.add((dataset_ref, SCHEMA.temporalCoverage, Literal('%s/%s' % (start, end))))  # noqa
             elif start:
-                self._add_date_triple(dataset_ref, SCHEMA.temporalCoverage, start)
+                self._add_date_triple(dataset_ref, SCHEMA.temporalCoverage, start)  # noqa
             elif end:
-                self._add_date_triple(dataset_ref, SCHEMA.temporalCoverage, end)
+                self._add_date_triple(dataset_ref, SCHEMA.temporalCoverage, end)  # noqa
 
-
+    def _distribution_url_graph(self, distribution, resource_dict):
+        url = resource_dict.get('url')
+        res_type = resource_dict.get('resource_type')
+        if url and res_type == 'file':
+            self.g.add((distribution, SCHEMA.contentUrl, Literal(url)))
+        if url:
+            self.g.add((distribution, SCHEMA.url, Literal(url)))
