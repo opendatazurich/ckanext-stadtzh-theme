@@ -462,3 +462,6 @@ class StadtzhSchemaOrgProfile(SchemaOrgProfile, StadtzhProfile):
             self.g.add((distribution, SCHEMA.contentUrl, Literal(url)))
         if url:
             self.g.add((distribution, SCHEMA.url, Literal(url)))
+
+        description = resource_dict.get('description', '')
+        self.g.add((distribution, SCHEMA.description, Literal(description)))
