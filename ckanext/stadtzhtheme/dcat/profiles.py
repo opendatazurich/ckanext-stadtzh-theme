@@ -435,6 +435,7 @@ class StadtzhSchemaOrgProfile(SchemaOrgProfile, StadtzhProfile):
         self.g.add((dataset_ref, SCHEMA.text, Literal(bemerkungen)))
 
         notes = render_markdown(dataset_dict.get('notes', ''))
+        self.g.remove((dataset_ref, SCHEMA.description, None))
         self.g.add((dataset_ref, SCHEMA.description, Literal(notes)))
 
         author = dataset_dict.get('author', '')
