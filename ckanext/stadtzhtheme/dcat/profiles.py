@@ -434,6 +434,15 @@ class StadtzhSchemaOrgProfile(SchemaOrgProfile, StadtzhProfile):
         bemerkungen = render_markdown(dataset_dict.get('sszBemerkungen', ''))
         self.g.add((dataset_ref, SCHEMA.text, Literal(bemerkungen)))
 
+        notes = render_markdown(dataset_dict.get('notes', ''))
+        self.g.add((dataset_ref, SCHEMA.description, Literal(notes)))
+
+        author = dataset_dict.get('author', '')
+        self.g.add((dataset_ref, SCHEMA.author, author))
+
+        data_publisher = dataset_dict.get('data_publisher', '')
+        self.g.add((dataset_ref, SCHEMA.publisher, data_publisher))
+
     def _temporal_graph(self, dataset_ref, dataset_dict):
         time_range = self._time_interval_from_dataset(dataset_dict)
         if time_range is not None and time_range.get('start_date') and time_range.get('end_date'):  # noqa
@@ -453,3 +462,6 @@ class StadtzhSchemaOrgProfile(SchemaOrgProfile, StadtzhProfile):
             self.g.add((distribution, SCHEMA.contentUrl, Literal(url)))
         if url:
             self.g.add((distribution, SCHEMA.url, Literal(url)))
+
+        description = resource_dict.get('description', '')
+        self.g.add((distribution, SCHEMA.description, Literal(description)))
