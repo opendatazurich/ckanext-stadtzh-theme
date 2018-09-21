@@ -439,10 +439,10 @@ class StadtzhSchemaOrgProfile(SchemaOrgProfile, StadtzhProfile):
         self.g.add((dataset_ref, SCHEMA.description, Literal(notes)))
 
         author = dataset_dict.get('author', '')
-        self.g.add((dataset_ref, SCHEMA.author, Literal(author)))
+        self.g.add((dataset_ref, SCHEMA.sourceOrganization, Literal(author)))
 
         data_publisher = dataset_dict.get('data_publisher', '')
-        self.g.add((dataset_ref, SCHEMA.publisher, Literal(data_publisher)))
+        self.g.add((dataset_ref, SCHEMA.author, Literal(data_publisher)))
 
     def _temporal_graph(self, dataset_ref, dataset_dict):
         time_range = self._time_interval_from_dataset(dataset_dict)
