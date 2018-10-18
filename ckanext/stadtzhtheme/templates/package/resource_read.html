@@ -9,13 +9,11 @@
   {% endblock %}
   <div class="prose notes" property="rdfs:label">
 
-    {% set file_format = res.format.lower() or 'data' %}
-    {% set descr_config = h.get_descr_config() %}
-    {% if res.description %}
-        {{ h.render_markdown(res.description, allow_html=True) }}
-    {% elif file_format in descr_config and 'description' in descr_config[file_format] and 'link' in descr_config[file_format] %}
-        <p>{{ h.render_markdown(descr_config[file_format]['description']) }}</p>
-        <p>{{ h.render_markdown(descr_config[file_format]['link']) }}</p>
+    {% set descriptions = h.get_resource_descriptions(res) %}
+    {% if descriptions %}
+      {% for description in descriptions %}
+        <p>{{ h.render_markdown(description, allow_html=True) }}</p>
+      {% endfor %}
     {% else %}
       <h3>{{ _('From the dataset abstract') }}</h3>
       <blockquote>{{ h.markdown_extract(c.package.get('notes')) }}</blockquote>
