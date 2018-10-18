@@ -431,18 +431,28 @@ class StadtzhSchemaOrgProfile(SchemaOrgProfile, StadtzhProfile):
                               qualified=True)
         self.g.add((dataset_ref, SCHEMA.identifier, Literal(dataset_url)))
 
+        # text
         bemerkungen = render_markdown(dataset_dict.get('sszBemerkungen', ''))
         self.g.add((dataset_ref, SCHEMA.text, Literal(bemerkungen)))
 
+        # description (render markdown)
         notes = render_markdown(dataset_dict.get('notes', ''))
         self.g.remove((dataset_ref, SCHEMA.description, None))
         self.g.add((dataset_ref, SCHEMA.description, Literal(notes)))
 
+        # sourceOrganization
         author = dataset_dict.get('author', '')
         self.g.add((dataset_ref, SCHEMA.sourceOrganization, Literal(author)))
 
+        # author
         data_publisher = dataset_dict.get('data_publisher', '')
         self.g.add((dataset_ref, SCHEMA.author, Literal(data_publisher)))
+
+        # spatialRelationship
+        spatial = dataset_dict.get('spatialRelationship', '')
+        if spatial:
+            # add spatialRelationship as literal ("named location")
+            self.g.add((dataset_ref, SCHEMA.spatialCoverage, Literal(spatial)))
 
     def _temporal_graph(self, dataset_ref, dataset_dict):
         time_range = self._time_interval_from_dataset(dataset_dict)
