@@ -237,8 +237,18 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
 
         config['ckan.site_logo'] = '/logo.png'
 
-    def get_descr_config(self):
-        return self.descr_config
+    def get_resource_descriptions(self, res):
+        res_descr = res.get('description')
+        if res_descr:
+            return [res_descr]
+
+        file_format = (res.get('format') or 'data').lower()
+        if self.descr_config.get(file_format):
+            return [
+                self.descr_config[file_format]['description'],
+                self.descr_config[file_format]['link'],
+            ]
+        return []
 
     def get_helpers(self):
         return {
@@ -252,7 +262,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'validate_date': validate_date,
             'validate_email': validate_email,
             'get_organization_dict': get_organization_dict,
-            'get_descr_config': self.get_descr_config,
+            'get_resource_descriptions': self.get_resource_descriptions,
         }
 
     def is_fallback(self):

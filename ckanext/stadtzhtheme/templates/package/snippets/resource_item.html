@@ -10,15 +10,10 @@
   </a>
   {% endblock %}
   
-  {% set file_format = res.format.lower() or 'data' %}
-  {% set descr_config = h.get_descr_config() %}
   <p class="description">
-      {% if res.description %}
-          {{ h.markdown_extract(res.description, extract_length=80) }}
-      {% elif file_format in descr_config and 'description' in descr_config[file_format] and 'link' in descr_config[file_format] %}
-          {% set descr = descr_config[file_format]['description'] + ' ' + descr_config[file_format]['link'] %}
-          {{ h.markdown_extract(descr, extract_length=80) }}
-      {% endif %}
+      {% set descriptions = h.get_resource_descriptions(res) %}
+      {% set description = descriptions | join(' ') %}
+      {{ h.markdown_extract(description, extract_length=80) }}
   </p>
   {% block resource_item_explore %}
   {% if not url_is_edit %}

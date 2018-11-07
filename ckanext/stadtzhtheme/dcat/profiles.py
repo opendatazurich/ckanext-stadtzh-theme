@@ -3,6 +3,7 @@
 from ckanext.dcat.profiles import RDFProfile, SchemaOrgProfile
 from ckanext.dcat.utils import resource_uri
 from ckan.lib.helpers import url_for, render_markdown
+import ckanext.stadtzhtheme.plugin as plugin
 
 import datetime
 from dateutil.parser import parse as parse_date
@@ -474,5 +475,7 @@ class StadtzhSchemaOrgProfile(SchemaOrgProfile, StadtzhProfile):
         if url:
             self.g.add((distribution, SCHEMA.url, Literal(url)))
 
-        description = resource_dict.get('description', '')
+        theme_plugin = plugin.StadtzhThemePlugin()
+        descriptions = theme_plugin.get_resource_descriptions(resource_dict)
+        description = render_markdown(" ".join(descriptions))
         self.g.add((distribution, SCHEMA.description, Literal(description)))
