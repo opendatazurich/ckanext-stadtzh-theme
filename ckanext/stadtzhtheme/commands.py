@@ -1,5 +1,6 @@
 import sys
 import itertools
+import traceback
 import ckan.lib.cli
 import ckan.logic as logic
 import ckan.model as model
