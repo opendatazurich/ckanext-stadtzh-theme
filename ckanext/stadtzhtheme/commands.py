@@ -71,13 +71,20 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
         # delete the rows of the orphaned datastore tables
         delete_count = 0
         for resource_id in resource_id_list:
-            logic.check_access('datastore_delete', context)
-            logic.get_action('datastore_delete')(
-                context,
-                {'resource_id': resource_id, 'force': True}
-            )
-            print("Table '%s' deleted (not dropped)" % resource_id)
-            delete_count += 1
+            try:
+                logic.check_access('datastore_delete', context)
+                logic.get_action('datastore_delete')(
+                    context,
+                    {'resource_id': resource_id, 'force': True}
+                )
+                print("Table '%s' deleted (not dropped)" % resource_id)
+                delete_count += 1
+            except Exception, e:
+                print(
+                    "Error while deleting datastore resource %s: %s / %s"
+                    % (resource_id, str(e), traceback.format_exc())
+                )
+                continue
 
         print("Deleted content of %s tables" % delete_count)
 
