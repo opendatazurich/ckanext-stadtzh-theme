@@ -353,6 +353,14 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'zh_hash': [tk.get_validator('ignore_missing')]
         })
 
+        # validate URL
+        schema['resources'].update({
+            'url': [tk.get_validator('ignore_missing'),
+                    tk.get_validator('unicode'),
+                    tk.get_validator('remove_whitespace'),
+                    tk.get_validator('url_validator')]
+        })
+
         return schema
 
     def create_package_schema(self):
