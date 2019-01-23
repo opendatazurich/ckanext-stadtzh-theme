@@ -13,6 +13,7 @@ import ckanext.xloader.interfaces as xi
 import ckan.plugins.toolkit as tk
 from ckan.lib.plugins import DefaultTranslation
 from ckan import model
+from ckan.common import _
 
 log = logging.getLogger(__name__)
 
@@ -190,6 +191,28 @@ def validate_email(email):
         return ''
 
 
+def validate_url(key, data, errors, context):
+    ''' Checks that the provided value (if it is present) is a valid URL '''
+    import urlparse
+    import string
+
+    url = data.get(key, None)
+    if not url:
+        return
+
+    try:
+        pieces = urlparse.urlparse(url)
+        if (all([pieces.scheme, pieces.netloc]) and
+                set(pieces.netloc) <= set(string.letters + string.digits + '-.') and  # noqa
+                pieces.scheme in ['http', 'https']):
+            return
+    except ValueError:
+        # invalid URL
+        pass
+
+    errors[key].append(_('Please provide a valid URL'))
+
+
 class IFacetPlugin(plugins.SingletonPlugin):
 
     plugins.implements(plugins.IFacets, inherit=True)
@@ -217,6 +240,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     plugins.implements(plugins.ITemplateHelpers, inherit=False)
     plugins.implements(plugins.IPackageController, inherit=True)
     plugins.implements(plugins.IRoutes, inherit=True)
+    plugins.implements(plugins.IValidators, inherit=True)
     plugins.implements(xi.IXloader, inherit=True)
 
     def configure(self, config):
@@ -250,6 +274,8 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             ]
         return []
 
+    # ITemplateHelpers
+
     def get_helpers(self):
         return {
             'updateInterval': updateInterval,
@@ -263,6 +289,12 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'validate_email': validate_email,
             'get_organization_dict': get_organization_dict,
             'get_resource_descriptions': self.get_resource_descriptions,
+        }
+
+    # IValidators
+    def get_validators(self):
+        return {
+            'url_valid': validate_url,
         }
 
     def is_fallback(self):
@@ -358,7 +390,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'url': [tk.get_validator('ignore_missing'),
                     unicode,
                     tk.get_validator('remove_whitespace'),
-                    tk.get_validator('url_validator')]
+                    tk.get_validator('url_valid')]
         })
 
         return schema
