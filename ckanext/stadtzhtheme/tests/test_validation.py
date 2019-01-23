@@ -1,5 +1,9 @@
+import nose
 from ckanapi import LocalCKAN, ValidationError
 from ckan.tests import helpers, factories
+
+eq_ = nose.tools.eq_
+assert_true = nose.tools.assert_true
 
 
 class TestValidation(helpers.FunctionalTestBase):
@@ -18,7 +22,7 @@ class TestValidation(helpers.FunctionalTestBase):
 		}
             )
         except ValidationError as e:
-            assert_equals(
+            eq_(
                 e.error_dict['url'],
                     ['Value must be one of: bactrian; hybrid; f2hybrid; snowwhite; black (not \'rocker\')']
             )
