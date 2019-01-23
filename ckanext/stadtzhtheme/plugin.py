@@ -201,6 +201,11 @@ def validate_url(key, data, errors, context):
     if not url:
         return
 
+    # if the url_type is upload, do not check the URL
+    url_type = data.get('url_type', None)
+    if not url_type or url_type == 'upload':
+        return
+
     try:
         pieces = urlparse.urlparse(url)
         if (all([pieces.scheme, pieces.netloc]) and
