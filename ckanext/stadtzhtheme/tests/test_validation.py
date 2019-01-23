@@ -17,14 +17,14 @@ class TestValidation(helpers.FunctionalTestBase):
 		{
                     'package_id': dataset['name'],
                     'name': 'Test-File',
-                    'url': '<![CDATA[https://ogd-test.intra.stzh.ch/geoportal/geodatensatz/250]]>'
+                    'url': 'https://example.com]'
 		
 		}
             )
         except ValidationError as e:
             eq_(
                 e.error_dict['url'],
-                    ['Value must be one of: bactrian; hybrid; f2hybrid; snowwhite; black (not \'rocker\')']
+                    [u'Please provide a valid URL']
             )
         else:
             raise AssertionError('ValidationError not raised')
