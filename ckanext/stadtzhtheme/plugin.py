@@ -356,7 +356,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         # validate URL
         schema['resources'].update({
             'url': [tk.get_validator('ignore_missing'),
-                    tk.get_validator('unicode'),
+                    unicode,
                     tk.get_validator('remove_whitespace'),
                     tk.get_validator('url_validator')]
         })
