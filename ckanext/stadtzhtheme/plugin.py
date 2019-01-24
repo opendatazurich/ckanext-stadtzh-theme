@@ -198,6 +198,9 @@ def validate_url(key, data, errors, context):
     import string
 
     url = data.get(key, None)
+    from pprint import pprint
+    print("DATA")
+    pprint(data)
     if not url:
         return
 
@@ -217,7 +220,6 @@ def validate_url(key, data, errors, context):
         pass
 
     errors[key].append(_('Please provide a valid URL'))
-    raise tk.Invalid('Please provide a valid URL')
 
 
 class IFacetPlugin(plugins.SingletonPlugin):
