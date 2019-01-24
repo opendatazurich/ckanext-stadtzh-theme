@@ -199,7 +199,7 @@ def validate_url(key, data, errors, context):
 
     url = data.get(key, None)
     from pprint import pprint
-    print("DATA")
+    print("DATA, key: %r" % key)
     pprint(data)
     if not url:
         return
