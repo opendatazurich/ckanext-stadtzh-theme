@@ -217,6 +217,7 @@ def validate_url(key, data, errors, context):
         pass
 
     errors[key].append(_('Please provide a valid URL'))
+    raise tk.Invalid('Please provide a valid URL')
 
 
 class IFacetPlugin(plugins.SingletonPlugin):
