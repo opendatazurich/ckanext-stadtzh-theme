@@ -205,9 +205,13 @@ def validate_url(key, data, errors, context):
         return
 
     # if the url_type is upload, do not check the URL
-    url_type = data.get('url_type', None)
-    if url_type == 'upload':
-        return
+    try:
+        url_type_key = (key[0], key[1], 'url_type')
+        url_type = data.get(url_type_key, None)
+        if url_type == 'upload':
+            return
+    except IndexError:
+        pass
 
     try:
         pieces = urlparse.urlparse(url)
