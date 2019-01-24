@@ -198,14 +198,13 @@ def validate_url(key, data, errors, context):
     import string
 
     url = data.get(key, None)
-    from pprint import pprint
-    print("DATA, key: %s" % repr(key))
-    pprint(data)
     if not url:
         return
 
-    # if the url_type is upload, do not check the URL
+    # if the url_type is `upload`, do not check the URL
     try:
+        # generate url_type key from given key
+        # key is a tuple like this: ('resources', 0, 'url')
         url_type_key = (key[0], key[1], 'url_type')
         url_type = data.get(url_type_key, None)
         if url_type == 'upload':
