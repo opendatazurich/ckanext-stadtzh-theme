@@ -255,7 +255,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
                 for theme_name in theme_names:
                     g.add((
                         dataset_ref,
-                        SCHEMA.genre,
+                        DCAT.theme,
                         URIRef(ogd_theme_base_url + theme_name)
                     ))
             except IndexError:
