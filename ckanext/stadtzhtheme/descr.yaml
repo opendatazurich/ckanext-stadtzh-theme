@@ -1,6 +1,9 @@
 zip:
     description: Shapefile. Projektion CH1903+ / LV95 (EPSG:2056).
     link: Weitere Informationen zu Shapefiles finden Sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/shp_shapefile.html)
+shp:
+    description: Shapefile. Projektion CH1903+ / LV95 (EPSG:2056).
+    link: Weitere Informationen zu Shapefiles finden Sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/shp_shapefile.html)
 wms: 
     description: Web Map Service. Projektion WGS84 (EPSG:4326).
     link: Weitere Informationen zu WMS finden Sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/wms_wmts.html)
@@ -25,3 +28,6 @@ csv:
 gpkg:    
     description: GeoPackage. Projektion CH1903+ / LV95 (EPSG:2056).
     link: Weitere Informationen zu GeoPackage finden Sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/gpkg.html)
+dxf:
+    description: Drawing Interchange File Format.
+    link: Weitere Informationen zu DXF finden Sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/dxf.html)
