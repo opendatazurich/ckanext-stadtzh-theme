@@ -370,3 +370,10 @@ ul.resource-list,
     }
 }
 
+/* Navigation buttons for mobile should be displayed horizontally */
+@media (max-width: 979px) {
+    .nav-collapse .nav>li {
+        float: left;
+    }
+}
+
