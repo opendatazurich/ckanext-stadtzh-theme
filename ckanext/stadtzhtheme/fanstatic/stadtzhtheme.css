@@ -62,11 +62,6 @@ html,
     right: 0px;
     top: 27px;
 }
-@media (min-width: 980px) {
-    .masthead .nav-collapse {
-        float: none;
-    }
-}
 
 .account-masthead .nav-tabs:after,
 .account-masthead .nav-pills:after {
@@ -333,4 +328,30 @@ ul.resource-list,
 
 .label[data-format=odt], .label[data-format*=odt] {
     background-color: #325598;
+}
+
+/* Large desktop */
+@media (min-width: 980px) {
+    .masthead .nav-collapse {
+        float: none;
+    }
+    .hero, [role="main"], .main {
+        background-image: none;
+        background: #ECECEC;
+    }
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {
+    .hero, [role="main"], .main {
+        background-image: none;
+        background: #ECECEC;
+    }
+}
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+    .hero, [role="main"], .main {
+        background: #1F52A3;
+    }
 }
