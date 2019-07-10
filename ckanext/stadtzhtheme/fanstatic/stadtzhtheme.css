@@ -365,3 +365,10 @@ ul.resource-list,
         background: #1F52A3;
     }
 }
+
+/* Navigation buttons for mobile should be displayed horizontally */
+@media (max-width: 979px) {
+    .nav-collapse .nav>li {
+        float: left;
+    }
+}
