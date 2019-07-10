@@ -14,13 +14,10 @@
 {% block package_info %}
 {% endblock %}
 
-{# This is a "backport" of a bugfix in CKAN 2.2.1 (see issue https://github.com/ckan/ckan/issues/1934 #}
 {% block package_organization %}
-    {% if pkg.organization %}
-      {% set org = h.get_organization_dict(pkg.organization.name) %}
-      {% snippet "snippets/organization.html", organization=org, has_context_title=true %}
-    {% endif %}
+   {# Organization should not be shown as there is only one data provider #}
 {% endblock %}
+
 {% block structured_data %}
   {% if h.helper_available('structured_data') %}
   <script type="application/ld+json">
