@@ -187,6 +187,16 @@ a.tag:hover {
     background-color: #0E2B56;
 }
 
+.masthead .btn-navbar,
+.masthead .btn-navbar:hover,
+.masthead .btn-navbar:focus,
+.masthead .btn-navbar:active,
+.masthead .btn-navbar.active,
+.masthead .btn-navbar.disabled,
+.masthead .btn-navbar[disabled] {
+    background-color: #0E2B56;
+}
+
 .homepage.layout-1 .row1 .col2 {
     position: relative;
     float: right;
