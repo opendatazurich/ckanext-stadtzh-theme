@@ -16,8 +16,11 @@ html,
 .masthead .navigation .nav-pills li a:hover,
 .masthead .navigation .nav-pills li.active a,
 .homepage .module-search .tags,
-.hero .tags, .stadtzh-footer {
+.hero .tags {
     background-color: #0E2B56;
+    color: #FFF;
+}
+.stadtzh-footer {
     color: #FFF;
 }
 
