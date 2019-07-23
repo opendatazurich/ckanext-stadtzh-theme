@@ -575,6 +575,10 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     def before_map(self, map):
         # add named route 'home' as this is removed in recent versions of CKAN
         map.connect('home', '/', controller='home', action='index')
+
+        map.connect('group_read', '/group/{id}',
+                    controller='ckanext.stadtzhtheme.controller:OgdzhGroupSearchController',  # noqa
+                    action='read')
         return map
 
     # IXloader
