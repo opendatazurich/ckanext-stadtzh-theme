@@ -1,3 +1,7 @@
+body {
+    background-color: #1F52A3;
+}
+
 a {
     color: #1F52A3;
 }
@@ -12,8 +16,11 @@ html,
 .masthead .navigation .nav-pills li a:hover,
 .masthead .navigation .nav-pills li.active a,
 .homepage .module-search .tags,
-.hero .tags, .stadtzh-footer {
+.hero .tags {
     background-color: #0E2B56;
+    color: #FFF;
+}
+.stadtzh-footer {
     color: #FFF;
 }
 
@@ -61,11 +68,6 @@ html,
     position: absolute;
     right: 0px;
     top: 27px;
-}
-@media (min-width: 980px) {
-    .masthead .nav-collapse {
-        float: none;
-    }
 }
 
 .account-masthead .nav-tabs:after,
@@ -146,7 +148,7 @@ html,
 
 .site-logo img {
     display: inline;
-    padding-top: 15px;
+    padding-top: 25px;
     height: 35px;
     float: left;
 }
@@ -189,6 +191,16 @@ a.tag:hover {
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .btn-primary.disabled, .btn-primary[disabled] {
+    background-color: #0E2B56;
+}
+
+.masthead .btn-navbar,
+.masthead .btn-navbar:hover,
+.masthead .btn-navbar:focus,
+.masthead .btn-navbar:active,
+.masthead .btn-navbar.active,
+.masthead .btn-navbar.disabled,
+.masthead .btn-navbar[disabled] {
     background-color: #0E2B56;
 }
 
@@ -333,4 +345,48 @@ ul.resource-list,
 
 .label[data-format=odt], .label[data-format*=odt] {
     background-color: #325598;
+}
+
+/* Large desktop */
+@media (min-width: 980px) {
+    .masthead .nav-collapse {
+        float: none;
+    }
+    .hero, [role="main"], .main {
+        background-image: none;
+        background: #ECECEC;
+    }
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {
+    .hero, [role="main"], .main {
+        background-image: none;
+        background: #ECECEC;
+    }
+}
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+    .hero, [role="main"], .main {
+        background: #1F52A3;
+    }
+    .masthead .nav-pills {
+        margin-left: 0;
+        margin-top: 0;
+    }
+}
+
+/* Landscape phones and down */
+@media (max-width: 380px) {
+    .masthead a {
+        font-size: 11px;
+    }
+}
+
+/* Navigation buttons for mobile should be displayed horizontally */
+@media (max-width: 979px) {
+    .nav-collapse .nav>li {
+        float: left;
+    }
 }
