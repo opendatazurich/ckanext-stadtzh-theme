@@ -237,8 +237,14 @@ a.tag:hover {
 .category-box .media-grid {
     background-image: none;
     background-color: white;
+    margin: auto;
     margin-top: 20px;
-    margin-left: -24px;
+    padding-bottom: 16px;
+    padding-right: 16px;
+}
+
+ul.media-grid {
+   padding: 0;
 }
 
 .follow_button {
