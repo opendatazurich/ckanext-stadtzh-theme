@@ -1,5 +1,6 @@
 zip:
     description: ZIP-File. Das ZIP-Dateiformat ist ein Format für verlustfrei komprimierte Dateien, das einerseits den Platzbedarf bei der Archivierung reduziert und andererseits als Containerdatei fungiert, in der mehrere zusammengehörige Dateien zusammengefasst werden können. 
+    link: 
 shp:
     description: Shapefile. Projektion CH1903+ / LV95 (EPSG:2056).
     link: Weitere Informationen zu Shapefiles finden Sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/shp_shapefile.html)
