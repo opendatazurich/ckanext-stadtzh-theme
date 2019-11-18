@@ -29,7 +29,7 @@ class TestPlugin(helpers.FunctionalTestBase):
         descr = theme_plugin.get_resource_descriptions(res)
 
         eq_(len(descr), 2)
-        eq_(descr[0], 'Comma-Separated Values.') 
+        eq_(descr[0], 'Comma-Separated Values. Projektion CH1903+ / LV95 (EPSG:2056).') 
         eq_(descr[1], 'Weitere Informationen zu CSV finden Sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/csv.html)') 
 
     def test_translations_without_orgs(self):
