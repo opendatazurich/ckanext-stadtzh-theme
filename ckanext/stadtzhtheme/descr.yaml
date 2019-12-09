@@ -1,6 +1,6 @@
 zip:
     description: ZIP-File. Das ZIP-Dateiformat ist ein Format für verlustfrei komprimierte Dateien, das einerseits den Platzbedarf bei der Archivierung reduziert und andererseits als Containerdatei fungiert, in der mehrere zusammengehörige Dateien zusammengefasst werden können. 
-    link: 
+    link: Weitere Informationen zum ZIP-Dateiformat finden Sie hier in [Wikipedia](https://de.wikipedia.org/wiki/ZIP-Dateiformat).
 shp:
     description: Shapefile. Projektion CH1903+ / LV95 (EPSG:2056).
     link: Weitere Informationen zu Shapefiles finden Sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/shp_shapefile.html)
@@ -31,3 +31,12 @@ gpkg:
 dxf:
     description: Drawing Interchange File Format. Projektion CH1903+ / LV95 (EPSG:2056)
     link: Weitere Informationen zu DXF finden Sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/dxf.html)
+gdb:
+    description: Geodatabase. Projektion CH1903+ / LV95 (EPSG:2056)
+    link: Weitere Informationen zu Geodatabase finden Sie auf der Webseite von ESRI: «[Was ist eine Geodatabase?](https://desktop.arcgis.com/de/arcmap/10.3/manage-data/geodatabases/what-is-a-geodatabase.htm)».
+tiff:
+    description: Tagged Image File Format.
+    link: Das Tagged Image File Format (TIFF oder auch kurz TIF) ist ein Dateiformat zur Speicherung von Bilddaten. Es wurde ursprünglich von Aldus (1994 von Adobe übernommen) und Microsoft für die Farbseparation bei gescannten Rastergrafiken entwickelt. TIFF-Dateien besitzen den MIME-Typ image/tiff. Weitere Informationen dazu finden Sie [hier](https://de.wikipedia.org/wiki/Tagged_Image_File_Format).
+ili:
+    description: INTERLIS.
+    link: INTERLIS ist eine Beschreibungssprache, mit der die langfristige Kompatibilität unter verschiedlichen Systemen gewährleistet werden soll. INTERLIS ist software- und systemunabhängig.  Weitere Informationen dazu finden Sie [hier](https://www.interlis.ch/).
