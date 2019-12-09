@@ -377,22 +377,4 @@ ul.resource-list,
     .hero, [role="main"], .main {
         background: #1F52A3;
     }
-    .masthead .nav-pills {
-        margin-left: 0;
-        margin-top: 0;
-    }
-}
-
-/* Landscape phones and down */
-@media (max-width: 380px) {
-    .masthead a {
-        font-size: 11px;
-    }
-}
-
-/* Navigation buttons for mobile should be displayed horizontally */
-@media (max-width: 979px) {
-    .nav-collapse .nav>li {
-        float: left;
-    }
 }
