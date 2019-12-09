@@ -280,9 +280,12 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
 
         file_format = (res.get('format') or 'data').lower()
         if self.descr_config.get(file_format):
+            link = self.descr_config[file_format]['link']
+            if not link:
+                link = ''
             return [
                 self.descr_config[file_format]['description'],
-                self.descr_config[file_format]['link'],
+                link,
             ]
         return []
 
