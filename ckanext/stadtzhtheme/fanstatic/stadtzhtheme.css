@@ -383,16 +383,16 @@ ul.resource-list,
     }
 }
 
-/* Landscape phones and down */
-@media (max-width: 380px) {
-    .masthead a {
-        font-size: 11px;
-    }
-}
-
 /* Navigation buttons for mobile should be displayed horizontally */
 @media (max-width: 979px) {
     .nav-collapse .nav>li {
+        float: left;
+    }
+}
+
+/* Subnavigation buttons for mobile should be displayed vertically */
+@media (min-width: 481px) {
+    .page-header .nav-tabs > li {
         float: left;
     }
 }
