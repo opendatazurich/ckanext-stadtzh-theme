@@ -33,7 +33,7 @@ dxf:
     link: Weitere Informationen zu DXF finden Sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/dxf.html)
 gdb:
     description: Geodatabase. Projektion CH1903+ / LV95 (EPSG:2056)
-    link: Weitere Informationen zu Geodatabase finden Sie auf der Webseite von ESRI: [Was ist eine Geodatabase?](https://desktop.arcgis.com/de/arcmap/10.3/manage-data/geodatabases/what-is-a-geodatabase.htm).
+    link: "Weitere Informationen zu Geodatabase finden Sie auf der Webseite von ESRI: [Was ist eine Geodatabase?](https://desktop.arcgis.com/de/arcmap/10.3/manage-data/geodatabases/what-is-a-geodatabase.htm)."
 tiff:
     description: Tagged Image File Format.
     link: Das Tagged Image File Format (TIFF oder auch kurz TIF) ist ein Dateiformat zur Speicherung von Bilddaten. Es wurde ursprünglich von Aldus (1994 von Adobe übernommen) und Microsoft für die Farbseparation bei gescannten Rastergrafiken entwickelt. TIFF-Dateien besitzen den MIME-Typ image/tiff. Weitere Informationen dazu finden Sie [hier](https://de.wikipedia.org/wiki/Tagged_Image_File_Format).
