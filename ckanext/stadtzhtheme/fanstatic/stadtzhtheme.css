@@ -377,17 +377,6 @@ ul.resource-list,
     .hero, [role="main"], .main {
         background: #1F52A3;
     }
-    .masthead .nav-pills {
-        margin-left: 0;
-        margin-top: 0;
-    }
-}
-
-/* Navigation buttons for mobile should be displayed horizontally */
-@media (max-width: 979px) {
-    .nav-collapse .nav>li {
-        float: left;
-    }
 }
 
 /* Subnavigation buttons for mobile should be displayed vertically */
