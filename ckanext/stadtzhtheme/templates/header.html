@@ -43,3 +43,20 @@
     </ul>
   </nav>
 {% endblock %}
+
+{% block header_site_search %}
+  <form class="section site-search simple-input" action="{% url_for controller='package', action='search' %}" method="get">
+    <div class="field">
+      <label for="field-sitewide-search">{% block header_site_search_label %}{{ _('Search Datasets') }}{% endblock %}</label>
+      <input id="field-sitewide-search"
+       type="text"
+       class="search"
+       name="q"
+       value="{{ query }}"
+       autocomplete="off"
+       placeholder="{{ placeholder }}"
+       data-module="ogdzh_autocomplete">
+      <button class="btn-search" type="submit"><i class="fa fa-search"></i></button>
+    </div>
+  </form>
+{% endblock %}
