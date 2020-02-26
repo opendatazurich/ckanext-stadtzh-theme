@@ -13,3 +13,4 @@ It is meant to be run regularly by a cronjob.
 ```bash
 paster --plugin=ckanext-stadtzh-theme stadtzhtheme cleanup_datastore -c /etc/ckan/default/development.ini
 ```
+
