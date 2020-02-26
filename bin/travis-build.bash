@@ -18,21 +18,9 @@ else
     git checkout $CKAN_TAG
     echo "CKAN version: ${CKAN_TAG#ckan-}"
 fi
-
-# install the recommended version of setuptools
-if [ -f requirement-setuptools.txt ]
-then
-    echo "Updating setuptools..."
-    pip install -r requirement-setuptools.txt
-fi
-echo "+++++++++++++++ After Install of setuptools"
-
 python setup.py develop
-echo "+++++++++++++++ After setup.py"
-
-pip install -r -U requirements.txt
-echo "+++++++++++++++ requirements.txt"
-pip install -r dev-requirements.txt
+pip install -r requirements.txt --allow-all-external
+pip install -r dev-requirements.txt --allow-all-external
 cd -
 
 echo "Setting up Solr..."
