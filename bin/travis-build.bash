@@ -25,12 +25,13 @@ then
     echo "Updating setuptools..."
     pip install -r requirement-setuptools.txt
 fi
+echo "+++++++++++++++ After Install of setuptools"
 
 python setup.py develop
+echo "+++++++++++++++ After setup.py"
 
-cat requirements.txt
-
-pip install -r requirements.txt
+pip install -r -U requirements.txt
+echo "+++++++++++++++ requirements.txt"
 pip install -r dev-requirements.txt
 cd -
 
