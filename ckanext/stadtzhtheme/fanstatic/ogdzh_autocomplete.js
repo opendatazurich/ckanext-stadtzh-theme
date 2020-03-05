@@ -17,11 +17,26 @@ ckan.module('ogdzh_autocomplete', function ($) {
   return {
     initialize: function () {
         var getData = function (request, response) {
-            $.getJSON(
-                "/api/3/action/ogdzh_autosuggest?q=" + request.term,
-                function (data) {
-                    response(data['result']);
+            console.log("new search");
+            var url = '/api/3/action/ogdzh_autosuggest';
+            var params = {q: request.term};
+            // check if any filters/facets are set and send them along
+            var values = [];
+            var filtered = $('.filtered');
+
+            //console.log(filtered);
+            for (var i = 0; i < filtered.length; i++) {
+                var value = filtered[i].innerText.trim();
+                if (value !== "Creative Commons CCZero") {
+                    values.push(value);
+                }
+            }
+            params.cfq = values.join(' AND ');
+            $.getJSON(url, params)
+            .done(function (data) {
+                response(data.result);
             });
+            console.log(params.cfq);
         };
 
         // search field on the page
