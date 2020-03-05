@@ -4,6 +4,7 @@ from unidecode import unidecode
 from ckan.plugins.toolkit import get_or_bust, side_effect_free
 from ckan.logic import ActionError, NotFound, ValidationError
 from ckan.lib.search.common import make_connection
+import ckan.plugins.toolkit as tk
 
 import logging
 log = logging.getLogger(__name__)
@@ -22,6 +23,11 @@ def ogdzh_autosuggest(context, data_dict):
     handler = '/suggest'
     suggester = 'default'
 
+    try:
+        suggest_limit = tk.config.get('ckanext.stadtzh-theme.ogdzh_autosuggest_limit')
+    except:
+        suggest_limit = 100
+
     solr = make_connection()
     try:
         log.debug(
@@ -30,7 +36,7 @@ def ogdzh_autosuggest(context, data_dict):
         results = solr.search(
             '',
             search_handler=handler,
-            **{'suggest.q': q, 'suggest.count': 10, 'suggest.cfq': cfq}
+            **{'suggest.q': q, 'suggest.count': suggest_limit, 'suggest.cfq': cfq}
         )
         suggestions = results.raw_response['suggest'][suggester].values()[0]  # noqa
         terms = list(set([suggestion['term']

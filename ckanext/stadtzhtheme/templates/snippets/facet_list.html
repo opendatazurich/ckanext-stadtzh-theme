@@ -60,6 +60,10 @@ within_tertiary
                 {% set label = label_function(item) if label_function else item.display_name %}
                 {% set label_truncated = h.truncate(label, 22) if not label_function else label %}
                 {% set count = count_label(item['count']) if count_label else ('(%d)' % item['count']) %}
+                <div class="facet-item" style="display:none">
+                  <span class="facet-display-name">{{ item.display_name }}</span>
+                  <span class="facet-name">{{ item.name }}</span>
+                </div>
                 <li class="{{ nav_item_class or 'nav-item' }}{% if item.active %} active{% endif %}">
                   <a href="{{ href }}" title="{{ label if label != label_truncated else '' }}">
                     <span>{% if title == 'Formate' %}{{ label_truncated|lower() }}{% else %}{{ label_truncated }}{% endif %} {{ count }}</span>
