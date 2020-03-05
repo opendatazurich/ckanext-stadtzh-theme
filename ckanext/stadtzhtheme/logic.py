@@ -12,12 +12,12 @@ log = logging.getLogger(__name__)
 @side_effect_free
 def ogdzh_autosuggest(context, data_dict):
     q = get_or_bust(data_dict, 'q')
-    fq = data_dict.get('fq', '')
+    cfq = data_dict.get('cfq', '')
 
-    if fq:
-        fq = 'NOT private AND %s' % fq
+    if cfq:
+        cfq = 'active AND %s' % cfq
     else:
-        fq = 'NOT private'
+        cfq = 'active'
 
     handler = '/suggest'
     suggester = 'default'
@@ -25,12 +25,12 @@ def ogdzh_autosuggest(context, data_dict):
     solr = make_connection()
     try:
         log.debug(
-            'Loading suggestions for %s (fq: %s)' % (q, fq)
+            'Loading suggestions for %s (cfq: %s)' % (q, cfq)
         )
         results = solr.search(
             '',
             search_handler=handler,
-            **{'suggest.q': q, 'suggest.count': 10, 'suggest.cfq': fq}
+            **{'suggest.q': q, 'suggest.count': 10, 'suggest.cfq': cfq}
         )
         suggestions = results.raw_response['suggest'][suggester].values()[0]  # noqa
         terms = list(set([suggestion['term']
