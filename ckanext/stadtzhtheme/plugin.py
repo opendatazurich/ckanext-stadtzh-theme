@@ -15,6 +15,8 @@ from ckan.lib.plugins import DefaultTranslation
 from ckan import model
 from ckan.common import _
 
+from ckanext.stadtzhtheme import logic as ogdzh_logic
+
 log = logging.getLogger(__name__)
 
 __location__ = os.path.realpath(
@@ -253,6 +255,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     plugins.implements(plugins.IPackageController, inherit=True)
     plugins.implements(plugins.IRoutes, inherit=True)
     plugins.implements(plugins.IValidators, inherit=True)
+    plugins.implements(plugins.IActions, inherit=True)
     plugins.implements(xi.IXloader, inherit=True)
 
     def configure(self, config):
@@ -304,6 +307,12 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'validate_email': validate_email,
             'get_organization_dict': get_organization_dict,
             'get_resource_descriptions': self.get_resource_descriptions,
+        }
+
+    # IActions
+    def get_actions(self):
+        return {
+            'ogdzh_autosuggest': ogdzh_logic.ogdzh_autosuggest,
         }
 
     # IValidators
