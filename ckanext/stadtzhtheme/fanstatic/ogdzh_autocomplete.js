@@ -6,10 +6,12 @@
 // ----------------------------------------------------------------------------
 // This js module implements autocompletion for the dataset forms
 // - it uses jquery ui autocompletion
-// - it uses getJSON to get the data from the api
-// - it relies on the api action ogdzh_autosuggest
+// - it uses getJSON to get the data from the ckan api
+// - it relies on the action ogdzh_autosuggest
 // - it serves 2 forms that are on the same page:
-//   therefore for 2 id selectors are served
+//   therefore there are two id selectors that are served
+// - the main search form on the dataset page may have context (e.g. selected
+//   facets) that is extracted and added as parameter to the api call
 
 "use strict";
 
@@ -17,30 +19,38 @@ ckan.module('ogdzh_autocomplete', function ($) {
   return {
     initialize: function () {
         var getData = function (request, response) {
-            console.log("new search");
             var url = '/api/3/action/ogdzh_autosuggest';
+            // search term
             var params = {q: request.term};
-            // check if any filters/facets are set and send them along
-            var values = [];
-            var filtered = $('.filtered');
-
-            //console.log(filtered);
-            for (var i = 0; i < filtered.length; i++) {
-                var value = filtered[i].innerText.trim();
-                if (value !== "Creative Commons CCZero") {
-                    values.push(value);
+            // determine which form is in focus
+            var searchForm = $(':focus')[0].id;
+            if (searchForm === 'ogdzh_search') {
+                // only for the main dataset form:
+                // check if any filters/facets are set and send them along
+                var values = [];
+                $("#dataset-search-form input[name='groups']").each(function (elem) {
+                    values.push($(this).val());
+                });
+                $("#dataset-search-form input[name='license_id']").each(function (elem) {
+                    values.push($(this).val());
+                });
+                $("#dataset-search-form input[name='res_format']").each(function (elem) {
+                    values.push($(this).val());
+                });
+                $("#dataset-search-form input[name='tags']").each(function (elem) {
+                    values.push($(this).val());
+                });
+                if (values) {
+                    params.cfq = values.join(' AND ');
                 }
             }
-            params.cfq = values.join(' AND ');
             $.getJSON(url, params)
             .done(function (data) {
                 response(data.result);
             });
-            console.log(params.cfq);
         };
 
         // search field on the page
-
         var selectItem = function (event, ui) {
             $("#ogdzh_search").val(ui.item.value);
             return false;
@@ -52,7 +62,6 @@ ckan.module('ogdzh_autocomplete', function ($) {
         });
 
         // search field in the site header
-        
         var siteSelectItem = function (event, ui) {
             $("#field-sitewide-search").val(ui.item.value);
             return false;
