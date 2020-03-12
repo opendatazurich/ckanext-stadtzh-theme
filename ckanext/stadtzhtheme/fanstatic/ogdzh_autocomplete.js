@@ -41,6 +41,7 @@ ckan.module('ogdzh_autocomplete', function ($) {
                     values.push($(this).val());
                 });
                 if (values) {
+                    values = values.map(function(v) { return v.replace(/-/gi, ''); });
                     params.cfq = values.join(' AND ');
                 }
             }
