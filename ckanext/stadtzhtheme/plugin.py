@@ -550,6 +550,13 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             search_data['date_first_published'] = datetime.strptime(search_data['dateFirstPublished'], '%d.%m.%Y').isoformat() + 'Z'  # noqa
         except (KeyError, ValueError):
             pass
+
+        # clean terms for suggest context
+        search_data = self._prepare_suggest_context(
+            search_data,
+            validated_dict
+        )
+
         return search_data
 
     def before_view(self, pkg_dict):
@@ -582,6 +589,15 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     def is_supported_package_type(self, pkg_dict):
         # only package type 'dataset' is supported (not harvesters!)
         return pkg_dict.get('type') == 'dataset'
+
+    def _prepare_suggest_context(self, search_data, pkg_dict):
+        def clean_suggestion(term):
+            return term.replace('-', '')
+        search_data['cleaned_groups'] = [clean_suggestion(t) for t in search_data['groups']]  # noqa
+        search_data['cleaned_tags'] = [clean_suggestion(t) for t in search_data['tags']]  # noqa
+        search_data['cleaned_license_id'] = clean_suggestion(search_data['license_id']) # noqa
+        search_data['cleaned_res_format'] = [clean_suggestion(t) for t in search_data['res_format']]  # noqa
+        return search_data
 
     # IRoutes
     def before_map(self, map):

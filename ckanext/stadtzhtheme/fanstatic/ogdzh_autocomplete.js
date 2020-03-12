@@ -41,6 +41,7 @@ ckan.module('ogdzh_autocomplete', function ($) {
                     values.push($(this).val());
                 });
                 if (values) {
+                    values = values.map(function(v) { return v.replace(/-/gi, ''); });
                     params.cfq = values.join(' AND ');
                 }
             }
@@ -48,6 +49,16 @@ ckan.module('ogdzh_autocomplete', function ($) {
             .done(function (data) {
                 response(data.result);
             });
+        };
+
+        var showData = function( event, ui ) {
+          var pattern = /\s/;
+          ui.content.map(function(item) {
+              if (item.value.match(pattern)) {
+                 //add quotes around single-term values for Solr
+                 item.value = '"' + item.value + '"';
+              }
+          });
         };
 
         // search field on the page
@@ -59,6 +70,7 @@ ckan.module('ogdzh_autocomplete', function ($) {
             source: getData,
             select: selectItem,
             minLength: 2,
+            response: showData,
         });
 
         // search field in the site header
@@ -70,6 +82,7 @@ ckan.module('ogdzh_autocomplete', function ($) {
             source: getData,
             select: siteSelectItem,
             minLength: 2,
+            response: showData,
         });
     }
     };
