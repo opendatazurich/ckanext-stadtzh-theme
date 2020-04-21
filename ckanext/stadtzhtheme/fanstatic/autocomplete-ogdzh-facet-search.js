@@ -1,6 +1,6 @@
 "use strict";
 
-ckan.module('autocomplete-ogdzh_search', function ($) {
+ckan.module('autocomplete-ogdzh-facet-search', function ($) {
   return {
     initialize: function () {
         new autoComplete({

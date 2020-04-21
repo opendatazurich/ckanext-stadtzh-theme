@@ -1,6 +1,6 @@
 "use strict";
 
-ckan.module('autocomplete-sitewide-search', function ($) {
+ckan.module('autocomplete-ogdzh-header-search', function ($) {
   return {
     initialize: function () {
         new autoComplete({
