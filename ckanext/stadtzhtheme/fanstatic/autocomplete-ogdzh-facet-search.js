@@ -8,8 +8,7 @@ ckan.module('autocomplete-ogdzh-facet-search', function ($) {
             minChars: 2,
             renderItem: function (item, search){
                 // put some searches in quotes, so that solr does not interpret special characters
-                var pattern = /\s/;
-                if (search.match(pattern)) {
+                if (item.match(/\s/g)) {
                     item = '"' + item + '"';
                 }
                 return '<div class="autocomplete-suggestion" data-val="' + item.replace(/"/g, '&quot;') + '">' + item + '</div>';
