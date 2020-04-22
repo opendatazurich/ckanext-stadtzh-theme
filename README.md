@@ -38,5 +38,5 @@ http://stadtzh.lo:8983/solr/ckan/suggest?wt=json&suggest.count=100&suggest.q=vel
 
 ### Remarks
 
-- When facets are added in the future ogdzh_autocomplete.js must be adapted 
+- When facets are added in the future autocomplete-ogdzh-facet-search.js must be adapted 
   to filter for these facets in its context search.
