@@ -1,7 +1,7 @@
 # Please validate this YAML file using a validator, e.g. http://www.yamllint.com/
 
 csv: 
-  description: "Comma-Separated Values. Projektion CH1903+ / LV95 (EPSG:2056)."
+  description: "Comma-Separated Values. Ein Textformat für tabellarische Daten."
   link: "Weitere Informationen zu CSV finden Sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/csv.html)"
 dxf: 
   description: "Drawing Interchange File Format. Projektion CH1903+ / LV95 (EPSG:2056)"
