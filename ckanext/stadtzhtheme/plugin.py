@@ -607,6 +607,10 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         map.connect('group_read', '/group/{id}',
                     controller='ckanext.stadtzhtheme.controller:OgdzhGroupSearchController',  # noqa
                     action='read')
+        map.connect('resource_read_permalink',
+                    '/dataset/{id}/resource/{resource_name}',
+                    controller='ckanext.stadtzhtheme.controller:OgdzhPackageController',  # noqa
+                    action='resource_read_permalink')
         return map
 
     # IXloader

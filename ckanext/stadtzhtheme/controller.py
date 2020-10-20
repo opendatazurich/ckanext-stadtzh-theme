@@ -13,6 +13,7 @@ from six import string_types
 
 
 import ckan.controllers.group as group
+import ckan.controllers.package as package
 
 lookup_group_controller = ckan.lib.plugins.lookup_group_controller
 log = logging.getLogger(__name__)
@@ -169,3 +170,75 @@ class OgdzhGroupSearchController(group.GroupController):
 
         self._setup_template_variables(context, {'id': id},
                                        group_type=group_type)
+
+
+class OgdzhPackageController(package.PackageController):
+    def resource_read_permalink(self, id, resource_name):
+        """
+        Copied from PackageController resource_read method, but using
+        resource name instead of id. This will allow accessing resources of a
+        package by filename, giving a link that will not change even if a
+        resource is deleted and reuploaded with a new id.
+        """
+        context = {'model': model, 'session': model.Session,
+                   'user': c.user,
+                   'auth_user_obj': c.userobj,
+                   'for_view': True}
+
+        try:
+            c.package = get_action('package_show')(context, {'id': id})
+        except (NotFound, NotAuthorized):
+            abort(404, _('Dataset not found'))
+
+        for resource in c.package.get('resources', []):
+            if resource['name'] == resource_name:
+                c.resource = resource
+                break
+        if not c.resource:
+            abort(404, _('Resource not found'))
+
+        # required for nav menu
+        c.pkg = context['package']
+        c.pkg_dict = c.package
+        dataset_type = c.pkg.type or 'dataset'
+
+        # get package license info
+        license_id = c.package.get('license_id')
+        try:
+            c.package['isopen'] = model.Package.\
+                get_license_register()[license_id].isopen()
+        except KeyError:
+            c.package['isopen'] = False
+
+        # Deprecated: c.datastore_api - use h.action_url instead
+        c.datastore_api = '%s/api/action' % \
+            config.get('ckan.site_url', '').rstrip('/')
+
+        c.resource['can_be_previewed'] = self._resource_preview(
+            {'resource': c.resource, 'package': c.package})
+
+        resource_views = get_action('resource_view_list')(
+            context, {'id': c.resource['id']})
+        c.resource['has_views'] = len(resource_views) > 0
+
+        current_resource_view = None
+        view_id = request.GET.get('view_id')
+        if c.resource['can_be_previewed'] and not view_id:
+            current_resource_view = None
+        elif c.resource['has_views']:
+            if view_id:
+                current_resource_view = [rv for rv in resource_views
+                                         if rv['id'] == view_id]
+                if len(current_resource_view) == 1:
+                    current_resource_view = current_resource_view[0]
+                else:
+                    abort(404, _('Resource view not found'))
+            else:
+                current_resource_view = resource_views[0]
+
+        vars = {'resource_views': resource_views,
+                'current_resource_view': current_resource_view,
+                'dataset_type': dataset_type}
+
+        template = self._resource_template(dataset_type)
+        return render(template, extra_vars=vars)
