@@ -38,7 +38,8 @@ def ogdzh_autosuggest(context, data_dict):
         'Loading suggestions for {} (cfq: {}) with handler {}, '
         'suggester {}, result-limit {}, search-limit {}'
         .format(
-           q, cfq, handler, suggester, suggest_results_limit,  suggest_search_limit
+            q, cfq, handler, suggester, suggest_results_limit,
+            suggest_search_limit
         ))
 
     try:
