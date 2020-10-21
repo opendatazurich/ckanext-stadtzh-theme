@@ -529,6 +529,9 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     def after_show(self, context, pkg_dict):
         # set value of new field data_publisher with value of url
         pkg_dict['data_publisher'] = pkg_dict['url']
+        self._replace_resource_download_urls(
+            pkg_dict['resources'], pkg_dict['name'])
+        return pkg_dict
 
     def before_index(self, search_data):
         if not self.is_supported_package_type(search_data):
@@ -583,12 +586,27 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             context,
             {'package': dataset}
         )
+        self._replace_resource_download_urls(
+            pkg_dict['resources'], pkg_dict['name'])
 
         return pkg_dict
+
+    def after_search(self, search_results, search_params):
+        for package in search_results['results']:
+            self._replace_resource_download_urls(
+                package['resources'], package['name'])
+        return search_results
 
     def is_supported_package_type(self, pkg_dict):
         # only package type 'dataset' is supported (not harvesters!)
         return pkg_dict.get('type') == 'dataset'
+
+    def _replace_resource_download_urls(self, resources, package_name):
+        for resource in resources:
+            if resource['resource_type'] == 'file':
+                resource['url'] = '%s/dataset/%s/download/%s' % (
+                    tk.config.get('ckan.site_url', ''),
+                    package_name, resource['name'])
 
     def _prepare_suggest_context(self, search_data, pkg_dict):
         def clean_suggestion(term):
