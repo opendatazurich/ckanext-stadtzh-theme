@@ -189,7 +189,8 @@ class OgdzhPackageController(package.PackageController):
                    'for_view': True}
 
         try:
-            c.package = get_action('package_show')(context, {'id': package_name})
+            c.package = get_action('package_show')(
+                context, {'id': package_name})
         except (NotFound, NotAuthorized):
             abort(404, _('Dataset not found'))
 
@@ -201,20 +202,23 @@ class OgdzhPackageController(package.PackageController):
             abort(404, _('Resource not found'))
 
         if resource.get('url_type') == 'upload':
-            upload = uploader.get_resource_uploader(resource)
-            filepath = upload.get_path(resource['id'])
-            fileapp = paste.fileapp.FileApp(filepath)
-            try:
-                status, headers, app_iter = request.call_application(fileapp)
-            except OSError:
-                abort(404, _('Resource data not found'))
-            response.headers.update(dict(headers))
-            content_type, content_enc = mimetypes.guess_type(
-                resource.get('url', ''))
-            if content_type:
-                response.headers['Content-Type'] = content_type
-            response.status = status
-            return app_iter
+            return self._get_download_details(resource)
         elif 'url' not in resource:
             abort(404, _('No download is available'))
         h.redirect_to(resource['url'])
+
+    def _get_download_details(self, resource):
+        upload = uploader.get_resource_uploader(resource)
+        filepath = upload.get_path(resource['id'])
+        fileapp = paste.fileapp.FileApp(filepath)
+        try:
+            status, headers, app_iter = request.call_application(fileapp)
+        except OSError:
+            abort(404, _('Resource data not found'))
+        response.headers.update(dict(headers))
+        content_type, content_enc = mimetypes.guess_type(
+            resource.get('url', ''))
+        if content_type:
+            response.headers['Content-Type'] = content_type
+        response.status = status
+        return app_iter
