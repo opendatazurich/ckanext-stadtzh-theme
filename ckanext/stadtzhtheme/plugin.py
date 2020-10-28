@@ -610,7 +610,9 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
 
     def _prepare_suggest_context(self, search_data, pkg_dict):
         def clean_suggestion(term):
-            return term.replace('-', '')
+            if term:
+                term = term.replace('-', '')
+            return term
         search_data['cleaned_groups'] = [clean_suggestion(t) for t in search_data['groups']]  # noqa
         search_data['cleaned_tags'] = [clean_suggestion(t) for t in search_data['tags']]  # noqa
         search_data['cleaned_license_id'] = clean_suggestion(search_data['license_id']) # noqa
