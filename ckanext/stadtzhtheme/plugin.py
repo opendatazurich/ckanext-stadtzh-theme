@@ -521,10 +521,14 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
 
     # IPackageController
 
-    def before_search(self, data_dict):
-        if not data_dict.get('sort'):
-            data_dict['sort'] = 'score desc, date_last_modified desc'
-        return data_dict
+    def before_search(self, search_params):
+        if not search_params.get('sort'):
+            search_params['sort'] = 'score desc, date_last_modified desc'
+        # Search in our `text_de` field that has been analysed as German text.
+        # The CKAN default query fields are the same except they include
+        # the `text` field instead.
+        search_params['qf'] = "name^4 title^4 tags^2 groups^2 text_de"
+        return search_params
 
     def after_show(self, context, pkg_dict):
         # set value of new field data_publisher with value of url
