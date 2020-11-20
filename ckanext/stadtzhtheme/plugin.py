@@ -257,6 +257,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     plugins.implements(plugins.IValidators, inherit=True)
     plugins.implements(plugins.IActions, inherit=True)
     plugins.implements(xi.IXloader, inherit=True)
+    plugins.implements(plugins.IResourceController, inherit=True)
 
     def configure(self, config):
         # create vocabularies if necessary
@@ -648,3 +649,16 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
                 'package': dataset_dict,
             }
         )
+
+    # IResourceController
+
+    def before_create(self, context, resource):
+        dataset = tk.get_action('package_show')(
+            context,
+            {'id': resource['package_id']}
+        )
+        existing_names = [r['name'] for r in dataset['resources']]
+        if resource['name'] in existing_names:
+            msg = 'The resource name "{0}" is already in use'.format(
+                resource['name'])
+            raise tk.ValidationError({"resources": msg})
