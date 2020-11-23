@@ -114,37 +114,8 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
             print("User is not authorized to perform this action.")
             sys.exit(1)
 
-        files_to_delete = []
-        files_to_keep = []
-        for root, dirs, files in os.walk(resource_path, topdown=True):
-            if files:
-                for file in files:
-                    resource_id = ''.join(root.split('/')[-2:]) + file
-                    file_path = os.path.join(root, file)
-                    try:
-                        logic.check_access('resource_show', context)
-                        logic.get_action('resource_show')(
-                            context,
-                            {'id': resource_id}
-                        )
-                        files_to_keep.append(file_path)
-                    except logic.NotFound:
-                        files_to_delete.append(file_path)
-                    except logic.NotAuthorized:
-                        print("User is not authorized to perform this action.")
-                        sys.exit(1)
-                    except (KeyError, AttributeError), e:
-                        raise("Error while handling record {}: {}"
-                              .format(resource_id, str(e)))
-        print("""Remove files from storage where resource has been deleted:\n
-              {} files have been deleted."""
-              .format(len(files_to_delete)))
-        for file_path in files_to_delete:
-            print("  removed file {}".format(file_path))
-            os.remove(file_path)
-
+        files_to_keep = self._cleanup_storage_files(context, resource_path)
         _delete_orphaned_storage_directories(resource_path)
-
         print("{} Files are remaining in storage"
               .format(len(files_to_keep)))
 
@@ -185,14 +156,45 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
 
         return (resource_id_list, has_next_page)
 
+    def _cleanup_storage_files(self, context, resource_path):
+        files_to_delete = []
+        files_to_keep = []
+        for root, dirs, files in os.walk(resource_path, topdown=True):
+            if files:
+                for file in files:
+                    resource_id = ''.join(root.split('/')[-2:]) + file
+                    file_path = os.path.join(root, file)
+                    try:
+                        logic.check_access('resource_show', context)
+                        logic.get_action('resource_show')(
+                            context,
+                            {'id': resource_id}
+                        )
+                        files_to_keep.append(file_path)
+                    except logic.NotFound:
+                        files_to_delete.append(file_path)
+                    except logic.NotAuthorized:
+                        print("User is not authorized to perform this action.")
+                        sys.exit(1)
+                    except (KeyError, AttributeError), e:
+                        raise ("Error while handling record {}: {}"
+                               .format(resource_id, str(e)))
+        print("Remove files from storage where resource has been deleted:\n"
+              "{} files have been deleted."
+              .format(len(files_to_delete)))
+        for file_path in files_to_delete:
+            print("  removed file {}".format(file_path))
+            os.remove(file_path)
+        return files_to_keep
+
 
 def _get_resource_storage_path():
     """get resource storage path"""
     try:
         storage_path = get_storage_path()
     except Exception, e:
-        print("""Error occurred while getting
-              storage path configuration: {}"""
+        print("Error occurred while getting"
+              "storage path configuration: {}"
               .format(e))
         sys.exit(1)
     else:
@@ -214,8 +216,8 @@ def _delete_orphaned_storage_directories(resource_path):
                 dir_empty = False
         if dir_empty:
             dirs_to_delete.append(dir_path)
-    print("""Delete empty directories from storage:\n
-          {} directories have been deleted."""
+    print("Delete empty directories from storage:\n"
+          "{} directories have been deleted."
           .format(len(dirs_to_delete)))
     for dir_path in dirs_to_delete:
         os.rmdir(dir_path)
