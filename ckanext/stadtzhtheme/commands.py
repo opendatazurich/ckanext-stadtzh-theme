@@ -165,6 +165,7 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
                     resource_id = ''.join(root.split('/')[-2:]) + file
                     file_path = os.path.join(root, file)
                     try:
+                        logic.check_access('resource_show', context)
                         logic.get_action('resource_show')(
                             context,
                             {'id': resource_id}
