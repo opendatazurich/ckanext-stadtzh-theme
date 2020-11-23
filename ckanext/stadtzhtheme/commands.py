@@ -165,7 +165,6 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
                     resource_id = ''.join(root.split('/')[-2:]) + file
                     file_path = os.path.join(root, file)
                     try:
-                        logic.check_access('resource_show', context)
                         logic.get_action('resource_show')(
                             context,
                             {'id': resource_id}
@@ -179,12 +178,11 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
                     except (KeyError, AttributeError), e:
                         raise ("Error while handling record {}: {}"
                                .format(resource_id, str(e)))
-        print("Remove files from storage where resource has been deleted:\n"
-              "{} files have been deleted."
+        print("{} files will be deleted:"
               .format(len(files_to_delete)))
         for file_path in files_to_delete:
-            print("  removed file {}".format(file_path))
             os.remove(file_path)
+            print("- deleted: {}".format(file_path))
         return files_to_keep
 
 
@@ -216,9 +214,8 @@ def _delete_orphaned_storage_directories(resource_path):
                 dir_empty = False
         if dir_empty:
             dirs_to_delete.append(dir_path)
-    print("Delete empty directories from storage:\n"
-          "{} directories have been deleted."
+    print("{} directories will be deleted:"
           .format(len(dirs_to_delete)))
     for dir_path in dirs_to_delete:
         os.rmdir(dir_path)
-        print("remove directory {}".format(dir_path))
+        print("- deleted {}".format(dir_path))
