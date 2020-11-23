@@ -95,15 +95,8 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
         print("Deleted content of %s tables" % delete_count)
 
     def cleanup_filestore(self):
-        try:
-            storage_path = get_storage_path()
-        except Exception, e:
-            print("""Error occurred while getting 
-                  storage path configuration: {}"""
-                  .format(e))
-            sys.exit(1)
 
-        resource_path = os.path.join(storage_path, 'resources')
+        resource_path = _get_resource_storage_path()
 
         print("\nClean up file storage at {}:\n"
               .format(resource_path))
@@ -171,7 +164,7 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
             os.rmdir(dir_path)
             print("remove directory {}".format(dir_path))
 
-        print("{} Files are remaining in storage:"
+        print("{} Files are remaining in storage"
               .format(len(files_to_keep)))
 
     def _get_datastore_table_page(self, context, offset=0):
@@ -210,3 +203,15 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
         has_next_page = (len(result['records']) > 0)
 
         return (resource_id_list, has_next_page)
+
+
+def _get_resource_storage_path():
+    try:
+        storage_path = get_storage_path()
+    except Exception, e:
+        print("""Error occurred while getting
+              storage path configuration: {}"""
+              .format(e))
+        sys.exit(1)
+    else:
+        return os.path.join(storage_path, 'resources')
