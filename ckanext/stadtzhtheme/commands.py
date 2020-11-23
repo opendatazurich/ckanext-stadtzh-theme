@@ -143,26 +143,7 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
             print("  removed file {}".format(file_path))
             os.remove(file_path)
 
-        dirs_to_delete = []
-        for dir in os.listdir(resource_path):
-            dir_path = os.path.join(resource_path, dir)
-            subdirs = os.listdir(dir_path)
-            dir_empty = True
-            for subdir in subdirs:
-                subdir_path = os.path.join(dir_path, subdir)
-                if not os.listdir(subdir_path):
-                    dirs_to_delete.append(subdir_path)
-                else:
-                    dir_empty = False
-            if dir_empty:
-                dirs_to_delete.append(dir_path)
-
-        print("""Delete empty directories from storage:\n
-              {} directories have been deleted."""
-              .format(len(dirs_to_delete)))
-        for dir_path in dirs_to_delete:
-            os.rmdir(dir_path)
-            print("remove directory {}".format(dir_path))
+        _delete_orphaned_storage_directories(resource_path)
 
         print("{} Files are remaining in storage"
               .format(len(files_to_keep)))
@@ -206,6 +187,7 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
 
 
 def _get_resource_storage_path():
+    """get resource storage path"""
     try:
         storage_path = get_storage_path()
     except Exception, e:
@@ -215,3 +197,26 @@ def _get_resource_storage_path():
         sys.exit(1)
     else:
         return os.path.join(storage_path, 'resources')
+
+
+def _delete_orphaned_storage_directories(resource_path):
+    """delete orphaned storage directories"""
+    dirs_to_delete = []
+    for dir in os.listdir(resource_path):
+        dir_path = os.path.join(resource_path, dir)
+        subdirs = os.listdir(dir_path)
+        dir_empty = True
+        for subdir in subdirs:
+            subdir_path = os.path.join(dir_path, subdir)
+            if not os.listdir(subdir_path):
+                dirs_to_delete.append(subdir_path)
+            else:
+                dir_empty = False
+        if dir_empty:
+            dirs_to_delete.append(dir_path)
+    print("""Delete empty directories from storage:\n
+          {} directories have been deleted."""
+          .format(len(dirs_to_delete)))
+    for dir_path in dirs_to_delete:
+        os.rmdir(dir_path)
+        print("remove directory {}".format(dir_path))
