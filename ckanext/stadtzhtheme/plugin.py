@@ -608,7 +608,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
 
     def _replace_resource_download_urls(self, resources, package_name):
         for resource in resources:
-            if resource['resource_type'] == 'file':
+            if resource['url_type'] == 'upload':
                 resource['url'] = '%s/dataset/%s/download/%s' % (
                     tk.config.get('ckan.site_url', ''),
                     package_name, resource['name'])
