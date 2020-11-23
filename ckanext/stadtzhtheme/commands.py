@@ -1,9 +1,11 @@
 import sys
+import os
 import itertools
 import traceback
 import ckan.lib.cli
 import ckan.logic as logic
 import ckan.model as model
+from ckan.lib.uploader import get_storage_path
 
 
 class StadtzhCommand(ckan.lib.cli.CkanCommand):
@@ -15,6 +17,8 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
         paster stadtzh help
         # Cleanup datastore
         paster stadtzh cleanup_datastore
+        # Cleanup filestore
+        paster stadtzh cleanup_filestore
     '''
     summary = __doc__.split('\n')[0]
     usage = __doc__
@@ -24,6 +28,7 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
         self._load_config()
         options = {
             'cleanup_datastore': self.cleanup_datastore,
+            'cleanup_filestore': self.cleanup_filestore,
             'help': self.help,
         }
 
@@ -88,6 +93,86 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
                 continue
 
         print("Deleted content of %s tables" % delete_count)
+
+    def cleanup_filestore(self):
+        try:
+            storage_path = get_storage_path()
+        except Exception, e:
+            print("""Error occurred while getting 
+                  storage path configuration: {}"""
+                  .format(e))
+            sys.exit(1)
+
+        resource_path = os.path.join(storage_path, 'resources')
+
+        print("\nClean up file storage at {}:\n"
+              .format(resource_path))
+
+        user = logic.get_action('get_site_user')({'ignore_auth': True}, {})
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': user['name']
+        }
+        try:
+            logic.check_access('datastore_delete', context)
+            logic.check_access('resource_show', context)
+        except logic.NotAuthorized:
+            print("User is not authorized to perform this action.")
+            sys.exit(1)
+
+        files_to_delete = []
+        files_to_keep = []
+        for root, dirs, files in os.walk(resource_path, topdown=True):
+            if files:
+                for file in files:
+                    resource_id = ''.join(root.split('/')[-2:]) + file
+                    file_path = os.path.join(root, file)
+                    try:
+                        logic.check_access('resource_show', context)
+                        logic.get_action('resource_show')(
+                            context,
+                            {'id': resource_id}
+                        )
+                        files_to_keep.append(file_path)
+                    except logic.NotFound:
+                        files_to_delete.append(file_path)
+                    except logic.NotAuthorized:
+                        print("User is not authorized to perform this action.")
+                        sys.exit(1)
+                    except (KeyError, AttributeError), e:
+                        raise("Error while handling record {}: {}"
+                              .format(resource_id, str(e)))
+        print("""Remove files from storage where resource has been deleted:\n
+              {} files have been deleted."""
+              .format(len(files_to_delete)))
+        for file_path in files_to_delete:
+            print("  removed file {}".format(file_path))
+            os.remove(file_path)
+
+        dirs_to_delete = []
+        for dir in os.listdir(resource_path):
+            dir_path = os.path.join(resource_path, dir)
+            subdirs = os.listdir(dir_path)
+            dir_empty = True
+            for subdir in subdirs:
+                subdir_path = os.path.join(dir_path, subdir)
+                if not os.listdir(subdir_path):
+                    dirs_to_delete.append(subdir_path)
+                else:
+                    dir_empty = False
+            if dir_empty:
+                dirs_to_delete.append(dir_path)
+
+        print("""Delete empty directories from storage:\n
+              {} directories have been deleted."""
+              .format(len(dirs_to_delete)))
+        for dir_path in dirs_to_delete:
+            os.rmdir(dir_path)
+            print("remove directory {}".format(dir_path))
+
+        print("{} Files are remaining in storage:"
+              .format(len(files_to_keep)))
 
     def _get_datastore_table_page(self, context, offset=0):
         # query datastore to get all resources from the _table_metadata
