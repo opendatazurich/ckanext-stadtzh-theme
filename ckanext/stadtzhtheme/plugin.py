@@ -405,7 +405,9 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'group': [tk.get_validator('ignore_missing')]
         })
 
-        # add a custom hash field
+        # Add a custom hash field, used to check if a package's resources have
+        # been updated. The `hash` field on the resource is updated by xloader
+        # but only for files, not for urls, so we need one we can use for both
         schema['resources'].update({
             'zh_hash': [tk.get_validator('ignore_missing')]
         })
