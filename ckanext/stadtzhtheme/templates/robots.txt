@@ -1,0 +1,14 @@
+{% ckan_extends %}
+
+{% block additional_user_agents -%}
+User-agent: MJ12bot
+User-agent: SemrushBot
+User-agent: Yandex
+User-agent: YandexBot
+User-agent: UptimeRobot
+User-agent: AhrefsBot
+User-agent: BingBot
+User-agent: PetalBot
+Disallow: /
+
+{%- endblock %}
