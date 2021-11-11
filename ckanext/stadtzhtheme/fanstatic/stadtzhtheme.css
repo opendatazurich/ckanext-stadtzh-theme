@@ -385,3 +385,8 @@ ul.resource-list,
         float: left;
     }
 }
+
+/*  */
+.row.ckanext-showcase-edit-wrapper .span12 {
+    margin-left: 0;
+}
