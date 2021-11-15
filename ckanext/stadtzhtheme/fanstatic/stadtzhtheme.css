@@ -385,3 +385,8 @@ ul.resource-list,
         float: left;
     }
 }
+
+/* Fix formatting for showcase edit page */
+.row.ckanext-showcase-edit-wrapper .span12 {
+    margin-left: 0;
+}
