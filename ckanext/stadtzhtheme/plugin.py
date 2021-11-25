@@ -13,7 +13,6 @@ import ckanext.xloader.interfaces as xi
 import ckan.plugins.toolkit as tk
 from ckan.lib.plugins import DefaultTranslation
 from ckan import model
-from ckan.common import _
 
 from ckanext.stadtzhtheme import logic as ogdzh_logic
 
@@ -193,40 +192,6 @@ def validate_email(email):
         return ''
 
 
-def validate_url(key, data, errors, context):
-    ''' Checks that the provided value (if it is present) is a valid URL '''
-    # backport of PR #4630 in ckan-core, remove if it gets merged
-    import urlparse
-    import string
-
-    url = data.get(key, None)
-    if not url:
-        return
-
-    # if the url_type is `upload`, do not check the URL
-    try:
-        # generate url_type key from given key
-        # key is a tuple like this: ('resources', 0, 'url')
-        url_type_key = (key[0], key[1], 'url_type')
-        url_type = data.get(url_type_key, None)
-        if url_type == 'upload':
-            return
-    except IndexError:
-        pass
-
-    try:
-        pieces = urlparse.urlparse(url)
-        if (all([pieces.scheme, pieces.netloc]) and
-                set(pieces.netloc) <= set(string.letters + string.digits + '-.') and  # noqa
-                pieces.scheme in ['http', 'https']):
-            return
-    except ValueError:
-        # invalid URL
-        pass
-
-    errors[key].append(_('Please provide a valid URL'))
-
-
 class IFacetPlugin(plugins.SingletonPlugin):
 
     plugins.implements(plugins.IFacets, inherit=True)
@@ -254,7 +219,6 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     plugins.implements(plugins.ITemplateHelpers, inherit=False)
     plugins.implements(plugins.IPackageController, inherit=True)
     plugins.implements(plugins.IRoutes, inherit=True)
-    plugins.implements(plugins.IValidators, inherit=True)
     plugins.implements(plugins.IActions, inherit=True)
     plugins.implements(xi.IXloader, inherit=True)
     plugins.implements(plugins.IResourceController, inherit=True)
@@ -316,12 +280,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'ogdzh_autosuggest': ogdzh_logic.ogdzh_autosuggest,
         }
 
-    # IValidators
-    def get_validators(self):
-        return {
-            'url_valid': validate_url,
-        }
-
+    # IDatasetForm
     def is_fallback(self):
         # Return True to register this plugin as the default handler for
         # package types not handled by any other IDatasetForm plugin.
@@ -416,8 +375,8 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         schema['resources'].update({
             'url': [tk.get_validator('ignore_missing'),
                     unicode,
-                    tk.get_validator('remove_whitespace'),
-                    tk.get_validator('url_valid')]
+                    tk.get_validator('remove_whitespace')
+                    ]
         })
 
         return schema
