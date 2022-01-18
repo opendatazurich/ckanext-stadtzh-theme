@@ -84,10 +84,10 @@ mapping_accrualPeriodicity = {
     'taeglich': 'http://purl.org/cld/freq/daily',
     'woechentlich': 'http://purl.org/cld/freq/weekly',
     'vierzehntäglich': 'http://purl.org/cld/freq/bimonthly',
-    'keines': 'http://purl.org/cld/freq/completelyIrregular',
-    'alle 4 Jahre': 'http://purl.org/cld/freq/completelyIrregular',
+    'keines': 'http://purl.org/cld/freq/irregular',
+    'alle 4 Jahre': 'http://purl.org/cld/freq/irregular',
     'sporadisch oder unregelmaessig':
-        'http://purl.org/cld/freq/completelyIrregular',
+        'http://purl.org/cld/freq/irregular',
 }
 
 ckan_locale_default = pylons.config.get('ckan.locale_default', 'de')
