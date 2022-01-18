@@ -269,6 +269,10 @@ ul.resource-list,
     margin-left: 20px;
 }
 
+.metadata {
+    white-space: pre-wrap;
+}
+
 .footer-links-left, .footer-links-right {
     width: 160px;
 }
