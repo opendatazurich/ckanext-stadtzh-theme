@@ -195,7 +195,6 @@ def validate_email(email):
 
 def validate_url(key, data, errors, context):
     ''' Checks that the provided value (if it is present) is a valid URL '''
-    # backport of PR #4630 in ckan-core, remove if it gets merged
     import urlparse
     import string
 
