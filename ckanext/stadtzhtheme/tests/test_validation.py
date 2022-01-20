@@ -1,5 +1,5 @@
 import nose
-from ckanapi import LocalCKAN, ValidationError
+from ckanapi import TestAppCKAN, ValidationError
 from ckan.tests import helpers, factories
 
 eq_ = nose.tools.eq_
@@ -8,23 +8,21 @@ assert_true = nose.tools.assert_true
 
 class TestValidation(helpers.FunctionalTestBase):
     def test_invalid_url(self):
-        lc = LocalCKAN()
+        factories.Sysadmin(apikey="my-test-key")
+        app = self._get_test_app()
+        demo = TestAppCKAN(app, apikey="my-test-key")
 
         try:
             dataset = factories.Dataset()
-            lc.call_action(
-		'resource_create',
-		{
-                    'package_id': dataset['name'],
-                    'name': 'Test-File',
-                    'url': 'https://example.com]'
-		
-		}
+            demo.action.resource_create(
+                package_id=dataset['name'],
+                name='Test-File',
+                url='https://example.com]'
             )
         except ValidationError as e:
             eq_(
                 e.error_dict['url'],
-                    [u'Please provide a valid URL']
+                [u'Bitte eine valide URL angeben']
             )
         else:
             raise AssertionError('ValidationError not raised')
