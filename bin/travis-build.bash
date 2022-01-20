@@ -50,6 +50,12 @@ cd ckan
 paster db init -c test-core.ini
 cd -
 
+echo "Installing ckanext-stadtzh-theme and its requirements..."
+python setup.py develop
+pip install -r pip-requirements.txt
+pip install -r dev-requirements.txt
+python setup.py compile_catalog
+
 echo "Installing ckanext-showcase and its requirements..."
 git clone https://github.com/ckan/ckanext-showcase
 cd ckanext-showcase
@@ -79,12 +85,6 @@ python setup.py develop
 pip install -r requirements.txt
 pip install -r dev-requirements.txt
 cd -
-
-echo "Installing ckanext-stadtzh-theme and its requirements..."
-python setup.py develop
-pip install -r pip-requirements.txt
-pip install -r dev-requirements.txt
-python setup.py compile_catalog
 
 echo "Moving test.ini into a subdir..."
 mkdir subdir
