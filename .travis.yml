@@ -8,7 +8,7 @@ python:
 - '2.7'
 
 env:
-    - CKANVERSION=2.7
+    - CKANVERSION=2.7.6
 
 services:
     - redis-server

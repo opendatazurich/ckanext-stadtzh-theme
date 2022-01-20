@@ -7,6 +7,7 @@ assert_true = nose.tools.assert_true
 
 
 class TestValidation(helpers.FunctionalTestBase):
+
     def test_invalid_url(self):
         factories.Sysadmin(apikey="my-test-key")
         app = self._get_test_app()
