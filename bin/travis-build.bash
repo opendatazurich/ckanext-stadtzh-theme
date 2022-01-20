@@ -43,12 +43,18 @@ sudo service jetty restart
 
 echo "Creating the PostgreSQL user and database..."
 sudo -u postgres psql -c "CREATE USER ckan_default WITH PASSWORD 'pass';"
-sudo -u postgres psql -c 'CREATE DATABASE ckan_test_27 WITH OWNER ckan_default;'
+sudo -u postgres psql -c 'CREATE DATABASE ckan_test WITH OWNER ckan_default;'
 
 echo "Initialising the database..."
 cd ckan
 paster db init -c test-core.ini
 cd -
+
+echo "Installing ckanext-stadtzh-theme and its requirements..."
+python setup.py develop
+pip install -r pip-requirements.txt
+pip install -r dev-requirements.txt
+python setup.py compile_catalog
 
 echo "Installing ckanext-showcase and its requirements..."
 git clone https://github.com/ckan/ckanext-showcase
@@ -79,12 +85,6 @@ python setup.py develop
 pip install -r requirements.txt
 pip install -r dev-requirements.txt
 cd -
-
-echo "Installing ckanext-stadtzh-theme and its requirements..."
-python setup.py develop
-pip install -r pip-requirements.txt
-pip install -r dev-requirements.txt
-python setup.py compile_catalog
 
 echo "Moving test.ini into a subdir..."
 mkdir subdir
