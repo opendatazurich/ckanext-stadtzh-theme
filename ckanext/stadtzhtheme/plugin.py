@@ -611,7 +611,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         for resource in resources:
             if resource['url_type'] == 'upload':
                 resource['url'] = '%s/dataset/%s/download/%s' % (
-                    tk.config.get('ckan.site_url', ''),
+                    tk.config.get('ckanext.stadtzh-theme.frontend_url', ''),
                     package_name, resource['name'])
 
     def _prepare_suggest_context(self, search_data, pkg_dict):
