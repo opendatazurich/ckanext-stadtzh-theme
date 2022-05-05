@@ -59,6 +59,9 @@ python setup.py compile_catalog
 echo "Installing ckanext-showcase and its requirements..."
 git clone https://github.com/ckan/ckanext-showcase
 cd ckanext-showcase
+# v1.5.0 adds compatibility with CKAN v2.10, which breaks compatibility with v2.7.
+# We still need to remain compatible with CKAN v2.7.
+git checkout v1.4.8
 python setup.py develop
 pip install -r dev-requirements.txt
 cd -
