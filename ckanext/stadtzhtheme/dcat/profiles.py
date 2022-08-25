@@ -159,7 +159,8 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
             self._add_triples_from_dict(dataset_dict, dataset_ref, basic_items)
 
             # landingPage is the original portal page
-            site_url = pylons.config.get('ckan.site_url', '')
+            site_url = pylons.config.get(
+                'ckanext.stadtzh-theme.frontend_url', '')
             g.add((
                 dataset_ref,
                 DCAT.landingPage,
