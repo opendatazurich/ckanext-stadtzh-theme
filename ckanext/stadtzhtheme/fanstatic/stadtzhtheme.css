@@ -358,8 +358,8 @@ ul.resource-list,
 }
 
 /* Large desktop */
-@media (min-width: 980px) {
-    .masthead .nav-collapse {
+@media (min-width: 992px) {
+    .masthead .navbar-collapse {
         float: none;
     }
     .hero, [role="main"], .main {
