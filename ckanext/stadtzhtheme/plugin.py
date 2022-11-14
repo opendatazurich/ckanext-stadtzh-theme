@@ -272,7 +272,8 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
 
         tk.add_template_directory(config, 'templates')
         tk.add_public_directory(config, 'public')
-        tk.add_resource('fanstatic', 'stadtzhtheme')
+        tk.add_resource('assets', 'stadtzh_theme')
+        tk.add_resource('assets', 'stadtzh_theme_js')
 
         config['ckan.site_logo'] = '/logo.png'
 

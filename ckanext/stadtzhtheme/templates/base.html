@@ -14,11 +14,7 @@
 {% endblock -%}
 
 {% block styles %}
-{{ super() }}
-  {% resource 'stadtzhtheme/auto-complete.css' %}
-  {% resource 'stadtzhtheme/stadtzhtheme.css' %}
-  {% resource 'stadtzhtheme/masonry.pkgd.js' %}
-  {% resource 'stadtzhtheme/auto-complete.js' %}
-  {% resource 'stadtzhtheme/autocomplete-ogdzh-facet-search.js' %}
-  {% resource 'stadtzhtheme/autocomplete-ogdzh-header-search.js' %}
+  {{ super() }}
+  {% asset 'stadtzh_theme/stadtzh_theme_css' %}
+  {% asset 'stadtzh_theme/stadtzh_theme_js' %}
 {% endblock %}
