@@ -1,7 +1,7 @@
 {% ckan_extends %}
 
 {% block links -%}
-  <link rel="alternate" type="application/rdf+xml" href="{{ h.url_for(controller='package', action='read', id=pkg.id, format='rdf', qualified=True) }}"/>
+  <link rel="alternate" type="application/rdf+xml" href="{{ h.url_for('dataset.read', id=pkg.id, format='rdf', qualified=True) }}"/>
 {% endblock -%}
 
 {% block content_primary_nav %}
