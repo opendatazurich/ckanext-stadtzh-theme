@@ -78,5 +78,8 @@ jobs:
     - name: Setup extension (CKAN >= 2.9)
       run: |
         ckan -c test.ini db init
+    - name: Enable plugins
+      run: |
+        ckan config-tool test.ini "ckan.plugins = stats stadtzhtheme showcase dcat text_view recline_view image_view"
     - name: Run tests
       run: pytest --ckan-ini=test.ini --cov=ckanext.stadtzhtheme --disable-warnings ckanext/stadtzhtheme/tests
