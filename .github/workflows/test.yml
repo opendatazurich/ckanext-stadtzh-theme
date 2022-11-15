@@ -66,11 +66,11 @@ jobs:
     - name: Install py2 ckanext-dcat requirements
       if: ${{ matrix.ckan-version == '2.9-py2' }}
       run: |
-        pip install -r https://raw.githubusercontent.com/ckan/ckanext-dcat/master/requirements-py2.txt && \
+        pip install -r https://raw.githubusercontent.com/ckan/ckanext-dcat/master/requirements-py2.txt
     - name: Install py3 ckanext-dcat requirements
       if: ${{ matrix.ckan-version != '2.9-py2' }}
       run: |
-        pip install -r https://raw.githubusercontent.com/ckan/ckanext-dcat/master/requirements.txt && \
+        pip install -r https://raw.githubusercontent.com/ckan/ckanext-dcat/master/requirements.txt
     - name: Adjust test.ini
       run: |
         # Replace default path to CKAN core config file with the one on the container
