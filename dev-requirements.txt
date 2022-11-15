@@ -1,2 +1,4 @@
 flake8==3.0.4
 six==1.12.0
+pytest-ckan
+pytest-cov
