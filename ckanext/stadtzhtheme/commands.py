@@ -40,7 +40,7 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
             sys.exit(1)
 
     def help(self):
-        print self.__doc__
+        print(self.__doc__)
 
     def cleanup_datastore(self):
         user = logic.get_action('get_site_user')({'ignore_auth': True}, {})
@@ -68,7 +68,7 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
                 resource_id_list.extend(record_list)
                 if not has_next_page:
                     break
-        except Exception, e:
+        except Exception as e:
             print(
                 "Error while gathering resources: %s / %s"
                 % (str(e), traceback.format_exc())
@@ -85,7 +85,7 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
                 )
                 print("Table '%s' deleted (not dropped)" % resource_id)
                 delete_count += 1
-            except Exception, e:
+            except Exception as e:
                 print(
                     "Error while deleting datastore resource %s: %s / %s"
                     % (resource_id, str(e), traceback.format_exc())
@@ -147,7 +147,7 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
                 print("Resource '%s' *not* found" % record['name'])
             except logic.NotAuthorized:
                 print("User is not authorized to perform this action.")
-            except (KeyError, AttributeError), e:
+            except (KeyError, AttributeError) as e:
                 print("Error while handling record %s: %s" % (record, str(e)))
                 continue
 
@@ -176,7 +176,7 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
                     except logic.NotAuthorized:
                         print("User is not authorized to perform this action.")
                         sys.exit(1)
-                    except (KeyError, AttributeError), e:
+                    except (KeyError, AttributeError) as e:
                         raise ("Error while handling record {}: {}"
                                .format(resource_id, str(e)))
         print("{} files will be deleted:"
@@ -191,7 +191,7 @@ def _get_resource_storage_path():
     """get resource storage path"""
     try:
         storage_path = get_storage_path()
-    except Exception, e:
+    except Exception as e:
         print("Error occurred while getting"
               "storage path configuration: {}"
               .format(e))
