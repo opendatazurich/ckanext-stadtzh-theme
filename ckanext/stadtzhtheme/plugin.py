@@ -152,7 +152,7 @@ def load_json(json_data):
             if not isinstance(kv_pair, list) and len(kv_pair) != 2:
                 return False
         return json.loads(json_data)
-    except:
+    except Exception:
         return False
 
 
@@ -161,7 +161,7 @@ def get_package_dict(datasetID):
     context = {'user': user['name']}
     try:
         return tk.get_action('package_show')(context, {'id': datasetID})
-    except:
+    except Exception:
         return {}
 
 
@@ -176,7 +176,7 @@ def get_organization_dict(org=None):
 
 def validate_date(datestring):
     m = re.match(
-        '^[0-9]{2}\.[0-9]{2}\.[0-9]{4}(, [0-9]{2}:[0-9]{2})?$',
+        r'^[0-9]{2}\.[0-9]{2}\.[0-9]{4}(, [0-9]{2}:[0-9]{2})?$',
         datestring
     )
     if m:

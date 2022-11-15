@@ -13,24 +13,26 @@ class TestPlugin(helpers.FunctionalTestBase):
     def test_descr_file(self):
         theme_plugin = plugin.StadtzhThemePlugin()
 
-        expected_keys = ['zip', 'wms', 'wmts', 'wfs', 'kml', 'kmz', 'json', 'csv', 'gpkg'] 
+        expected_keys = [
+            'zip', 'wms', 'wmts', 'wfs', 'kml', 'kmz', 'json', 'csv', 'gpkg']
         descr = theme_plugin.descr_config
-        assert all(k in descr.keys() for k in expected_keys), "Keys: %s" % descr.keys()
+        assert all(k in descr.keys() for k in expected_keys),\
+            "Keys: %s" % descr.keys()
 
     def test_resource_description_value(self):
         theme_plugin = plugin.StadtzhThemePlugin()
-        res = {'format': 'CSV', 'description': 'My super CSV'} 
+        res = {'format': 'CSV', 'description': 'My super CSV'}
         eq_(theme_plugin.get_resource_descriptions(res), ['My super CSV'])
 
     def test_resource_description_file(self):
         theme_plugin = plugin.StadtzhThemePlugin()
-        res = {'format': 'CSV', 'description': ''} 
+        res = {'format': 'CSV', 'description': ''}
 
         descr = theme_plugin.get_resource_descriptions(res)
 
         eq_(len(descr), 2)
         eq_(descr[0], 'Comma-Separated Values.')
-        eq_(descr[1], 'Weitere Informationen zu CSV finden Sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/csv.html)') 
+        eq_(descr[1], 'Weitere Informationen zu CSV finden Sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/csv.html)')  # noqa
 
     def test_translations_without_orgs(self):
         dataset = factories.Dataset()
@@ -40,7 +42,7 @@ class TestPlugin(helpers.FunctionalTestBase):
         response = app.get(url)
 
         assert 'Aktualisierungs&shy;datum' in response, response
-        assert not 'Date last updated' in response, response
+        assert 'Date last updated' not in response, response
 
     def test_translations_with_org(self):
         org = factories.Organization()
@@ -51,7 +53,7 @@ class TestPlugin(helpers.FunctionalTestBase):
         response = app.get(url)
 
         assert 'Aktualisierungs&shy;datum' in response, response
-        assert not 'Date last updated' in response, response
+        assert 'Date last updated' not in response, response
 
     def test_translation_with_en_locale(self):
         org = factories.Organization()
@@ -61,5 +63,5 @@ class TestPlugin(helpers.FunctionalTestBase):
         app = self._get_test_app()
         response = app.get(url)
 
-        assert not 'Aktualisierungs&shy;datum' in response, response
+        assert 'Aktualisierungs&shy;datum' not in response, response
         assert 'Date last updated' in response, response

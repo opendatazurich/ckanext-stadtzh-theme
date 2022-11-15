@@ -46,5 +46,5 @@ class TestValidation(helpers.FunctionalTestBase):
                 url='https://example.com]',
                 url_type='upload'
             )
-        except ValidationError as e:
+        except ValidationError:
             raise AssertionError('ValidationError raised erroneously')
