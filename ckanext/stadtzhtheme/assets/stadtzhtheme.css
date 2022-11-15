@@ -209,9 +209,10 @@ a.tag:hover {
     float: right;
 }
 
-.homepage [role="main"] {
+.homepage [role="main"], .homepage .main {
     padding: 20px;
     min-height: 0px;
+    background: #ECECEC;
 }
 
 .homepage .hero {
@@ -222,7 +223,6 @@ a.tag:hover {
 
 .hero, [role="main"], .main {
     background-image: none;
-    background: #ECECEC;
 }
 
 .category-box {
@@ -364,28 +364,13 @@ ul.resource-list,
     .masthead .navbar-collapse {
         float: none;
     }
-    .hero, [role="main"], .main {
-        background-image: none;
-        background: #ECECEC;
-    }
 }
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 991px) {
-    .hero, [role="main"], .main {
-        background-image: none;
-        background: #ECECEC;
-    }
     .category-box .media-item {
         width: 110px;
         margin: 0 0 15px 0;
-    }
-}
-
-/* Landscape phone to portrait tablet */
-@media (max-width: 767px) {
-    .hero, [role="main"], .main {
-        background: #1F52A3;
     }
 }
 
@@ -399,4 +384,9 @@ ul.resource-list,
 /* Fix formatting for showcase edit page */
 .row.ckanext-showcase-edit-wrapper .span12 {
     margin-left: 0;
+}
+
+/* Fix height of 'x' on tags in dataset/showcase edit page */
+.select2-search-choice-close, .select2-container-multi .select2-search-choice-close {
+    top: 3px;
 }
