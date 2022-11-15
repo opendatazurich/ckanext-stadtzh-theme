@@ -17,7 +17,7 @@
     {% else %}
       <h3>{{ _('From the dataset abstract') }}</h3>
       <blockquote>{{ h.markdown_extract(c.package.get('notes')) }}</blockquote>
-      <p>{% trans dataset=c.package.title, url=h.url_for(controller='package', action='read', id=c.package['name']) %}Source: <a href="{{ url }}">{{ dataset }}</a>{% endtrans %}
+      <p>{% trans dataset=c.package.title, url=h.url_for('dataset.read', id=c.package['name']) %}Source: <a href="{{ url }}">{{ dataset }}</a>{% endtrans %}
     {% endif %}
   </div>
 {% endblock %}

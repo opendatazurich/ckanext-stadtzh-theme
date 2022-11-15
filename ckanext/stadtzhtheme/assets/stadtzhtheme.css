@@ -209,9 +209,10 @@ a.tag:hover {
     float: right;
 }
 
-.homepage [role="main"] {
+.homepage [role="main"], .homepage .main {
     padding: 20px;
     min-height: 0px;
+    background: #ECECEC;
 }
 
 .homepage .hero {
@@ -222,7 +223,6 @@ a.tag:hover {
 
 .hero, [role="main"], .main {
     background-image: none;
-    background: #ECECEC;
 }
 
 .category-box {
@@ -230,21 +230,23 @@ a.tag:hover {
 }
 
 .category-box .media-item {
-    width: 100.333px;
-    height: 160px
+    width: 162px;
+    margin: 0 0 15px 0;
+}
+
+.category-box .media-grid::before, .category-box .media-grid::after {
+    content: none;
 }
 
 .category-box .media-grid {
+    content: "";
     background-image: none;
     background-color: white;
-    margin: auto;
     margin-top: 20px;
-    padding-bottom: 16px;
-    padding-right: 16px;
-}
-
-ul.media-grid {
-   padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    row-gap: 15px;
 }
 
 .follow_button {
@@ -358,28 +360,17 @@ ul.resource-list,
 }
 
 /* Large desktop */
-@media (min-width: 980px) {
-    .masthead .nav-collapse {
+@media (min-width: 992px) {
+    .masthead .navbar-collapse {
         float: none;
-    }
-    .hero, [role="main"], .main {
-        background-image: none;
-        background: #ECECEC;
     }
 }
 
 /* Portrait tablet to landscape and desktop */
-@media (min-width: 768px) and (max-width: 979px) {
-    .hero, [role="main"], .main {
-        background-image: none;
-        background: #ECECEC;
-    }
-}
-
-/* Landscape phone to portrait tablet */
-@media (max-width: 767px) {
-    .hero, [role="main"], .main {
-        background: #1F52A3;
+@media (min-width: 768px) and (max-width: 991px) {
+    .category-box .media-item {
+        width: 110px;
+        margin: 0 0 15px 0;
     }
 }
 
@@ -393,4 +384,9 @@ ul.resource-list,
 /* Fix formatting for showcase edit page */
 .row.ckanext-showcase-edit-wrapper .span12 {
     margin-left: 0;
+}
+
+/* Fix height of 'x' on tags in dataset/showcase edit page */
+.select2-search-choice-close, .select2-container-multi .select2-search-choice-close {
+    top: 3px;
 }

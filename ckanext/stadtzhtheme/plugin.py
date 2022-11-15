@@ -272,7 +272,8 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
 
         tk.add_template_directory(config, 'templates')
         tk.add_public_directory(config, 'public')
-        tk.add_resource('fanstatic', 'stadtzhtheme')
+        tk.add_resource('assets', 'stadtzh_theme_css')
+        tk.add_resource('assets', 'stadtzh_theme_js')
 
         config['ckan.site_logo'] = '/logo.png'
 
@@ -629,10 +630,6 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     def before_map(self, map):
         # add named route 'home' as this is removed in recent versions of CKAN
         map.connect('home', '/', controller='home', action='index')
-
-        map.connect('group_read', '/group/{id}',
-                    controller='ckanext.stadtzhtheme.controller:OgdzhGroupSearchController',  # noqa
-                    action='read')
         map.connect('resource_download_permalink',
                     '/dataset/{package_name}/download/{resource_name}',
                     controller='ckanext.stadtzhtheme.controller:OgdzhPackageController',  # noqa

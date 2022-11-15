@@ -1,0 +1,11 @@
+stadtzh_theme_css:
+  output: stadtzh_theme/stadtzh_theme.css
+  contents:
+    - stadtzhtheme.css
+    - auto-complete.css
+stadtzh_theme_js:
+  output: stadtzh_theme/stadtzh_theme.js
+  contents:
+    - auto-complete.js
+    - autocomplete-ogdzh-facet-search.js
+    - autocomplete-ogdzh-header-search.js

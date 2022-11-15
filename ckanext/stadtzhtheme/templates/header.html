@@ -1,33 +1,30 @@
 {% ckan_extends %}
 
-
 {% block header_account_container_content %}
-  <nav class="section navigation">
-    {% if c.userobj %}
-      {{ super() }}
-    {% else %}
-      <nav class="account not-authed">
-        <ul class="unstyled">
-          {% block header_account_notlogged %}
-          {% endblock %}
-        </ul>
-      </nav>
-    {% endif %}
-    {% block top_links %}
-      <ul class="nav nav-pills">
-        <li><a href="https://www.stadt-zuerich.ch/portal/de/index/ogd.html">Open Data Portal</a></li>
-        <li><a href="https://www.stadt-zuerich.ch/portal/de/index/ogd/anwendungen.html">Anwendungen</a></li>
-        <li><a href="https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt.html">Werkstatt</a></li>
-        <li><a href="https://www.stadt-zuerich.ch/portal/de/index/ogd/blog.html">Blog</a></li>
-        <li><a href="https://twitter.com/OpenDataZurich" target="_blank"><i class="fa fa-twitter header-icon"></i></a></li>
-        <li><a href="mailto:opendata@zuerich.ch"><i class="fa fa-envelope header-icon"></i></a></li>
+  {% if c.userobj %}
+    {{ super() }}
+  {% else %}
+    <nav class="account not-authed" aria-label="{{ _('Account') }}">
+      <ul class="list-unstyled">
+        {% block header_account_notlogged %}
+        {% endblock %}
       </ul>
-    {% endblock %}
-  </nav>
+    </nav>
+  {% endif %}
+  {% block top_links %}
+    <ul class="nav nav-pills">
+      <li><a href="https://www.stadt-zuerich.ch/portal/de/index/ogd.html">Open Data Portal</a></li>
+      <li><a href="https://www.stadt-zuerich.ch/portal/de/index/ogd/anwendungen.html">Anwendungen</a></li>
+      <li><a href="https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt.html">Werkstatt</a></li>
+      <li><a href="https://www.stadt-zuerich.ch/portal/de/index/ogd/blog.html">Blog</a></li>
+      <li><a href="https://twitter.com/OpenDataZurich" target="_blank"><i class="fa fa-twitter header-icon"></i></a></li>
+      <li><a href="mailto:opendata@zuerich.ch"><i class="fa fa-envelope header-icon"></i></a></li>
+    </ul>
+  {% endblock %}
 {% endblock %}
 
 {% block header_logo %}
-  <a class="site-logo" href="/"><img src="/opendatazurichlogo.png" alt="Open Data Zürich" title="Open Data Zürich"></a>
+  <a class="logo" href="{{ h.url_for('home.index') }}"><img src="/opendatazurichlogo.png" alt="Open Data Zürich" title="Open Data Zürich"></a>
 {% endblock %}
 
 {% block header_site_navigation %}
@@ -35,28 +32,28 @@
     <ul class="nav nav-pills">
       {% block header_site_navigation_tabs %}
         {{ h.build_nav_main(
-          ('home', _('Homepage')),
-          ('search', _('Datasets')),
-          ('group_index', _('Groups'))
-        ) }}
+        ('home.index', _('Homepage')),
+        ('dataset.search', _('Datasets')),
+        ('group.index', _('Groups')) ) }}
       {% endblock %}
     </ul>
   </nav>
 {% endblock %}
 
 {% block header_site_search %}
-  <form class="section site-search simple-input" action="{% url_for controller='package', action='search' %}" method="get">
+  <form class="section site-search simple-input" action="{% url_for 'dataset.search' %}" method="get">
     <div class="field">
       <label for="field-sitewide-search">{% block header_site_search_label %}{{ _('Search Datasets') }}{% endblock %}</label>
       <input id="field-sitewide-search"
-       type="text"
-       class="search"
-       name="q"
-       value="{{ query }}"
-       autocomplete="off"
-       placeholder="{{ placeholder }}"
-       data-module="autocomplete-ogdzh-header-search">
-      <button class="btn-search" type="submit"><i class="fa fa-search"></i></button>
+             type="text"
+             class="form-control"
+             name="q"
+             value="{{ query }}"
+             autocomplete="off"
+             placeholder="{{ _('Search') }}"
+             aria-label="{{ _('Search datasets') }}"
+             data-module="autocomplete-ogdzh-header-search">
+      <button class="btn-search" type="submit" aria-label="{{ _('Submit') }}"><i class="fa fa-search"></i></button>
     </div>
   </form>
 {% endblock %}
