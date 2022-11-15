@@ -351,3 +351,7 @@ ul.resource-list,
 .select2-search-choice-close, .select2-container-multi .select2-search-choice-close {
     top: 3px;
 }
+
+.dataset-resources {
+    padding-left: 0;
+}
