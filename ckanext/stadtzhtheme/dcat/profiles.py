@@ -160,7 +160,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
 
             # landingPage is the original portal page
             site_url = pylons.config.get(
-                'ckanext.stadtzh-theme.frontend_url', '')
+                'ckanext.stadtzhtheme.frontend_url', '')
             g.add((
                 dataset_ref,
                 DCAT.landingPage,
@@ -183,7 +183,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
 
             # Organization
             organization_id = pylons.config.get(
-                'ckanext.stadtzh-theme.dcat_ap_organization_slug',
+                'ckanext.stadtzhtheme.dcat_ap_organization_slug',
                 '',
             )
             id = self._get_dataset_value(dataset_dict, 'id')
