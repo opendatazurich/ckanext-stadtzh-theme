@@ -1,32 +1,28 @@
-import nose
-from ckanapi import TestAppCKAN, ValidationError
+import pytest
+from ckanapi import ValidationError
 from ckan.tests import helpers, factories
-
-eq_ = nose.tools.eq_
-assert_true = nose.tools.assert_true
+from ckantoolkit import config
 
 
-class TestValidation(helpers.FunctionalTestBase):
+@pytest.mark.ckan_config("ckan.plugins", "stadtzhtheme")
+@pytest.mark.usefixtures("clean_db", "with_plugins")
+class TestValidation(object):
 
     def test_invalid_url(self):
         """Test that an invalid resource url is caught by our validator.
         """
-        factories.Sysadmin(apikey="my-test-key")
-        app = self._get_test_app()
-        demo = TestAppCKAN(app, apikey="my-test-key")
-
+        print(config.get('ckan.plugins'))
         try:
             dataset = factories.Dataset()
-            demo.action.resource_create(
+            helpers.call_action(
+                'resource_download_permalink',
+                {},
                 package_id=dataset['name'],
                 name='Test-File',
                 url='https://example.com]'
             )
         except ValidationError as e:
-            eq_(
-                e.error_dict['url'],
-                [u'Bitte eine valide URL angeben']
-            )
+            assert e.error_dict['url'] == [u'Bitte eine valide URL angeben']
         else:
             raise AssertionError('ValidationError not raised')
 
@@ -34,13 +30,10 @@ class TestValidation(helpers.FunctionalTestBase):
         """Test that the resource url is not validated if the url_type
         is 'upload'.
         """
-        factories.Sysadmin(apikey="my-test-key")
-        app = self._get_test_app()
-        demo = TestAppCKAN(app, apikey="my-test-key")
-
         try:
             dataset = factories.Dataset()
-            demo.action.resource_create(
+            helpers.call_action(
+                'resource_create',
                 package_id=dataset['name'],
                 name='Test-File',
                 url='https://example.com]',
