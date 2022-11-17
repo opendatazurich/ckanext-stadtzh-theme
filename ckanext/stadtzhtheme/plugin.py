@@ -7,6 +7,7 @@ import re
 import lepl.apps.rfc3696
 import os.path
 from datetime import datetime
+from six import text_type
 
 import ckan.plugins as plugins
 import ckanext.xloader.interfaces as xi
@@ -374,7 +375,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         # validate URL
         schema['resources'].update({
             'url': [tk.get_validator('ignore_missing'),
-                    unicode,
+                    text_type,
                     tk.get_validator('remove_whitespace'),
                     tk.get_validator('url_validator')]
         })
