@@ -1,65 +1,65 @@
-import nose
-from ckan.tests import helpers, factories
+import pytest
+from ckan.tests import factories, helpers
 from ckan.lib.helpers import url_for
 
 import ckanext.stadtzhtheme.plugin as plugin
 
-eq_ = nose.tools.eq_
-assert_true = nose.tools.assert_true
 
-
-class TestPlugin(helpers.FunctionalTestBase):
+@pytest.mark.ckan_config("ckan.plugins", "stadtzhtheme showcase")
+@pytest.mark.usefixtures('with_plugins')
+class TestPlugin(object):
+    def setup(self):
+        helpers.reset_db()
 
     def test_descr_file(self):
         theme_plugin = plugin.StadtzhThemePlugin()
 
-        expected_keys = ['zip', 'wms', 'wmts', 'wfs', 'kml', 'kmz', 'json', 'csv', 'gpkg'] 
+        expected_keys = [
+            'zip', 'wms', 'wmts', 'wfs', 'kml', 'kmz', 'json', 'csv', 'gpkg']
         descr = theme_plugin.descr_config
-        assert all(k in descr.keys() for k in expected_keys), "Keys: %s" % descr.keys()
+        assert all(k in descr.keys() for k in expected_keys),\
+            "Keys: %s" % descr.keys()
 
     def test_resource_description_value(self):
         theme_plugin = plugin.StadtzhThemePlugin()
-        res = {'format': 'CSV', 'description': 'My super CSV'} 
-        eq_(theme_plugin.get_resource_descriptions(res), ['My super CSV'])
+        res = {'format': 'CSV', 'description': 'My super CSV'}
+        assert theme_plugin.get_resource_descriptions(res) == ['My super CSV']
 
     def test_resource_description_file(self):
         theme_plugin = plugin.StadtzhThemePlugin()
-        res = {'format': 'CSV', 'description': ''} 
+        res = {'format': 'CSV', 'description': ''}
 
         descr = theme_plugin.get_resource_descriptions(res)
 
-        eq_(len(descr), 2)
-        eq_(descr[0], 'Comma-Separated Values.')
-        eq_(descr[1], 'Weitere Informationen zu CSV finden Sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/csv.html)') 
+        assert len(descr) == 2
+        assert descr[0] == 'Comma-Separated Values.'
+        assert descr[1] == 'Weitere Informationen zu CSV finden Sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/csv.html)'  # noqa
 
-    def test_translations_without_orgs(self):
+    def test_translations_without_orgs(self, app):
         dataset = factories.Dataset()
 
         url = url_for('dataset_read', id=dataset['name'])
-        app = self._get_test_app()
-        response = app.get(url)
+        response = app.get(url).body
 
         assert 'Aktualisierungs&shy;datum' in response, response
-        assert not 'Date last updated' in response, response
+        assert 'Date last updated' not in response, response
 
-    def test_translations_with_org(self):
+    def test_translations_with_org(self, app):
         org = factories.Organization()
         dataset = factories.Dataset(owner_org=org['id'])
 
         url = url_for('dataset_read', id=dataset['name'])
-        app = self._get_test_app()
-        response = app.get(url)
+        response = app.get(url).body
 
         assert 'Aktualisierungs&shy;datum' in response, response
-        assert not 'Date last updated' in response, response
+        assert 'Date last updated' not in response, response
 
-    def test_translation_with_en_locale(self):
+    def test_translation_with_en_locale(self, app):
         org = factories.Organization()
         dataset = factories.Dataset(owner_org=org['id'])
 
         url = url_for('dataset_read', id=dataset['name'], locale='en')
-        app = self._get_test_app()
-        response = app.get(url)
+        response = app.get(url).body
 
-        assert not 'Aktualisierungs&shy;datum' in response, response
+        assert 'Aktualisierungs&shy;datum' not in response, response
         assert 'Date last updated' in response, response

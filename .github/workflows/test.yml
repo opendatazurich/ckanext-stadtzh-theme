@@ -1,0 +1,92 @@
+name: Tests
+on: [push, pull_request]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '2.7'
+      - name: Install requirements
+        run: pip install flake8 pycodestyle
+      - name: Check syntax
+        run: flake8 . --count --select=E901,E999,F821,F822,F823 --show-source --statistics --extend-exclude ckan
+      - name: Run flake8
+        run: flake8 . --count --max-line-length=127 --statistics --exclude ckan
+
+  test:
+    needs: lint
+    strategy:
+      matrix:
+        ckan-version: [2.9, 2.9-py2]
+      fail-fast: false
+
+    name: CKAN ${{ matrix.ckan-version }}
+    runs-on: ubuntu-latest
+    container:
+      image: openknowledge/ckan-dev:${{ matrix.ckan-version }}
+    services:
+      solr:
+        image: ckan/ckan-solr:${{ matrix.ckan-version }}
+      postgres:
+        image: ckan/ckan-postgres-dev:${{ matrix.ckan-version }}
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      redis:
+          image: redis:3
+    env:
+      CKAN_SQLALCHEMY_URL: postgresql://ckan_default:pass@postgres/ckan_test
+      CKAN_DATASTORE_WRITE_URL: postgresql://datastore_write:pass@postgres/datastore_test
+      CKAN_DATASTORE_READ_URL: postgresql://datastore_read:pass@postgres/datastore_test
+      CKAN_SOLR_URL: http://solr:8983/solr/ckan
+      CKAN_REDIS_URL: redis://redis:6379/1
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install requirements
+      run: |
+        pip install -r pip-requirements.txt
+        pip install -r dev-requirements.txt
+        pip install -e .
+        pip install -U requests[security]
+    - name: Install required ckanexts
+      run: |
+        pip install -e git+https://github.com/ckan/ckanext-dcat.git#egg=ckanext-dcat && \
+        pip install -e git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest && \
+        pip install -r https://raw.githubusercontent.com/ckan/ckanext-harvest/master/requirements.txt && \
+        pip install -e git+https://github.com/ckan/ckanext-showcase.git#egg=ckanext-showcase && \
+        pip install -e git+https://github.com/ckan/ckanext-xloader.git#egg=ckanext-xloader && \
+        pip install -r https://raw.githubusercontent.com/ckan/ckanext-xloader/master/requirements.txt
+    - name: Install py2 ckanext-dcat requirements
+      if: ${{ matrix.ckan-version == '2.9-py2' }}
+      run: |
+        pip install -r https://raw.githubusercontent.com/ckan/ckanext-dcat/master/requirements-py2.txt
+    - name: Install py3 ckanext-dcat requirements
+      if: ${{ matrix.ckan-version != '2.9-py2' }}
+      run: |
+        pip install -r https://raw.githubusercontent.com/ckan/ckanext-dcat/master/requirements.txt
+    - name: Adjust test.ini
+      run: |
+        # Replace default path to CKAN core config file with the one on the container
+        sed -i -e 's/use = config:.*/use = config:\/srv\/app\/src\/ckan\/test-core.ini/' test.ini
+    - name: Setup extension (CKAN >= 2.9)
+      run: |
+        ckan config-tool test.ini "ckan.plugins = "
+        ckan -c test.ini db init
+        ckan config-tool test.ini "ckan.plugins = stadtzhtheme showcase"
+    - name: Compile catalogue (py2)
+      if: ${{ matrix.ckan-version == '2.9-py2' }}
+      run: |
+        python setup.py compile_catalog
+    - name: Compile catalogue (py3)
+      if: ${{ matrix.ckan-version != '2.9-py2' }}
+      run: |
+        python3 setup.py compile_catalog
+    - name: Run tests
+      run: pytest --ckan-ini=test.ini --cov=ckanext.stadtzhtheme --disable-warnings ckanext/stadtzhtheme/tests

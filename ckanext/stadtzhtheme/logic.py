@@ -30,9 +30,9 @@ def ogdzh_autosuggest(context, data_dict):
     handler = '/suggest'
     suggester = 'default'
     suggest_search_limit = int(tk.config.get(
-        'ckanext.stadtzh-theme.ogdzh_autosuggest_search_limit', 100))
+        'ckanext.stadtzhtheme.ogdzh_autosuggest_search_limit', 100))
     suggest_results_limit = int(tk.config.get(
-        'ckanext.stadtzh-theme.ogdzh_autosuggest_result_limit', 10))
+        'ckanext.stadtzhtheme.ogdzh_autosuggest_result_limit', 10))
 
     log.debug(
         'Loading suggestions for {} (cfq: {}) with handler {}, '

@@ -1,4 +1,3 @@
-from urllib import urlencode
 import logging
 import mimetypes
 
@@ -6,16 +5,13 @@ from ckan.plugins import toolkit as tk
 import ckan.model as model
 import ckan.logic as logic
 import ckan.lib.plugins
-from ckan.common import c, config, _, request, response, OrderedDict
+from ckan.common import c, _, request, response
 import ckan.lib.helpers as h
 import ckan.lib.uploader as uploader
-import ckan.lib.search as search
 import ckan.lib.base as base
 import paste.fileapp
-from six import string_types
 
 
-import ckan.controllers.group as group
 import ckan.controllers.package as package
 
 lookup_group_controller = ckan.lib.plugins.lookup_group_controller

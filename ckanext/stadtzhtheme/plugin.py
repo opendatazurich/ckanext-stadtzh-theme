@@ -7,13 +7,13 @@ import re
 import lepl.apps.rfc3696
 import os.path
 from datetime import datetime
+from six import text_type
 
 import ckan.plugins as plugins
 import ckanext.xloader.interfaces as xi
 import ckan.plugins.toolkit as tk
 from ckan.lib.plugins import DefaultTranslation
 from ckan import model
-from ckan.common import _
 
 from ckanext.stadtzhtheme import logic as ogdzh_logic
 
@@ -152,7 +152,7 @@ def load_json(json_data):
             if not isinstance(kv_pair, list) and len(kv_pair) != 2:
                 return False
         return json.loads(json_data)
-    except:
+    except Exception:
         return False
 
 
@@ -161,7 +161,7 @@ def get_package_dict(datasetID):
     context = {'user': user['name']}
     try:
         return tk.get_action('package_show')(context, {'id': datasetID})
-    except:
+    except Exception:
         return {}
 
 
@@ -176,7 +176,7 @@ def get_organization_dict(org=None):
 
 def validate_date(datestring):
     m = re.match(
-        '^[0-9]{2}\.[0-9]{2}\.[0-9]{4}(, [0-9]{2}:[0-9]{2})?$',
+        r'^[0-9]{2}\.[0-9]{2}\.[0-9]{4}(, [0-9]{2}:[0-9]{2})?$',
         datestring
     )
     if m:
@@ -191,39 +191,6 @@ def validate_email(email):
         return email
     else:
         return ''
-
-
-def validate_url(key, data, errors, context):
-    ''' Checks that the provided value (if it is present) is a valid URL '''
-    import urlparse
-    import string
-
-    url = data.get(key, None)
-    if not url:
-        return
-
-    # if the url_type is `upload`, do not check the URL
-    try:
-        # generate url_type key from given key
-        # key is a tuple like this: ('resources', 0, 'url')
-        url_type_key = (key[0], key[1], 'url_type')
-        url_type = data.get(url_type_key, None)
-        if url_type == 'upload':
-            return
-    except IndexError:
-        pass
-
-    try:
-        pieces = urlparse.urlparse(url)
-        if (all([pieces.scheme, pieces.netloc]) and
-                set(pieces.netloc) <= set(string.letters + string.digits + '-.') and  # noqa
-                pieces.scheme in ['http', 'https']):
-            return
-    except ValueError:
-        # invalid URL
-        pass
-
-    errors[key].append(_('Please provide a valid URL'))
 
 
 class IFacetPlugin(plugins.SingletonPlugin):
@@ -253,7 +220,6 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     plugins.implements(plugins.ITemplateHelpers, inherit=False)
     plugins.implements(plugins.IPackageController, inherit=True)
     plugins.implements(plugins.IRoutes, inherit=True)
-    plugins.implements(plugins.IValidators, inherit=True)
     plugins.implements(plugins.IActions, inherit=True)
     plugins.implements(xi.IXloader, inherit=True)
     plugins.implements(plugins.IResourceController, inherit=True)
@@ -315,12 +281,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'ogdzh_autosuggest': ogdzh_logic.ogdzh_autosuggest,
         }
 
-    # IValidators
-    def get_validators(self):
-        return {
-            'url_valid': validate_url,
-        }
-
+    # IDatasetForm
     def is_fallback(self):
         # Return True to register this plugin as the default handler for
         # package types not handled by any other IDatasetForm plugin.
@@ -414,9 +375,9 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         # validate URL
         schema['resources'].update({
             'url': [tk.get_validator('ignore_missing'),
-                    unicode,
+                    text_type,
                     tk.get_validator('remove_whitespace'),
-                    tk.get_validator('url_valid')]
+                    tk.get_validator('url_validator')]
         })
 
         return schema
@@ -611,7 +572,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         for resource in resources:
             if resource['url_type'] == 'upload':
                 resource['url'] = '%s/dataset/%s/download/%s' % (
-                    tk.config.get('ckanext.stadtzh-theme.frontend_url', ''),
+                    tk.config.get('ckanext.stadtzhtheme.frontend_url', ''),
                     package_name, resource['name'])
 
     def _prepare_suggest_context(self, search_data, pkg_dict):

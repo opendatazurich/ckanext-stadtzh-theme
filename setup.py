@@ -8,7 +8,8 @@ setup(
     description="CKAN theme for the City of Zurich",
     long_description="""\
     """,
-    classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+    classifiers=[],  # Get strings from
+                     # http://pypi.python.org/pypi?%3Aaction=list_classifiers
     keywords='',
     author='Liip AG',
     author_email='ogd@liip.ch',
@@ -21,8 +22,7 @@ setup(
     install_requires=[
         # -*- Extra requirements: -*-
     ],
-    entry_points=
-    """
+    entry_points="""
     [ckan.plugins]
     stadtzhtheme=ckanext.stadtzhtheme.plugin:StadtzhThemePlugin
     [babel.extractors]
@@ -31,10 +31,10 @@ setup(
     [ckan.rdf.profiles]
     stadtzh_swiss_dcat=ckanext.stadtzhtheme.dcat.profiles:StadtzhSwissDcatProfile
     stadtzh_schemaorg=ckanext.stadtzhtheme.dcat.profiles:StadtzhSchemaOrgProfile
-    
+
     [paste.paster_command]
     stadtzhtheme=ckanext.stadtzhtheme.commands:StadtzhCommand
-        
+
     """,
     message_extractors={
         'ckanext': [
