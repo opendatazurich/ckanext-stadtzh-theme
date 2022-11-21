@@ -13,6 +13,7 @@ import ckan.plugins as plugins
 import ckanext.xloader.interfaces as xi
 import ckan.plugins.toolkit as tk
 from ckan.lib.plugins import DefaultTranslation
+from ckan.logic.validators import url_validator
 from ckan import model
 
 from ckanext.stadtzhtheme import logic as ogdzh_logic
@@ -193,6 +194,24 @@ def validate_email(email):
         return ''
 
 
+def validate_url(key, data, errors, context):
+    """Skip validating url if the url_type is 'upload'. Otherwise, call CKAN's
+    url validator.
+    """
+    try:
+        # generate url_type key from given key
+        # key is a tuple like this: ('resources', 0, 'url')
+        url_type_key = (key[0], key[1], 'url_type')
+        url_type = data.get(url_type_key, None)
+        if url_type == 'upload':
+            log.warn('url_type is upload, skipping')
+            return
+    except IndexError:
+        pass
+
+    return url_validator(key, data, errors, context)
+
+
 class IFacetPlugin(plugins.SingletonPlugin):
 
     plugins.implements(plugins.IFacets, inherit=True)
@@ -220,6 +239,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     plugins.implements(plugins.ITemplateHelpers, inherit=False)
     plugins.implements(plugins.IPackageController, inherit=True)
     plugins.implements(plugins.IRoutes, inherit=True)
+    plugins.implements(plugins.IValidators, inherit=True)
     plugins.implements(plugins.IActions, inherit=True)
     plugins.implements(xi.IXloader, inherit=True)
     plugins.implements(plugins.IResourceController, inherit=True)
@@ -279,6 +299,12 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     def get_actions(self):
         return {
             'ogdzh_autosuggest': ogdzh_logic.ogdzh_autosuggest,
+        }
+
+    # IValidators
+    def get_validators(self):
+        return {
+            'validate_url': validate_url,
         }
 
     # IDatasetForm
@@ -377,7 +403,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'url': [tk.get_validator('ignore_missing'),
                     text_type,
                     tk.get_validator('remove_whitespace'),
-                    tk.get_validator('url_validator')]
+                    tk.get_validator('validate_url')]
         })
 
         return schema
