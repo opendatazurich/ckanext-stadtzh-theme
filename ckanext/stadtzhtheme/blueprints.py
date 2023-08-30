@@ -2,11 +2,13 @@ import logging
 import mimetypes
 from typing import Optional, Union
 
+import ckan.lib.base as base
 import ckan.lib.helpers as h
 import ckan.lib.uploader as uploader
 import ckan.logic as logic
 import ckan.model as model
-from ckan.common import _, c, request
+from ckan.common import _, c, current_user, request
+from ckan.lib import signals
 from ckan.plugins import toolkit as tk
 from ckan.types import Context, Response
 from flask import Blueprint, make_response, send_file
@@ -47,7 +49,7 @@ def resource_download_permalink(
 
         if rsc.get("mimetype"):
             resp.headers["Content-Type"] = rsc["mimetype"]
-        signals.resource_download.send(resource_id)
+        signals.resource_download.send(resource_name)
         return resp
 
     elif "url" not in rsc:
