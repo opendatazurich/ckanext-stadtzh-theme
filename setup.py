@@ -1,22 +1,22 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
-version = '0.0'
+version = "0.0"
 
 setup(
-    name='ckanext-stadtzh-theme',
+    name="ckanext-stadtzh-theme",
     version=version,
     description="CKAN theme for the City of Zurich",
     long_description="""\
     """,
     classifiers=[],  # Get strings from
-                     # http://pypi.python.org/pypi?%3Aaction=list_classifiers
-    keywords='',
-    author='Liip AG',
-    author_email='ogd@liip.ch',
-    url='http://www.liip.ch/',
-    license='GPL',
-    packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
-    namespace_packages=['ckanext', 'ckanext.stadtzhtheme'],
+    # http://pypi.python.org/pypi?%3Aaction=list_classifiers
+    keywords="",
+    author="Liip AG",
+    author_email="ogd@liip.ch",
+    url="http://www.liip.ch/",
+    license="GPL",
+    packages=find_packages(exclude=["ez_setup", "examples", "tests"]),
+    namespace_packages=["ckanext", "ckanext.stadtzhtheme"],
     include_package_data=True,
     zip_safe=False,
     install_requires=[
@@ -37,10 +37,10 @@ setup(
 
     """,
     message_extractors={
-        'ckanext': [
-            ('**.py', 'python', None),
-            ('**.js', 'javascript', None),
-            ('**/templates/**.html', 'ckan', None),
+        "ckanext": [
+            ("**.py", "python", None),
+            ("**.js", "javascript", None),
+            ("**/templates/**.html", "ckan", None),
         ],
-    }
+    },
 )
