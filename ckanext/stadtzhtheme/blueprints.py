@@ -1,69 +1,60 @@
 import logging
 import mimetypes
-from flask import Blueprint, make_response, send_file
+from typing import Optional, Union
 
-from ckan.plugins import toolkit as tk
-import ckan.model as model
-import ckan.logic as logic
-from ckan.common import c, _, request
 import ckan.lib.helpers as h
 import ckan.lib.uploader as uploader
+import ckan.logic as logic
+import ckan.model as model
+from ckan.common import _, c, request
+from ckan.plugins import toolkit as tk
+from ckan.types import Context, Response
+from flask import Blueprint, make_response, send_file
+from werkzeug.wrappers.response import Response as WerkzeugResponse
 
-log = logging.getLogger(__name__)
 get_action = logic.get_action
 NotFound = logic.NotFound
 NotAuthorized = logic.NotAuthorized
 abort = tk.abort
 
 
-ogdzh_dataset = Blueprint('ogdzh_resource', __name__, url_prefix='/dataset')
+ogdzh_dataset = Blueprint("ogdzh_resource", __name__, url_prefix="/dataset")
 
 
-def resource_download_permalink(package_name, resource_name):
+def resource_download_permalink(
+    package_name: str, resource_name: str, filename: Optional[str] = None
+) -> Union[Response, WerkzeugResponse]:
     """
-    Copied from PackageController resource_download method, but using
-    package name and resource name instead of ids. This will allow
-    accessing resources of a package by filename, giving a link that will
-    not change even if a resource is deleted and reuploaded with a new id.
+    Copied from ckan 2.10 source code but using package name and resource name
+    instead of ids. This will allow accessing resources of a package by
+    filename, giving a link that will not change even if a resource is deleted
+    and reuploaded with a new id.
     """
-    context = {'model': model, 'session': model.Session,
-               'user': c.user,
-               'auth_user_obj': c.userobj,
-               'for_view': True}
+    context: Context = {"user": current_user.name, "auth_user_obj": current_user}
 
     try:
-        c.package = get_action('package_show')(
-            context, {'id': package_name})
-    except (NotFound, NotAuthorized):
-        abort(404, _('Dataset not found'))
+        rsc = get_action("resource_show")(context, {"id": resource_name})
+        get_action("package_show")(context, {"id": package_name})
+    except NotFound:
+        return base.abort(404, _("Resource not found"))
+    except NotAuthorized:
+        return base.abort(403, _("Not authorized to download resource"))
 
-    for resource in c.package.get('resources', []):
-        if resource['name'] == resource_name:
-            c.resource = resource
-            break
-    if not c.resource:
-        abort(404, _('Resource not found'))
+    if rsc.get("url_type") == "upload":
+        upload = uploader.get_resource_uploader(rsc)
+        filepath = upload.get_path(rsc["id"])
+        resp = send_file(filepath)
 
-    if resource.get('url_type') == 'upload':
-        return self._get_download_details(resource)
-    elif 'url' not in resource:
-        abort(404, _('No download is available'))
-    h.redirect_to(resource['url'])
+        if rsc.get("mimetype"):
+            resp.headers["Content-Type"] = rsc["mimetype"]
+        signals.resource_download.send(resource_id)
+        return resp
 
-
-def _get_download_details(resource):
-    upload = uploader.get_resource_uploader(resource)
-    filepath = upload.get_path(resource['id'])
-    resp = send_file(filepath, download_name=filename)
-
-    response = make_response(resp)
-    response.headers.update(dict(headers))
-    content_type, content_enc = mimetypes.guess_type(
-        resource.get('url', ''))
-    if content_type:
-        response.headers['Content-Type'] = content_type
-    response.status = status
-    return app_iter
+    elif "url" not in rsc:
+        return base.abort(404, _("No download is available"))
+    return h.redirect_to(rsc["url"])
 
 
-ogdzh_dataset.add_url_rule('/dataset/{package_name}/download/{resource_name}', view_func=resource_download_permalink)
+ogdzh_dataset.add_url_rule(
+    "/<package_name>/download/<resource_name>", view_func=resource_download_permalink
+)
