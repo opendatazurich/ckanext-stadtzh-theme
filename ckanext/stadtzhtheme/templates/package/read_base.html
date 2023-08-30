@@ -5,8 +5,8 @@
 {% endblock -%}
 
 {% block content_primary_nav %}
-  {{ h.build_nav_icon('dataset_read', _('Dataset'), id=pkg.name) }}
-  {{ h.build_nav_icon('dataset_groups', _('Groups'), id=pkg.name) }}
+  {{ h.build_nav_icon('dataset.read', _('Dataset'), id=pkg.name) }}
+  {{ h.build_nav_icon('dataset.groups', _('Groups'), id=pkg.name) }}
   {{ h.build_nav_icon(showcase_dataset_showcase_list_route, _('Showcases'), id=pkg.name) }}
 {% endblock %}
 

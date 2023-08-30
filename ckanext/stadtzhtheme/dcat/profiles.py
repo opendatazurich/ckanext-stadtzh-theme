@@ -428,7 +428,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
 class StadtzhSchemaOrgProfile(SchemaOrgProfile, StadtzhProfile):
     def additional_fields(self, dataset_ref, dataset_dict):
         # identifier
-        dataset_url = url_for('dataset_read',
+        dataset_url = url_for('dataset.read',
                               id=dataset_dict['name'],
                               qualified=True)
         self.g.add((dataset_ref, SCHEMA.identifier, Literal(dataset_url)))

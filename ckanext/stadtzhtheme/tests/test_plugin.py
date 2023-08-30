@@ -38,7 +38,7 @@ class TestPlugin(object):
     def test_translations_without_orgs(self, app):
         dataset = factories.Dataset()
 
-        url = url_for('dataset_read', id=dataset['name'])
+        url = url_for('dataset.read', id=dataset['name'])
         response = app.get(url).body
 
         assert 'Aktualisierungs&shy;datum' in response, response
@@ -48,7 +48,7 @@ class TestPlugin(object):
         org = factories.Organization()
         dataset = factories.Dataset(owner_org=org['id'])
 
-        url = url_for('dataset_read', id=dataset['name'])
+        url = url_for('dataset.read', id=dataset['name'])
         response = app.get(url).body
 
         assert 'Aktualisierungs&shy;datum' in response, response
@@ -58,7 +58,7 @@ class TestPlugin(object):
         org = factories.Organization()
         dataset = factories.Dataset(owner_org=org['id'])
 
-        url = url_for('dataset_read', id=dataset['name'], locale='en')
+        url = url_for('dataset.read', id=dataset['name'], locale='en')
         response = app.get(url).body
 
         assert 'Aktualisierungs&shy;datum' not in response, response
