@@ -8,9 +8,6 @@ import ckanext.stadtzhtheme.plugin as plugin
 @pytest.mark.ckan_config("ckan.plugins", "stadtzhtheme showcase")
 @pytest.mark.usefixtures('with_plugins')
 class TestPlugin(object):
-    def setup(self):
-        helpers.reset_db()
-
     def test_descr_file(self):
         theme_plugin = plugin.StadtzhThemePlugin()
 
