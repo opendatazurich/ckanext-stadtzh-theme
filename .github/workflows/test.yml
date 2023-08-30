@@ -57,17 +57,18 @@ jobs:
       run: |
         pip install -e git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest && \
         pip install -r https://raw.githubusercontent.com/ckan/ckanext-harvest/master/requirements.txt && \
-        pip install -e git+https://github.com/ckan/ckanext-showcase.git#egg=ckanext-showcase && \
         pip install -e git+https://github.com/ckan/ckanext-xloader.git#egg=ckanext-xloader && \
         pip install -r https://raw.githubusercontent.com/ckan/ckanext-xloader/master/requirements.txt
-    - name: Install py2 ckanext-dcat
+    - name: Install py2 ckanext-dcat and ckanext-showcase
       if: ${{ matrix.ckan-version == '2.9-py2' }}
       run: |
+        pip install -e git+https://github.com/ckan/ckanext-showcase.git@1.5.2#egg=ckanext-showcase && \
         pip install -e git+https://github.com/ckan/ckanext-dcat.git@v1.4.0#egg=ckanext-dcat && \
         pip install -r https://raw.githubusercontent.com/ckan/ckanext-dcat/v1.4.0/requirements-py2.txt
-    - name: Install py3 ckanext-dcat
+    - name: Install py3 ckanext-dcat and ckanext-showcase
       if: ${{ matrix.ckan-version != '2.9-py2' }}
       run: |
+        pip install -e git+https://github.com/ckan/ckanext-showcase.git#egg=ckanext-showcase && \
         pip install -e git+https://github.com/ckan/ckanext-dcat.git#egg=ckanext-dcat && \
         pip install -r https://raw.githubusercontent.com/ckan/ckanext-dcat/master/requirements.txt
     - name: Adjust test.ini
