@@ -12,7 +12,6 @@ import yaml
 from ckan import model
 from ckan.lib.plugins import DefaultTranslation
 from ckan.logic.validators import url_validator
-from six import text_type
 from validate_email import validate_email
 
 import ckanext.xloader.interfaces as xi
@@ -434,7 +433,7 @@ class StadtzhThemePlugin(
             {
                 "url": [
                     tk.get_validator("ignore_missing"),
-                    text_type,
+                    tk.get_validator("unicode_safe"),
                     tk.get_validator("remove_whitespace"),
                     tk.get_validator("validate_url"),
                 ]
