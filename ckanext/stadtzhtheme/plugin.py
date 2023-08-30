@@ -17,6 +17,7 @@ from ckan.logic.validators import url_validator
 from ckan import model
 
 from ckanext.stadtzhtheme import logic as ogdzh_logic
+from ckanext.stadtzhtheme.blueprints import ogdzh_dataset
 
 log = logging.getLogger(__name__)
 
@@ -238,7 +239,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
     plugins.implements(plugins.ITranslation, inherit=False)
     plugins.implements(plugins.ITemplateHelpers, inherit=False)
     plugins.implements(plugins.IPackageController, inherit=True)
-    plugins.implements(plugins.IRoutes, inherit=True)
+    plugins.implements(plugins.IBlueprint, inherit=True)
     plugins.implements(plugins.IValidators, inherit=True)
     plugins.implements(plugins.IActions, inherit=True)
     plugins.implements(xi.IXloader, inherit=True)
@@ -612,15 +613,9 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
         search_data['cleaned_res_format'] = [clean_suggestion(t) for t in search_data['res_format']]  # noqa
         return search_data
 
-    # IRoutes
-    def before_map(self, map):
-        # add named route 'home' as this is removed in recent versions of CKAN
-        map.connect('home', '/', controller='home', action='index')
-        map.connect('resource_download_permalink',
-                    '/dataset/{package_name}/download/{resource_name}',
-                    controller='ckanext.stadtzhtheme.controller:OgdzhPackageController',  # noqa
-                    action='resource_download_permalink')
-        return map
+    # IBlueprint
+    def get_blueprint(self):
+        return ogdzh_dataset
 
     # IXloader
 
