@@ -17,7 +17,7 @@ class TestPlugin(object):
         expected_keys = [
             'zip', 'wms', 'wmts', 'wfs', 'kml', 'kmz', 'json', 'csv', 'gpkg']
         descr = theme_plugin.descr_config
-        assert all(k in descr.keys() for k in expected_keys),\
+        assert all(k in descr.keys() for k in expected_keys), \
             "Keys: %s" % descr.keys()
 
     def test_resource_description_value(self):
