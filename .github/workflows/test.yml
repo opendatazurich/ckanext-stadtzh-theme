@@ -7,17 +7,19 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
       - name: Install requirements
-        run: pip install flake8 pycodestyle
+        run: pip install flake8 pycodestyle black isort
       - name: Check syntax
         run: flake8 . --count --select=E901,E999,F821,F822,F823 --show-source --statistics --extend-exclude ckan
-      - name: Run flake8
-        run: flake8 . --count --max-line-length=127 --statistics --exclude ckan
+      - name: Check codestyle
+        run: |
+          isort --diff --check ckanext/
+          black --diff --check ckanext/
 
   test:
     needs: lint
     strategy:
       matrix:
-        ckan-version: [2.9, 2.9-py2]
+        ckan-version: [2.9, 2.9-py2, 2.10]
       fail-fast: false
 
     name: CKAN ${{ matrix.ckan-version }}
