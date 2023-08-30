@@ -4,7 +4,7 @@ import logging
 import json
 import yaml
 import re
-import lepl.apps.rfc3696
+from validate_email import validate_email
 import os.path
 from datetime import datetime
 from six import text_type
@@ -187,9 +187,8 @@ def validate_date(datestring):
         return False
 
 
-def validate_email(email):
-    email_validator = lepl.apps.rfc3696.Email()
-    if email_validator(email):
+def ogdzh_validate_email(email):
+    if validate_email(email):
         return email
     else:
         return ''
@@ -291,7 +290,7 @@ class StadtzhThemePlugin(plugins.SingletonPlugin,
             'package_has_group': package_has_group,
             'get_package_dict': get_package_dict,
             'validate_date': validate_date,
-            'validate_email': validate_email,
+            'validate_email': ogdzh_validate_email,
             'get_organization_dict': get_organization_dict,
             'get_resource_descriptions': self.get_resource_descriptions,
         }
