@@ -62,7 +62,7 @@ jobs:
     - name: Install py2 ckanext-dcat and ckanext-showcase
       if: ${{ matrix.ckan-version == '2.9-py2' }}
       run: |
-        pip install -e git+https://github.com/ckan/ckanext-showcase.git@1.5.2#egg=ckanext-showcase && \
+        pip install -e git+https://github.com/ckan/ckanext-showcase.git@v1.5.2#egg=ckanext-showcase && \
         pip install -e git+https://github.com/ckan/ckanext-dcat.git@v1.4.0#egg=ckanext-dcat && \
         pip install -r https://raw.githubusercontent.com/ckan/ckanext-dcat/v1.4.0/requirements-py2.txt
     - name: Install py3 ckanext-dcat and ckanext-showcase
