@@ -110,7 +110,7 @@ class StadtzhProfile(object):
             dates = [d.strip() for d in dates]
             if len(dates) > 0 and dates[0].isdigit() and len(dates[0]) == 4:
                 time_interval["start_date"] = dates[0] + "-01-01"
-                if len(dates) > 1 and dates[1].isdigit() and len(dates[1]) == 4:  # noqa
+                if len(dates) > 1 and dates[1].isdigit() and len(dates[1]) == 4:
                     end_year = dates[1]
                 else:
                     end_year = dates[0]
@@ -143,7 +143,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
         except ValueError:
             self.g.add((subject, predicate, _type(value)))
 
-    def graph_from_dataset(self, dataset_dict, dataset_ref):  # noqa: C90
+    def graph_from_dataset(self, dataset_dict, dataset_ref):
         try:
             g = self.g
 
@@ -173,8 +173,8 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
 
             # Basic date fields
             date_items = [
-                ("dateLastUpdated", DCT.modified, "metadata_modified", Literal),  # noqa
-                ("dateFirstPublished", DCT.issued, "metadata_created", Literal),  # noqa
+                ("dateLastUpdated", DCT.modified, "metadata_modified", Literal),
+                ("dateFirstPublished", DCT.issued, "metadata_created", Literal),
             ]
             self._add_date_triples_from_dict(dataset_dict, dataset_ref, date_items)
 
@@ -213,7 +213,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
                 time_range is not None
                 and time_range.get("start_date")
                 and time_range.get("end_date")
-            ):  # noqa
+            ):
                 start = time_range.get("start_date")
                 end = time_range.get("end_date")
 
@@ -281,9 +281,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
                 maintainer_email = self._get_dataset_value(
                     dataset_dict, "maintainer_email"
                 )
-                g.add(
-                    (contact_details, VCARD.hasEmail, URIRef(maintainer_email))
-                )  # noqa
+                g.add((contact_details, VCARD.hasEmail, URIRef(maintainer_email)))
 
                 items = [
                     (
@@ -291,11 +289,9 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
                         VCARD.fn,
                         ["maintainer", "author"],
                         Literal,
-                    ),  # noqa
+                    ),
                 ]
-                self._add_triples_from_dict(
-                    dataset_dict, contact_details, items
-                )  # noqa
+                self._add_triples_from_dict(dataset_dict, contact_details, items)
 
             # Tags
             for tag in dataset_dict.get("tags", []):
@@ -313,9 +309,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
 
                 g.add((dataset_ref, DCAT.distribution, distribution))
                 g.add((distribution, RDF.type, DCAT.Distribution))
-                g.add(
-                    (distribution, DCT.language, Literal(ckan_locale_default))
-                )  # noqa
+                g.add((distribution, DCT.language, Literal(ckan_locale_default)))
 
                 #  Simple values
                 items = [
@@ -327,7 +321,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
 
                 self._add_triples_from_dict(resource_dict, distribution, items)
 
-                license_id = self._get_dataset_value(dataset_dict, "license_id")  # noqa
+                license_id = self._get_dataset_value(dataset_dict, "license_id")
                 license_title = self._rights(license_id)
                 g.add((distribution, DCT.rights, Literal(license_title)))
                 g.add((distribution, DCT.license, Literal(license_title)))
@@ -486,7 +480,7 @@ class StadtzhSchemaOrgProfile(SchemaOrgProfile, StadtzhProfile):
             time_range is not None
             and time_range.get("start_date")
             and time_range.get("end_date")
-        ):  # noqa
+        ):
             start = time_range.get("start_date")
             end = time_range.get("end_date")
             if start and end:
@@ -496,13 +490,11 @@ class StadtzhSchemaOrgProfile(SchemaOrgProfile, StadtzhProfile):
                         SCHEMA.temporalCoverage,
                         Literal("%s/%s" % (start, end)),
                     )
-                )  # noqa
+                )
             elif start:
-                self._add_date_triple(
-                    dataset_ref, SCHEMA.temporalCoverage, start
-                )  # noqa
+                self._add_date_triple(dataset_ref, SCHEMA.temporalCoverage, start)
             elif end:
-                self._add_date_triple(dataset_ref, SCHEMA.temporalCoverage, end)  # noqa
+                self._add_date_triple(dataset_ref, SCHEMA.temporalCoverage, end)
 
     def _distribution_url_graph(self, distribution, resource_dict):
         url = resource_dict.get("url")

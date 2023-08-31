@@ -41,7 +41,7 @@ class TestPlugin(object):
         assert (
             descr[1]
             == "Weitere Informationen zu CSV finden Sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/csv.html)"
-        )  # noqa
+        )
 
     def test_translations_without_orgs(self, app):
         dataset = factories.Dataset()

@@ -61,7 +61,7 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
                 print("Load metadata records from datastore (offset: %s)" % offset)
                 record_list, has_next_page = self._get_datastore_table_page(
                     context, offset
-                )  # noqa
+                )
                 resource_id_list.extend(record_list)
                 if not has_next_page:
                     break

@@ -129,11 +129,9 @@ def biggest_groups(n):
     if len(groups) > n:
         return sorted(groups, key=lambda group: group.get("package_count"))[
             -1 : -(n + 1) : -1
-        ]  # noqa
+        ]
     else:
-        return sorted(groups, key=lambda group: group.get("package_count"))[
-            ::-1
-        ]  # noqa
+        return sorted(groups, key=lambda group: group.get("package_count"))[::-1]
 
 
 def package_has_group(group_name, groups):
@@ -240,9 +238,7 @@ class StadtzhThemePlugin(
 
     def update_config(self, config):
         try:
-            with open(
-                os.path.join(__location__, "descr.yaml"), "r"
-            ) as descr_file:  # noqa
+            with open(os.path.join(__location__, "descr.yaml"), "r") as descr_file:
                 self.descr_config = yaml.safe_load(descr_file)
         except IOError:
             self.descr_config = {}
@@ -346,7 +342,7 @@ class StadtzhThemePlugin(
                 "updateInterval": [
                     tk.get_validator("ignore_missing"),
                     tk.get_converter("convert_to_tags")("updateInterval"),
-                ]  # noqa
+                ]
             }
         )
 
@@ -493,7 +489,7 @@ class StadtzhThemePlugin(
         schema.update(
             {
                 "updateInterval": [
-                    tk.get_converter("convert_from_tags")("updateInterval"),  # noqa
+                    tk.get_converter("convert_from_tags")("updateInterval"),
                     tk.get_validator("ignore_missing"),
                 ]
             }
@@ -613,7 +609,7 @@ class StadtzhThemePlugin(
                     if "format" in r
                 ]
             )
-        )  # noqa
+        )
 
         try:
             attributes = load_json(search_data["sszFields"])
@@ -629,13 +625,13 @@ class StadtzhThemePlugin(
                     search_data["dateLastUpdated"], "%d.%m.%Y"
                 ).isoformat()
                 + "Z"
-            )  # noqa
+            )
             search_data["date_first_published"] = (
                 datetime.strptime(
                     search_data["dateFirstPublished"], "%d.%m.%Y"
                 ).isoformat()
                 + "Z"
-            )  # noqa
+            )
         except (KeyError, ValueError):
             pass
 
@@ -690,16 +686,12 @@ class StadtzhThemePlugin(
 
         search_data["cleaned_groups"] = [
             clean_suggestion(t) for t in search_data["groups"]
-        ]  # noqa
-        search_data["cleaned_tags"] = [
-            clean_suggestion(t) for t in search_data["tags"]
-        ]  # noqa
-        search_data["cleaned_license_id"] = clean_suggestion(
-            search_data["license_id"]
-        )  # noqa
+        ]
+        search_data["cleaned_tags"] = [clean_suggestion(t) for t in search_data["tags"]]
+        search_data["cleaned_license_id"] = clean_suggestion(search_data["license_id"])
         search_data["cleaned_res_format"] = [
             clean_suggestion(t) for t in search_data["res_format"]
-        ]  # noqa
+        ]
         return search_data
 
     # IBlueprint
