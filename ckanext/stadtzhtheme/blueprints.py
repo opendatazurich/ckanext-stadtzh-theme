@@ -20,7 +20,7 @@ NotAuthorized = logic.NotAuthorized
 abort = tk.abort
 
 
-ogdzh_dataset = Blueprint("ogdzh_resource", __name__, url_prefix="/dataset")
+ogdzh_dataset = Blueprint("ogdzh_dataset", __name__, url_prefix="/dataset")
 
 
 def resource_download_permalink(
