@@ -1,12 +1,9 @@
-import logging
-import mimetypes
 from typing import Optional, Union
 
 import ckan.lib.base as base
 import ckan.lib.helpers as h
 import ckan.lib.uploader as uploader
 import ckan.logic as logic
-import ckan.model as model
 from ckan.common import _, c, current_user, request
 from ckan.lib import signals
 from ckan.plugins import toolkit as tk
