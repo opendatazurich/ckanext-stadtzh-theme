@@ -5,8 +5,8 @@ import itertools
 import logging
 import traceback
 
-import pylons
 from ckan.lib.helpers import render_markdown, url_for
+from ckan.plugins import toolkit
 from dateutil.parser import parse as parse_date
 from rdflib import BNode, Literal, URIRef
 from rdflib.namespace import RDF, RDFS, SKOS, XSD, Namespace
@@ -90,7 +90,7 @@ mapping_accrualPeriodicity = {
     "sporadisch oder unregelmaessig": "http://purl.org/cld/freq/irregular",
 }
 
-ckan_locale_default = pylons.config.get("ckan.locale_default", "de")
+ckan_locale_default = toolkit.config.get("ckan.locale_default", "de")
 
 
 class StadtzhProfile(object):
@@ -159,7 +159,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
             self._add_triples_from_dict(dataset_dict, dataset_ref, basic_items)
 
             # landingPage is the original portal page
-            site_url = pylons.config.get("ckanext.stadtzhtheme.frontend_url", "")
+            site_url = toolkit.config.get("ckanext.stadtzhtheme.frontend_url", "")
             g.add(
                 (
                     dataset_ref,
@@ -179,7 +179,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
             self._add_date_triples_from_dict(dataset_dict, dataset_ref, date_items)
 
             # Organization
-            organization_id = pylons.config.get(
+            organization_id = toolkit.config.get(
                 "ckanext.stadtzhtheme.dcat_ap_organization_slug",
                 "",
             )
