@@ -142,7 +142,7 @@ html,
 .stadtzh-footer .logo img {
     padding-top: 10px;
     padding-bottom: 10px;
-    height: 41px;
+    height: 61px;
     width: 185px;
 }
 
@@ -151,6 +151,10 @@ html,
     padding-top: 25px;
     height: 35px;
     float: left;
+}
+
+.site-footer .row {
+    justify-content: space-between;
 }
 
 .module-content .search-form {

@@ -1,28 +1,32 @@
-
 <footer class="site-footer">
   <div class="container">
     {% block footer_content %}
+    <div class="row">
       <nav class="footer-links-left row-fluid">
         {% block footer_nav_1 %}
-          <ul class="unstyled row-fluid">
-            <li><a href="http://www.stadt-zuerich.ch/portal/de/index/ogd/nutzungsbedingungen.html">Nutzungsbedingungen</a></li>
+          <ul class="list-unstyled">
+            {% block footer_links_1 %}
+              <li><a href="http://www.stadt-zuerich.ch/portal/de/index/ogd/nutzungsbedingungen.html">Nutzungsbedingungen</a></li>
               <li><a href="http://stadt-zuerich.ch/portal/de/index/ogd/kontakt.html">Kontakt</a></li>
               <li><a href="https://github.com/opendatazurich" target="_blank">Quellcode auf GitHub</a></li>
+            {% endblock %}
           </ul>
         {% endblock %}
       </nav>
       <nav class="footer-links-right row-fluid">
         {% block footer_nav_2 %}
-          <ul class="unstyled row-fluid">
+          <ul class="list-unstyled">
+            {% block footer_links_2 %}
               <li><a href="http://ckan.org/" target="_blank">Entwickelt mit CKAN</a></li>
               <li><a href="http://docs.ckan.org/en/latest/api/index.html" target="_blank">CKAN API</a></li>
               <li><a href="https://okfn.org/" target="_blank">Open Knowledge</a></li>
+            {% endblock %}
           </ul>
         {% endblock %}
       </nav>
+    </div>
     {% endblock %}
   </div>
-
 </footer>
 <footer class="stadtzh-footer">
   <div class="container">
