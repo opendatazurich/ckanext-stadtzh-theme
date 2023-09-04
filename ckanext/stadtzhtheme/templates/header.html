@@ -17,7 +17,7 @@
       <li><a href="https://www.stadt-zuerich.ch/portal/de/index/ogd/anwendungen.html">Anwendungen</a></li>
       <li><a href="https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt.html">Werkstatt</a></li>
       <li><a href="https://www.stadt-zuerich.ch/portal/de/index/ogd/blog.html">Blog</a></li>
-      <li><a href="https://twitter.com/OpenDataZurich" target="_blank"><i class="fa fa-twitter header-icon"></i></a></li>
+      <li><a href="https://twitter.com/OpenDataZurich" target="_blank"><i class="fa-brands fa-twitter"></i></a></li>
       <li><a href="mailto:opendata@zuerich.ch"><i class="fa fa-envelope header-icon"></i></a></li>
     </ul>
   {% endblock %}
@@ -28,32 +28,20 @@
 {% endblock %}
 
 {% block header_site_navigation %}
-  <nav class="section navigation">
-    <ul class="nav nav-pills">
-      {% block header_site_navigation_tabs %}
-        {{ h.build_nav_main(
-        ('home.index', _('Homepage')),
-        ('dataset.search', _('Datasets')),
-        ('group.index', _('Groups')) ) }}
-      {% endblock %}
-    </ul>
-  </nav>
+{% block header_site_navigation_tabs %}
+  {% set group_type = h.default_group_type('group') %}
+  {{ h.build_nav_main(
+    (dataset_type ~ '.search', h.humanize_entity_type('package', dataset_type, 'main nav') or _('Datasets'), ["dataset", "resource"]),
+    (group_type ~ '.index', h.humanize_entity_type('group', group_type, 'main nav') or _('Groups'), ['group']),
+    ('home.about', _('About')) ) }}
+  {% endblock %}
+</ul>
 {% endblock %}
 
 {% block header_site_search %}
-  <form class="section site-search simple-input" action="{% url_for 'dataset.search' %}" method="get">
-    <div class="field">
-      <label for="field-sitewide-search">{% block header_site_search_label %}{{ _('Search Datasets') }}{% endblock %}</label>
-      <input id="field-sitewide-search"
-             type="text"
-             class="form-control"
-             name="q"
-             value="{{ query }}"
-             autocomplete="off"
-             placeholder="{{ _('Search') }}"
-             aria-label="{{ _('Search datasets') }}"
-             data-module="autocomplete-ogdzh-header-search">
-      <button class="btn-search" type="submit" aria-label="{{ _('Submit') }}"><i class="fa fa-search"></i></button>
-    </div>
-  </form>
+    <form class="d-flex site-search" action="{% url_for dataset_type ~ '.search' %}" method="get">
+        <label class="d-none" for="field-sitewide-search">{% block header_site_search_label %}{{ h.humanize_entity_type('package', dataset_type, 'search_placeholder') or _('Search Datasets...') }}{% endblock %}</label>
+        <input id="field-sitewide-search" class="form-control me-2"  type="text" name="q" placeholder="{{ _('Search') }}" aria-label="{{ h.humanize_entity_type('package', dataset_type, 'search_placeholder') or _('Search datasets...') }}"/>
+        <button class="btn" type="submit" aria-label="{{ _('Submit') }}"><i class="fa fa-search"></i></button>
+    </form>
 {% endblock %}
