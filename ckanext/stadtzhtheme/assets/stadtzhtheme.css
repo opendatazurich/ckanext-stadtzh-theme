@@ -381,3 +381,16 @@ ul.resource-list,
 .dataset-resources {
     padding-left: 0;
 }
+
+/* ckanext-harvest */
+.harvest-types label.radio {
+    display: block;
+}
+[data-diff] {
+    color: #000;
+    background-color: #DDD;
+    text-shadow: none;
+    font-weight: normal;
+    border-radius: 3px;
+    padding: 2px 4px;
+}
