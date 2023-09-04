@@ -31,9 +31,9 @@
 {% block header_site_navigation_tabs %}
   {% set group_type = h.default_group_type('group') %}
   {{ h.build_nav_main(
+    ('home.index', _('Homepage')),
     (dataset_type ~ '.search', h.humanize_entity_type('package', dataset_type, 'main nav') or _('Datasets'), ["dataset", "resource"]),
-    (group_type ~ '.index', h.humanize_entity_type('group', group_type, 'main nav') or _('Groups'), ['group']),
-    ('home.about', _('About')) ) }}
+    (group_type ~ '.index', h.humanize_entity_type('group', group_type, 'main nav') or _('Groups'), ['group']) ) }}
   {% endblock %}
 </ul>
 {% endblock %}
