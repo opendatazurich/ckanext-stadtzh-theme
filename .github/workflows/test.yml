@@ -68,17 +68,12 @@ jobs:
       run: |
         # Replace default path to CKAN core config file with the one on the container
         sed -i -e 's/use = config:.*/use = config:\/srv\/app\/src\/ckan\/test-core.ini/' test.ini
-    - name: Setup extension (CKAN >= 2.9)
+    - name: Setup extension
       run: |
         ckan config-tool test.ini "ckan.plugins = "
         ckan -c test.ini db init
         ckan config-tool test.ini "ckan.plugins = stadtzhtheme showcase"
-    - name: Compile catalogue (py2)
-      if: ${{ matrix.ckan-version == '2.9-py2' }}
-      run: |
-        python setup.py compile_catalog
-    - name: Compile catalogue (py3)
-      if: ${{ matrix.ckan-version != '2.9-py2' }}
+    - name: Compile catalogue
       run: |
         python3 setup.py compile_catalog
     - name: Run tests
