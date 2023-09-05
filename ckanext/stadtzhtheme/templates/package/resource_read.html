@@ -3,8 +3,10 @@
 {% block resource_content %}
   {% block resource_read_title %}<h1 class="page-heading">{{ h.resource_display_name(res) | truncate(50) }}</h1>{% endblock %}
   {% block resource_read_url %}
-    {% if res.url %}
-      <p class="muted ellipsis">{{ _('URL:') }} <a href="{{ res.url }}" title="{{ res.url }}">{{ res.url }}</a></p>
+    {% if res.url and h.is_url(res.url) %}
+      <p class="text-muted ellipsis">{{ _('URL:') }} <a class="resource-url-analytics" href="{{ res.url }}" title="{{ res.url }}">{{ res.url }}</a></p>
+    {% elif res.url %}
+      <p class="text-muted break-word">{{ _('URL:') }} {{ res.url }}</p>
     {% endif %}
   {% endblock %}
   <div class="prose notes" property="rdfs:label">
@@ -23,48 +25,40 @@
 {% endblock %}
 
 {% block data_preview %}
-  {% if c.resource.resource_type != "api" %}
+  {% if resource.resource_type != "api" %}
     {% block resource_view %}
       {% block resource_view_nav %}
-        {% set resource_preview = h.resource_preview(c.resource, c.package) %}
         {% snippet "package/snippets/resource_views_list.html",
            views=resource_views,
            pkg=pkg,
            is_edit=false,
            view_id=current_resource_view['id'],
-           resource_preview=resource_preview,
-           resource=c.resource,
-           extra_class="nav-tabs-plain"
+           resource=resource,
+           extra_class="nav-tabs"
          %}
       {% endblock %}
       <div class="module-content">
         {% block resource_view_content %}
           <div class="resource-view">
-            {% set resource_preview = h.resource_preview(c.resource, c.package) %}
-            {% set views_created = res.has_views or resource_preview %}
-            {% if views_created %}
-              {% if resource_preview and not current_resource_view %}
-                {{ h.resource_preview(c.resource, c.package) }}
-              {% else %}
-                {% for resource_view in resource_views %}
-                  {% if resource_view == current_resource_view %}
-                    {% snippet 'package/snippets/resource_view.html',
-                       resource_view=resource_view,
-                       resource=c.resource,
-                       package=c.package
-                     %}
-                  {% endif %}
-                {% endfor %}
-              {% endif %}
+            {% if resource_views %}
+              {% for resource_view in resource_views %}
+                {% if resource_view == current_resource_view %}
+                  {% snippet 'package/snippets/resource_view.html',
+                     resource_view=resource_view,
+                     resource=resource,
+                     package=package
+                   %}
+                {% endif %}
+              {% endfor %}
             {% else %}
               {# Views not created #}
-              <div class="module-content data-viewer-info">
+              <div class="data-viewer-info">
                 <p>{{ _("There are no views created for this resource yet.") }}</p>
-                {% if h.check_access('resource_view_create', {'resource_id': c.resource.id}) %}
-                  <p class="muted">
+                {% if h.check_access('resource_view_create', {'resource_id': resource.id}) %}
+                  <p class="text-muted">
                     <i class="fa fa-info-circle"></i>
                     {{ _("Not seeing the views you were expecting?")}}
-                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#data-view-info">
+                    <a href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#data-view-info">
                       {{ _('Click here for more information.') }}</a>
                   </p>
                   <div id="data-view-info" class="collapse">
