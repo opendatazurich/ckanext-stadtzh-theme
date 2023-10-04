@@ -149,7 +149,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
 
             g.add((dataset_ref, RDF.type, DCAT.Dataset))
 
-            for prefix, namespace in namespaces.iteritems():
+            for prefix, namespace in namespaces.items():
                 g.bind(prefix, namespace)
 
             # Basic fields
