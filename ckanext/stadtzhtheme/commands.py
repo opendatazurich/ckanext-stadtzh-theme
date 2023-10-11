@@ -156,7 +156,7 @@ class StadtzhCommand(ckan.lib.cli.CkanCommand):
                         print("User is not authorized to perform this action.")
                         sys.exit(1)
                     except (KeyError, AttributeError) as e:
-                        raise (
+                        raise RuntimeError(
                             "Error while handling record {}: {}".format(
                                 resource_id, str(e)
                             )

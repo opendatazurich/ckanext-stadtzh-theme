@@ -55,7 +55,7 @@ def ogdzh_autosuggest(context, data_dict):
                 "suggest.cfq": cfq,
             }
         )
-        suggestions = results.raw_response["suggest"][suggester].values()[0]
+        suggestions = list(results.raw_response["suggest"][suggester].values())[0]
         log.debug("suggestions found: {}".format(suggestions))
         terms = list(
             set([suggestion["term"] for suggestion in suggestions["suggestions"]])

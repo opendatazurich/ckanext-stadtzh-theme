@@ -149,7 +149,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
 
             g.add((dataset_ref, RDF.type, DCAT.Dataset))
 
-            for prefix, namespace in namespaces.iteritems():
+            for prefix, namespace in namespaces.items():
                 g.bind(prefix, namespace)
 
             # Basic fields
@@ -433,8 +433,8 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
 
                 publisher_details = BNode()
 
-                g.add((publisher_details, RDF.type, RDF.Description))
-                g.add((publisher_details, RDFS.label, Literal(publisher_name)))
+                g.add((publisher_details, RDF.type, FOAF.Organization))
+                g.add((publisher_details, FOAF.name, Literal(publisher_name)))
                 g.add((dataset_ref, DCT.publisher, publisher_details))
         except Exception as e:
             log.exception("Something went wrong: %s / %s" % (e, traceback.format_exc()))
