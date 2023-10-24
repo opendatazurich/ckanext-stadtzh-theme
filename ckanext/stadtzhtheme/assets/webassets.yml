@@ -9,3 +9,7 @@ stadtzh_theme_js:
     - auto-complete.js
     - autocomplete-ogdzh-facet-search.js
     - autocomplete-ogdzh-header-search.js
+  extra:
+    preload:
+      - vendor/jquery
+      - base/main
