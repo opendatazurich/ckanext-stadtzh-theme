@@ -581,7 +581,7 @@ class StadtzhThemePlugin(
 
     # IPackageController
 
-    def before_search(self, search_params):
+    def before_dataset_search(self, search_params):
         if not search_params.get("sort"):
             search_params["sort"] = "score desc, date_last_modified desc"
         # Search in our `text_de` field that has been analysed as German text.
@@ -590,13 +590,13 @@ class StadtzhThemePlugin(
         search_params["qf"] = "name^4 title^4 tags^2 groups^2 text_de"
         return search_params
 
-    def after_show(self, context, pkg_dict):
+    def after_dataset_show(self, context, pkg_dict):
         # set value of new field data_publisher with value of url
         pkg_dict["data_publisher"] = pkg_dict["url"]
         self._replace_resource_download_urls(pkg_dict["resources"], pkg_dict["name"])
         return pkg_dict
 
-    def before_index(self, search_data):
+    def before_dataset_index(self, search_data):
         if not self.is_supported_package_type(search_data):
             return search_data
 
@@ -640,7 +640,7 @@ class StadtzhThemePlugin(
 
         return search_data
 
-    def before_view(self, pkg_dict):
+    def before_dataset_view(self, pkg_dict):
         if not self.is_supported_package_type(pkg_dict):
             return pkg_dict
 
@@ -660,7 +660,7 @@ class StadtzhThemePlugin(
 
         return pkg_dict
 
-    def after_search(self, search_results, search_params):
+    def after_dataset_search(self, search_results, search_params):
         for package in search_results["results"]:
             self._replace_resource_download_urls(package["resources"], package["name"])
         return search_results
@@ -712,7 +712,7 @@ class StadtzhThemePlugin(
 
     # IResourceController
 
-    def before_create(self, context, resource):
+    def before_resource_create(self, context, resource):
         dataset = tk.get_action("package_show")(context, {"id": resource["package_id"]})
         existing_names = [r["name"] for r in dataset["resources"]]
         if resource["name"] in existing_names:
