@@ -11,7 +11,8 @@
   <label class="form-label" for="field-license">{{ _("License") }}</label>
   <div class="controls">
     <select id="field-license" name="license_id" data-module="autocomplete">
-      {% for license_id, license_desc in h.license_options(existing_license_id)  %}
+      {% set existing_license_id = data.get('license_id') %}
+      {% for license_id, license_desc in h.license_options(existing_license_id) %}
         <option value="{{ license_id }}" {% if data.get('license_id', 'cc-zero') == license_id %}selected="selected"{% endif %}>{{ license_desc }}</option>
       {% endfor %}
     </select>
