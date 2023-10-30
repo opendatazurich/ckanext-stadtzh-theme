@@ -20,6 +20,29 @@ abort = tk.abort
 ogdzh_dataset = Blueprint("ogdzh_dataset", __name__, url_prefix="/dataset")
 
 
+def s3filestore_download(package_name: str, resource_name: str, context: Context):
+    """
+    Method will be used to reformat the url to the s3 based download url which
+    allow to download the file from s3 instead of filestore. The fallback is handled
+    within the s3filestore extension.
+    """
+    pkg = get_action("package_show")(context, {"id": package_name})
+    for resource in pkg.get("resources"):
+        if resource.get("name").lower() == resource_name.lower():
+            rsc = get_action("resource_show")(context, {"id": resource.get("id")})
+            break
+    if rsc and rsc.get("url_type") == "upload":
+        url = (
+            f"{tk.config.get('ckan.site_url')}/dataset/{package_name}/resource/"
+            f"{rsc.get('id')}/download/{resource_name.lower()}"
+        )
+    elif "url" not in rsc:
+        return base.abort(404, _("No download is available"))
+    else:
+        return base.abort(404, _("Resource not found"))
+    return url
+
+
 def resource_download_permalink(
     package_name: str, resource_name: str, filename: Optional[str] = None
 ) -> Union[Response, WerkzeugResponse]:
@@ -30,7 +53,9 @@ def resource_download_permalink(
     and reuploaded with a new id.
     """
     context: Context = {"user": current_user.name, "auth_user_obj": current_user}
-
+    if "s3filestore" in tk.config.get("ckan.plugins"):
+        url = s3filestore_download(package_name, resource_name, context)
+        return h.redirect_to(url)
     try:
         rsc = get_action("resource_show")(context, {"id": resource_name})
         get_action("package_show")(context, {"id": package_name})
