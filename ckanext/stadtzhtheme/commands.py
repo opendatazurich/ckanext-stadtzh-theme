@@ -65,7 +65,7 @@ def cleanup_datastore():
 
 
 @ogdzh.command("cleanup_filestore")
-def cleanup_filestore(self):
+def cleanup_filestore():
     resource_path = _get_resource_storage_path()
 
     click.echo("\nClean up file storage at {}:\n".format(resource_path))
@@ -79,12 +79,12 @@ def cleanup_filestore(self):
         click.echo("User is not authorized to perform this action.")
         sys.exit(1)
 
-    files_to_keep = self._cleanup_storage_files(context, resource_path)
+    files_to_keep = _cleanup_storage_files(context, resource_path)
     _delete_orphaned_storage_directories(resource_path)
     click.echo("{} Files are remaining in storage".format(len(files_to_keep)))
 
 
-def _get_datastore_table_page(self, context, offset=0):
+def _get_datastore_table_page(context, offset=0):
     # query datastore to get all resources from the _table_metadata
     result = logic.get_action("datastore_search")(
         context, {"resource_id": "_table_metadata", "offset": offset}
@@ -115,7 +115,7 @@ def _get_datastore_table_page(self, context, offset=0):
     return resource_id_list, has_next_page
 
 
-def _cleanup_storage_files(self, context, resource_path):
+def _cleanup_storage_files(context, resource_path):
     files_to_delete = []
     files_to_keep = []
     for root, dirs, files in os.walk(resource_path, topdown=True):
