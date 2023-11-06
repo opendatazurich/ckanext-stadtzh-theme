@@ -10,15 +10,15 @@ from ckan.lib.uploader import get_storage_path
 
 
 def get_commands():
-    return [ogdzh]
+    return [stadtzhtheme]
 
 
 @click.group()
-def ogdzh():
+def stadtzhtheme():
     pass
 
 
-@ogdzh.command("cleanup_datastore")
+@stadtzhtheme.command("cleanup_datastore")
 def cleanup_datastore():
     user = logic.get_action("get_site_user")({"ignore_auth": True}, {})
     context = {"model": model, "session": model.Session, "user": user["name"]}
@@ -64,7 +64,7 @@ def cleanup_datastore():
     click.echo("Deleted content of %s tables" % delete_count)
 
 
-@ogdzh.command("cleanup_filestore")
+@stadtzhtheme.command("cleanup_filestore")
 def cleanup_filestore():
     resource_path = _get_resource_storage_path()
 
