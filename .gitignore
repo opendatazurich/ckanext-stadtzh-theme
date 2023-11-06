@@ -1,6 +1,5 @@
 *.pyc
 *.egg-info
 *.min.js
-ckanext/stadtzhtheme/i18n/de/LC_MESSAGES/ckanext-stadtzhtheme.mo
 build/
 dist/
