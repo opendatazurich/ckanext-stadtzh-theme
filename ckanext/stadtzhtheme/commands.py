@@ -5,8 +5,8 @@ import traceback
 
 import ckan.logic as logic
 import ckan.model as model
-from ckan.lib.uploader import get_storage_path
 import click
+from ckan.lib.uploader import get_storage_path
 
 
 def get_commands():
