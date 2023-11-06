@@ -17,6 +17,7 @@ from validate_email import validate_email
 import ckanext.xloader.interfaces as xi
 from ckanext.stadtzhtheme import logic as ogdzh_logic
 from ckanext.stadtzhtheme.blueprints import ogdzh_dataset
+from ckanext.stadtzhtheme.commands import get_commands
 
 log = logging.getLogger(__name__)
 
@@ -219,6 +220,7 @@ class IFacetPlugin(plugins.SingletonPlugin):
 class StadtzhThemePlugin(
     plugins.SingletonPlugin, tk.DefaultDatasetForm, DefaultTranslation
 ):
+    plugins.implements(plugins.IClick)
     plugins.implements(plugins.IConfigurable)
     plugins.implements(plugins.IConfigurer, inherit=False)
     plugins.implements(plugins.IDatasetForm, inherit=False)
@@ -718,3 +720,8 @@ class StadtzhThemePlugin(
         if resource["name"] in existing_names:
             msg = 'The resource name "{0}" is already in use'.format(resource["name"])
             raise tk.ValidationError({"resources": msg})
+
+    # IClick
+
+    def get_commands(self):
+        return get_commands()
