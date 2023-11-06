@@ -198,3 +198,7 @@ def _delete_orphaned_storage_directories(resource_path):
     for dir_path in dirs_to_delete:
         os.rmdir(dir_path)
         print("- deleted {}".format(dir_path))
+
+
+def get_commands():
+    pass
