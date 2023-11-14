@@ -183,9 +183,9 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
                 "ckanext.stadtzhtheme.dcat_ap_organization_slug",
                 "",
             )
-            id = self._get_dataset_value(dataset_dict, "id")
-            title = self._get_dataset_value(dataset_dict, "title")
-            description = self._get_dataset_value(dataset_dict, "notes")
+            id = self._get_dataset_value(dataset_dict, "id", "")
+            title = self._get_dataset_value(dataset_dict, "title", "")
+            description = self._get_dataset_value(dataset_dict, "notes", "")
             g.add((dataset_ref, DCT.identifier, Literal(id + "@" + organization_id)))
             g.add((dataset_ref, DCT.title, Literal(title, lang=ckan_locale_default)))
             g.add(
@@ -199,7 +199,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
             # Update Interval
             try:
                 update_interval = self._get_dataset_value(
-                    dataset_dict, "updateInterval"
+                    dataset_dict, "updateInterval", []
                 )
                 accrualPeriodicity = mapping_accrualPeriodicity.get(update_interval[0])
             except IndexError:
@@ -232,7 +232,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
                 g.add((dataset_ref, DCT.temporal, temporal_extent))
 
             # Themes
-            groups = self._get_dataset_value(dataset_dict, "groups")
+            groups = self._get_dataset_value(dataset_dict, "groups", [])
             try:
                 theme_names = set(
                     itertools.chain.from_iterable(
@@ -257,7 +257,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
 
             # Legal Information
             legal_information = self._get_dataset_value(
-                dataset_dict, "legalInformation"
+                dataset_dict, "legalInformation", ""
             )
             g.add((dataset_ref, DCT.accessRights, Literal(legal_information)))
 
@@ -279,7 +279,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
                 g.add((dataset_ref, DCAT.contactPoint, contact_details))
 
                 maintainer_email = self._get_dataset_value(
-                    dataset_dict, "maintainer_email"
+                    dataset_dict, "maintainer_email", ""
                 )
                 g.add((contact_details, VCARD.hasEmail, URIRef(maintainer_email)))
 
@@ -321,7 +321,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
 
                 self._add_triples_from_dict(resource_dict, distribution, items)
 
-                license_id = self._get_dataset_value(dataset_dict, "license_id")
+                license_id = self._get_dataset_value(dataset_dict, "license_id", "")
                 license_title = self._rights(license_id)
                 g.add((distribution, DCT.rights, Literal(license_title)))
                 g.add((distribution, DCT.license, Literal(license_title)))
