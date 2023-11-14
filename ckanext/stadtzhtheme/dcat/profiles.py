@@ -233,27 +233,24 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
 
             # Themes
             groups = self._get_dataset_value(dataset_dict, "groups", [])
-            try:
-                theme_names = set(
-                    itertools.chain.from_iterable(
-                        [self._themes(group.get("name")) for group in groups]
+            theme_names = set(
+                itertools.chain.from_iterable(
+                    [self._themes(group.get("name")) for group in groups]
+                )
+            )
+            if any(
+                tag.get("name") == "geodaten" for tag in dataset_dict.get("tags", [])
+            ):
+                theme_names.add("geography")
+
+            for theme_name in theme_names:
+                g.add(
+                    (
+                        dataset_ref,
+                        DCAT.theme,
+                        URIRef(ogd_theme_base_url + theme_name),
                     )
                 )
-                if any(
-                    tag["name"] == "geodaten" for tag in dataset_dict.get("tags", [])
-                ):
-                    theme_names.add("geography")
-
-                for theme_name in theme_names:
-                    g.add(
-                        (
-                            dataset_ref,
-                            DCAT.theme,
-                            URIRef(ogd_theme_base_url + theme_name),
-                        )
-                    )
-            except IndexError:
-                pass
 
             # Legal Information
             legal_information = self._get_dataset_value(
