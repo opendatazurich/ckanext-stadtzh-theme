@@ -66,8 +66,9 @@ def resource_download_permalink(
         return base.abort(403, _("Not authorized to download resource"))
 
     if "s3filestore" in tk.config.get("ckan.plugins"):
-        # TODO: Use the resource's filename, not its name
-        url = s3filestore_download(package_name, resource_name, context)
+        # s3filestore needs the filename of the resource, not its name
+        resource_filename = rsc.get("filename", resource_name)
+        url = s3filestore_download(package_name, resource_filename, context)
         return h.redirect_to(url)
 
     if rsc.get("url_type") == "upload":
