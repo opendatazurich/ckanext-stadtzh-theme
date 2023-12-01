@@ -736,12 +736,22 @@ class StadtzhThemePlugin(
 
     # IResourceController
 
+    def _set_resource_filename(self, resource):
+        if resource["url_type"] == "upload" and resource.get("upload"):
+            upload = resource["upload"]
+            resource["filename"] = upload.filename
+
     def before_resource_create(self, context, resource):
+        self._set_resource_filename(resource)
+
         dataset = tk.get_action("package_show")(context, {"id": resource["package_id"]})
         existing_names = [r["name"] for r in dataset["resources"]]
         if resource["name"] in existing_names:
             msg = 'The resource name "{0}" is already in use'.format(resource["name"])
             raise tk.ValidationError({"resources": msg})
+
+    def before_resource_update(self, context, current, resource):
+        self._set_resource_filename(resource)
 
     # IClick
 
