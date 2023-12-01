@@ -426,7 +426,7 @@ class StadtzhThemePlugin(
         # but only for files, not for urls, so we need one we can use for both
         schema["resources"].update({"zh_hash": [tk.get_validator("ignore_missing")]})
 
-        # validate URL
+        # Validate URL with custom validate_url method
         schema["resources"].update(
             {
                 "url": [
@@ -435,6 +435,17 @@ class StadtzhThemePlugin(
                     tk.get_validator("remove_whitespace"),
                     tk.get_validator("validate_url"),
                 ]
+            }
+        )
+
+        # Add resource field 'filename'
+        schema["resources"].update(
+            {
+                "filename": [
+                    tk.get_validator("ignore_missing"),
+                    tk.get_validator("unicode_safe"),
+                    tk.get_validator("remove_whitespace"),
+                ],
             }
         )
 
@@ -572,6 +583,17 @@ class StadtzhThemePlugin(
 
         # add a custom hash field
         schema["resources"].update({"zh_hash": [tk.get_validator("ignore_missing")]})
+
+        # Add custom filename field
+        schema["resources"].update(
+            {
+                "filename": [
+                    tk.get_validator("ignore_missing"),
+                    tk.get_validator("unicode_safe"),
+                    tk.get_validator("remove_whitespace"),
+                ],
+            },
+        )
 
         return schema
 
