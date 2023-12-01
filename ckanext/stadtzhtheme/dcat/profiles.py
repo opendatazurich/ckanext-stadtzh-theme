@@ -9,14 +9,13 @@ from ckan.lib.helpers import render_markdown, url_for
 from ckan.plugins import toolkit
 from dateutil.parser import parse as parse_date
 from rdflib import BNode, Literal, URIRef
-from rdflib.namespace import RDF, RDFS, SKOS, XSD, Namespace
+from rdflib.namespace import RDF, SKOS, XSD, Namespace
 
 import ckanext.stadtzhtheme.plugin as plugin
 from ckanext.dcat.profiles import RDFProfile, SchemaOrgProfile
 from ckanext.dcat.utils import resource_uri
 
 log = logging.getLogger(__name__)
-
 
 DCT = Namespace("http://purl.org/dc/terms/")
 DCAT = Namespace("http://www.w3.org/ns/dcat#")

@@ -4,11 +4,11 @@ import ckan.lib.base as base
 import ckan.lib.helpers as h
 import ckan.lib.uploader as uploader
 import ckan.logic as logic
-from ckan.common import _, c, current_user, request
+from ckan.common import _, current_user
 from ckan.lib import signals
 from ckan.plugins import toolkit as tk
 from ckan.types import Context, Response
-from flask import Blueprint, make_response, send_file
+from flask import Blueprint, send_file
 from werkzeug.wrappers.response import Response as WerkzeugResponse
 
 get_action = logic.get_action

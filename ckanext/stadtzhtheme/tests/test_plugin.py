@@ -1,6 +1,6 @@
 import pytest
 from ckan.lib.helpers import url_for
-from ckan.tests import factories, helpers
+from ckan.tests import factories
 
 import ckanext.stadtzhtheme.plugin as plugin
 
