@@ -178,22 +178,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
             self._add_date_triples_from_dict(dataset_dict, dataset_ref, date_items)
 
             # Organization
-            organization_id = toolkit.config.get(
-                "ckanext.stadtzhtheme.dcat_ap_organization_slug",
-                "",
-            )
-            id = self._get_dataset_value(dataset_dict, "id")
-            title = self._get_dataset_value(dataset_dict, "title")
-            description = self._get_dataset_value(dataset_dict, "notes")
-            g.add((dataset_ref, DCT.identifier, Literal(id + "@" + organization_id)))
-            g.add((dataset_ref, DCT.title, Literal(title, lang=ckan_locale_default)))
-            g.add(
-                (
-                    dataset_ref,
-                    DCT.description,
-                    Literal(description, lang=ckan_locale_default),
-                )
-            )
+            self._add_organization(dataset_dict, dataset_ref, g)
 
             # Update Interval
             try:
@@ -207,52 +192,10 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
                 g.add((dataset_ref, DCT.accrualPeriodicity, URIRef(accrualPeriodicity)))
 
             # Temporal
-            time_range = self._time_interval_from_dataset(dataset_dict)
-            if (
-                time_range is not None
-                and time_range.get("start_date")
-                and time_range.get("end_date")
-            ):
-                start = time_range.get("start_date")
-                end = time_range.get("end_date")
-
-                temporal_extent = BNode()
-                g.add((temporal_extent, RDF.type, DCT.PeriodOfTime))
-                g.add(
-                    (
-                        temporal_extent,
-                        SCHEMA.startDate,
-                        Literal(start, datatype=XSD.date),
-                    )
-                )
-                g.add(
-                    (temporal_extent, SCHEMA.endDate, Literal(end, datatype=XSD.date))
-                )
-                g.add((dataset_ref, DCT.temporal, temporal_extent))
+            self._add_temporal(dataset_dict, dataset_ref, g)
 
             # Themes
-            groups = self._get_dataset_value(dataset_dict, "groups")
-            try:
-                theme_names = set(
-                    itertools.chain.from_iterable(
-                        [self._themes(group.get("name")) for group in groups]
-                    )
-                )
-                if any(
-                    tag["name"] == "geodaten" for tag in dataset_dict.get("tags", [])
-                ):
-                    theme_names.add("geography")
-
-                for theme_name in theme_names:
-                    g.add(
-                        (
-                            dataset_ref,
-                            DCAT.theme,
-                            URIRef(ogd_theme_base_url + theme_name),
-                        )
-                    )
-            except IndexError:
-                pass
+            self._add_groups(dataset_dict, dataset_ref, g)
 
             # Legal Information
             legal_information = self._get_dataset_value(
@@ -261,36 +204,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
             g.add((dataset_ref, DCT.accessRights, Literal(legal_information)))
 
             # Contact details
-            if any(
-                [
-                    self._get_dataset_value(dataset_dict, "contact_uri"),
-                    self._get_dataset_value(dataset_dict, "contact_name"),
-                    self._get_dataset_value(dataset_dict, "contact_email"),
-                    self._get_dataset_value(dataset_dict, "maintainer"),
-                    self._get_dataset_value(dataset_dict, "maintainer_email"),
-                    self._get_dataset_value(dataset_dict, "author"),
-                    self._get_dataset_value(dataset_dict, "author_email"),
-                ]
-            ):
-                contact_details = BNode()
-
-                g.add((contact_details, RDF.type, VCARD.Organization))
-                g.add((dataset_ref, DCAT.contactPoint, contact_details))
-
-                maintainer_email = self._get_dataset_value(
-                    dataset_dict, "maintainer_email"
-                )
-                g.add((contact_details, VCARD.hasEmail, URIRef(maintainer_email)))
-
-                items = [
-                    (
-                        "contact_name",
-                        VCARD.fn,
-                        ["maintainer", "author"],
-                        Literal,
-                    ),
-                ]
-                self._add_triples_from_dict(dataset_dict, contact_details, items)
+            self._add_contact_details(dataset_dict, dataset_ref, g)
 
             # Tags
             for tag in dataset_dict.get("tags", []):
@@ -304,140 +218,235 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
 
             # Resources
             for resource_dict in dataset_dict.get("resources", []):
-                distribution = URIRef(resource_uri(resource_dict))
-
-                g.add((dataset_ref, DCAT.distribution, distribution))
-                g.add((distribution, RDF.type, DCAT.Distribution))
-                g.add((distribution, DCT.language, Literal(ckan_locale_default)))
-
-                #  Simple values
-                items = [
-                    ("id", DCT.identifier, None, Literal),
-                    ("name", DCT.title, None, Literal),
-                    ("description", DCT.description, None, Literal),
-                    ("state", ADMS.status, None, Literal),
-                ]
-
-                self._add_triples_from_dict(resource_dict, distribution, items)
-
-                license_id = self._get_dataset_value(dataset_dict, "license_id")
-                license_title = self._rights(license_id)
-                g.add((distribution, DCT.rights, Literal(license_title)))
-                g.add((distribution, DCT.license, Literal(license_title)))
-
-                #  Lists
-                items = [
-                    ("conforms_to", DCT.conformsTo, None, Literal),
-                ]
-                self._add_list_triples_from_dict(resource_dict, distribution, items)
-
-                # Format
-                if "/" in resource_dict.get("format", ""):
-                    g.add(
-                        (distribution, DCAT.mediaType, Literal(resource_dict["format"]))
-                    )
-                else:
-                    if resource_dict.get("format"):
-                        g.add(
-                            (
-                                distribution,
-                                DCT["format"],
-                                Literal(resource_dict["format"]),
-                            )
-                        )
-
-                    if resource_dict.get("mimetype"):
-                        g.add(
-                            (
-                                distribution,
-                                DCAT.mediaType,
-                                Literal(resource_dict["mimetype"]),
-                            )
-                        )
-
-                # URLs
-                url = resource_dict.get("url")
-                if url:
-                    g.add((distribution, DCAT.accessURL, Literal(url)))
-
-                # if resource has the following format, the distribution is a
-                # service and therefore doesn't need a downloadURL
-                format = resource_dict.get("format").lower()
-                if format not in ["xml", "wms", "wmts", "wfs"]:
-                    download_url = resource_dict.get("url")
-                    if download_url:
-                        g.add((distribution, DCAT.downloadURL, Literal(download_url)))
-
-                # Dates
-                items = [
-                    ("created", DCT.issued, None, Literal),
-                    ("last_modified", DCT.modified, None, Literal),
-                ]
-
-                self._add_date_triples_from_dict(resource_dict, distribution, items)
-
-                # Numbers
-                if resource_dict.get("size"):
-                    try:
-                        g.add(
-                            (
-                                distribution,
-                                DCAT.byteSize,
-                                Literal(
-                                    float(resource_dict["size"]), datatype=XSD.decimal
-                                ),
-                            )
-                        )
-                    except (ValueError, TypeError):
-                        g.add(
-                            (
-                                distribution,
-                                DCAT.byteSize,
-                                Literal(resource_dict["size"]),
-                            )
-                        )
-                # Checksum
-                if resource_dict.get("hash"):
-                    checksum = BNode()
-                    g.add(
-                        (
-                            checksum,
-                            SPDX.checksumValue,
-                            Literal(resource_dict["hash"], datatype=XSD.hexBinary),
-                        )
-                    )
-
-                    if resource_dict.get("hash_algorithm"):
-                        if resource_dict["hash_algorithm"].startswith("http"):
-                            g.add(
-                                (
-                                    checksum,
-                                    SPDX.algorithm,
-                                    URIRef(resource_dict["hash_algorithm"]),
-                                )
-                            )
-                        else:
-                            g.add(
-                                (
-                                    checksum,
-                                    SPDX.algorithm,
-                                    Literal(resource_dict["hash_algorithm"]),
-                                )
-                            )
-                    g.add((distribution, SPDX.checksum, checksum))
+                self._add_resources(resource_dict, dataset_ref, g)
 
             # Publisher
-            if dataset_dict.get("organization"):
-                publisher_name = dataset_dict.get("author")
-
-                publisher_details = BNode()
-
-                g.add((publisher_details, RDF.type, FOAF.Organization))
-                g.add((publisher_details, FOAF.name, Literal(publisher_name)))
-                g.add((dataset_ref, DCT.publisher, publisher_details))
+            self._add_publisher(dataset_dict, dataset_ref, g)
         except Exception as e:
             log.exception("Something went wrong: %s / %s" % (e, traceback.format_exc()))
             raise
+
+    def _add_organization(self, dataset_dict, dataset_ref, g):
+        organization_id = toolkit.config.get(
+            "ckanext.stadtzhtheme.dcat_ap_organization_slug",
+            "",
+        )
+        id = self._get_dataset_value(dataset_dict, "id")
+        title = self._get_dataset_value(dataset_dict, "title")
+        description = self._get_dataset_value(dataset_dict, "notes")
+        g.add((dataset_ref, DCT.identifier, Literal(id + "@" + organization_id)))
+        g.add((dataset_ref, DCT.title, Literal(title, lang=ckan_locale_default)))
+        g.add(
+            (
+                dataset_ref,
+                DCT.description,
+                Literal(description, lang=ckan_locale_default),
+            )
+        )
+
+    def _add_temporal(self, dataset_dict, dataset_ref, g):
+        time_range = self._time_interval_from_dataset(dataset_dict)
+        if (
+            time_range is not None
+            and time_range.get("start_date")
+            and time_range.get("end_date")
+        ):
+            start = time_range.get("start_date")
+            end = time_range.get("end_date")
+
+            temporal_extent = BNode()
+            g.add((temporal_extent, RDF.type, DCT.PeriodOfTime))
+            g.add(
+                (
+                    temporal_extent,
+                    SCHEMA.startDate,
+                    Literal(start, datatype=XSD.date),
+                )
+            )
+            g.add((temporal_extent, SCHEMA.endDate, Literal(end, datatype=XSD.date)))
+            g.add((dataset_ref, DCT.temporal, temporal_extent))
+
+    def _add_groups(self, dataset_dict, dataset_ref, g):
+        groups = self._get_dataset_value(dataset_dict, "groups")
+        try:
+            theme_names = set(
+                itertools.chain.from_iterable(
+                    [self._themes(group.get("name")) for group in groups]
+                )
+            )
+            if any(tag["name"] == "geodaten" for tag in dataset_dict.get("tags", [])):
+                theme_names.add("geography")
+
+            for theme_name in theme_names:
+                g.add(
+                    (
+                        dataset_ref,
+                        DCAT.theme,
+                        URIRef(ogd_theme_base_url + theme_name),
+                    )
+                )
+        except IndexError:
+            pass
+
+    def _add_publisher(self, dataset_dict, dataset_ref, g):
+        if dataset_dict.get("organization"):
+            publisher_name = dataset_dict.get("author")
+
+            publisher_details = BNode()
+
+            g.add((publisher_details, RDF.type, FOAF.Organization))
+            g.add((publisher_details, FOAF.name, Literal(publisher_name)))
+            g.add((dataset_ref, DCT.publisher, publisher_details))
+
+    def _add_contact_details(self, dataset_dict, dataset_ref, g):
+        if any(
+            [
+                self._get_dataset_value(dataset_dict, "contact_uri"),
+                self._get_dataset_value(dataset_dict, "contact_name"),
+                self._get_dataset_value(dataset_dict, "contact_email"),
+                self._get_dataset_value(dataset_dict, "maintainer"),
+                self._get_dataset_value(dataset_dict, "maintainer_email"),
+                self._get_dataset_value(dataset_dict, "author"),
+                self._get_dataset_value(dataset_dict, "author_email"),
+            ]
+        ):
+            contact_details = BNode()
+
+            g.add((contact_details, RDF.type, VCARD.Organization))
+            g.add((dataset_ref, DCAT.contactPoint, contact_details))
+
+            maintainer_email = self._get_dataset_value(dataset_dict, "maintainer_email")
+            g.add((contact_details, VCARD.hasEmail, URIRef(maintainer_email)))
+
+            items = [
+                (
+                    "contact_name",
+                    VCARD.fn,
+                    ["maintainer", "author"],
+                    Literal,
+                ),
+            ]
+            self._add_triples_from_dict(dataset_dict, contact_details, items)
+
+    def _add_resources(self, resource_dict, dataset_ref, g):
+        distribution = URIRef(resource_uri(resource_dict))
+
+        g.add((dataset_ref, DCAT.distribution, distribution))
+        g.add((distribution, RDF.type, DCAT.Distribution))
+        g.add((distribution, DCT.language, Literal(ckan_locale_default)))
+
+        #  Simple values
+        items = [
+            ("id", DCT.identifier, None, Literal),
+            ("name", DCT.title, None, Literal),
+            ("description", DCT.description, None, Literal),
+            ("state", ADMS.status, None, Literal),
+        ]
+
+        self._add_triples_from_dict(resource_dict, distribution, items)
+
+        license_id = self._get_dataset_value(resource_dict, "license_id")
+        license_title = self._rights(license_id)
+        g.add((distribution, DCT.rights, Literal(license_title)))
+        g.add((distribution, DCT.license, Literal(license_title)))
+
+        #  Lists
+        items = [
+            ("conforms_to", DCT.conformsTo, None, Literal),
+        ]
+        self._add_list_triples_from_dict(resource_dict, distribution, items)
+
+        # Format
+        self._add_format(distribution, g, resource_dict)
+
+        # Dates
+        items = [
+            ("created", DCT.issued, None, Literal),
+            ("last_modified", DCT.modified, None, Literal),
+        ]
+
+        self._add_date_triples_from_dict(resource_dict, distribution, items)
+
+        # Numbers
+        if resource_dict.get("size"):
+            try:
+                g.add(
+                    (
+                        distribution,
+                        DCAT.byteSize,
+                        Literal(float(resource_dict["size"]), datatype=XSD.decimal),
+                    )
+                )
+            except (ValueError, TypeError):
+                g.add(
+                    (
+                        distribution,
+                        DCAT.byteSize,
+                        Literal(resource_dict["size"]),
+                    )
+                )
+        # Checksum
+        if resource_dict.get("hash"):
+            checksum = BNode()
+            g.add(
+                (
+                    checksum,
+                    SPDX.checksumValue,
+                    Literal(resource_dict["hash"], datatype=XSD.hexBinary),
+                )
+            )
+
+            if resource_dict.get("hash_algorithm"):
+                if resource_dict["hash_algorithm"].startswith("http"):
+                    g.add(
+                        (
+                            checksum,
+                            SPDX.algorithm,
+                            URIRef(resource_dict["hash_algorithm"]),
+                        )
+                    )
+                else:
+                    g.add(
+                        (
+                            checksum,
+                            SPDX.algorithm,
+                            Literal(resource_dict["hash_algorithm"]),
+                        )
+                    )
+            g.add((distribution, SPDX.checksum, checksum))
+
+    def _add_format(self, distribution, g, resource_dict):
+        if "/" in resource_dict.get("format", ""):
+            g.add((distribution, DCAT.mediaType, Literal(resource_dict["format"])))
+        else:
+            if resource_dict.get("format"):
+                g.add(
+                    (
+                        distribution,
+                        DCT["format"],
+                        Literal(resource_dict["format"]),
+                    )
+                )
+
+            if resource_dict.get("mimetype"):
+                g.add(
+                    (
+                        distribution,
+                        DCAT.mediaType,
+                        Literal(resource_dict["mimetype"]),
+                    )
+                )
+        # URLs
+        url = resource_dict.get("url")
+        if url:
+            g.add((distribution, DCAT.accessURL, Literal(url)))
+        # if resource has the following format, the distribution is a
+        # service and therefore doesn't need a downloadURL
+        format = resource_dict.get("format").lower()
+        if format not in ["xml", "wms", "wmts", "wfs"]:
+            download_url = resource_dict.get("url")
+            if download_url:
+                g.add((distribution, DCAT.downloadURL, Literal(download_url)))
 
     def graph_from_catalog(self, catalog_dict, catalog_ref):
         g = self.g
