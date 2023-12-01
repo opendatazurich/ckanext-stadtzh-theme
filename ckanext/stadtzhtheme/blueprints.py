@@ -73,7 +73,7 @@ def resource_download_permalink(
     if rsc.get("url_type") == "upload":
         upload = uploader.get_resource_uploader(rsc)
         filepath = upload.get_path(rsc["id"])
-        resp = send_file(filepath)
+        resp = send_file(filepath, download_name=resource_name)
 
         if rsc.get("mimetype"):
             resp.headers["Content-Type"] = rsc["mimetype"]
