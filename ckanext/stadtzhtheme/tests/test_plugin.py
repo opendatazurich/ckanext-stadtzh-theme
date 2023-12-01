@@ -40,7 +40,9 @@ class TestPlugin(object):
         assert descr[0] == "Comma-Separated Values."
         assert (
             descr[1]
-            == "Weitere Informationen zu CSV finden Sie in unserer Rubrik Werkstatt unter [Informationen zu Datenformaten.](https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/csv.html)"
+            == "Weitere Informationen zu CSV finden Sie in unserer Rubrik Werkstatt "
+            "unter [Informationen zu Datenformaten.]"
+            "(https://www.stadt-zuerich.ch/portal/de/index/ogd/werkstatt/csv.html)"
         )
 
     def test_translations_without_orgs(self, app):
