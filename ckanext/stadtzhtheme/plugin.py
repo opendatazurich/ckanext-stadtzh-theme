@@ -584,7 +584,7 @@ class StadtzhThemePlugin(
         # add a custom hash field
         schema["resources"].update({"zh_hash": [tk.get_validator("ignore_missing")]})
 
-        # Add custom filename field
+        # Add resource field 'filename'
         schema["resources"].update(
             {
                 "filename": [
