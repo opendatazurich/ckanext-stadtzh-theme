@@ -4,11 +4,11 @@ import ckan.lib.base as base
 import ckan.lib.helpers as h
 import ckan.lib.uploader as uploader
 import ckan.logic as logic
-from ckan.common import _, c, current_user, request
+from ckan.common import _, current_user
 from ckan.lib import signals
 from ckan.plugins import toolkit as tk
 from ckan.types import Context, Response
-from flask import Blueprint, make_response, send_file
+from flask import Blueprint, send_file
 from werkzeug.wrappers.response import Response as WerkzeugResponse
 
 get_action = logic.get_action
@@ -46,28 +46,35 @@ def s3filestore_download(package_name: str, resource_name: str, context: Context
 def resource_download_permalink(
     package_name: str, resource_name: str, filename: Optional[str] = None
 ) -> Union[Response, WerkzeugResponse]:
-    """
-    Copied from ckan 2.10 source code but using package name and resource name
-    instead of ids. This will allow accessing resources of a package by
-    filename, giving a link that will not change even if a resource is deleted
-    and reuploaded with a new id.
+    """Allow accessing resources of a package by resource name, giving a link that
+    will not change even if a resource is deleted and reuploaded with a new id.
     """
     context: Context = {"user": current_user.name, "auth_user_obj": current_user}
-    if "s3filestore" in tk.config.get("ckan.plugins"):
-        url = s3filestore_download(package_name, resource_name, context)
-        return h.redirect_to(url)
+    rsc = None
+
     try:
-        rsc = get_action("resource_show")(context, {"id": resource_name})
-        get_action("package_show")(context, {"id": package_name})
+        package = get_action("package_show")(context, {"id": package_name})
+        for r in package["resources"]:
+            # If the resource names match, this is the resource we want
+            if r["name"] == resource_name:
+                # Search for the resource using its id, to make sure it exists
+                rsc = get_action("resource_show")(context, {"id": r["id"]})
+                break
     except NotFound:
         return base.abort(404, _("Resource not found"))
     except NotAuthorized:
         return base.abort(403, _("Not authorized to download resource"))
 
+    if "s3filestore" in tk.config.get("ckan.plugins"):
+        # s3filestore needs the filename of the resource, not its name
+        resource_filename = rsc.get("filename", resource_name)
+        url = s3filestore_download(package_name, resource_filename, context)
+        return h.redirect_to(url)
+
     if rsc.get("url_type") == "upload":
         upload = uploader.get_resource_uploader(rsc)
         filepath = upload.get_path(rsc["id"])
-        resp = send_file(filepath)
+        resp = send_file(filepath, download_name=resource_name)
 
         if rsc.get("mimetype"):
             resp.headers["Content-Type"] = rsc["mimetype"]
