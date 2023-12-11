@@ -195,7 +195,7 @@ def validate_url(key, data, errors, context):
         url_type_key = (key[0], key[1], "url_type")
         url_type = data.get(url_type_key, None)
         if url_type == "upload":
-            log.warn("url_type is upload, skipping")
+            log.debug("url_type is upload, skipping")
             return
     except IndexError:
         pass
