@@ -31,4 +31,8 @@
         </span>
       {% endcall %}
     {% endblock %}
+
+  {% block basic_fields_filename %}
+    <input name="filename" value="{{ data.filename }}" type="hidden"/>
+  {% endblock %}
 {% endblock %}
