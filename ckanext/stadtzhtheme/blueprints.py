@@ -45,11 +45,11 @@ def resource_download_permalink(
 
     try:
         package = get_action("package_show")(context, {"id": package_name})
-        for r in package["resources"]:
+        for res in package["resources"]:
             # If the resource names match, this is the resource we want
-            if r["name"] == resource_name:
+            if res["name"] == resource_name:
                 # Search for the resource using its id, to make sure it exists
-                rsc = get_action("resource_show")(context, {"id": r["id"]})
+                rsc = get_action("resource_show")(context, {"id": res["id"]})
                 break
     except NotFound:
         return base.abort(404, _("Resource not found"))
