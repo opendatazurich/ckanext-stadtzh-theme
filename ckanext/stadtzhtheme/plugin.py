@@ -739,7 +739,8 @@ class StadtzhThemePlugin(
     def _set_resource_filename(self, resource):
         if resource["url_type"] == "upload" and resource.get("upload"):
             upload = resource["upload"]
-            resource["filename"] = upload.filename
+            if upload.filename:
+                resource["filename"] = os.path.basename(upload.filename)
 
     def before_resource_create(self, context, resource):
         self._set_resource_filename(resource)
