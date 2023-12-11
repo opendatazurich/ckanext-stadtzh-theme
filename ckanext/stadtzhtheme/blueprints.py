@@ -5,7 +5,7 @@ import ckan.lib.helpers as h
 import ckan.lib.uploader as uploader
 import ckan.logic as logic
 from ckan.common import _, current_user
-from ckan.lib import signals
+from ckan.lib import munge, signals
 from ckan.plugins import toolkit as tk
 from ckan.types import Context, Response
 from flask import Blueprint, send_file
@@ -15,7 +15,6 @@ get_action = logic.get_action
 NotFound = logic.NotFound
 NotAuthorized = logic.NotAuthorized
 abort = tk.abort
-
 
 ogdzh_dataset = Blueprint("ogdzh_dataset", __name__, url_prefix="/dataset")
 
@@ -28,9 +27,10 @@ def s3filestore_download(
     allow to download the file from s3 instead of filestore. The fallback is handled
     within the s3filestore extension.
     """
+    filename = munge.munge_filename(filename)
     return (
         f"{tk.config.get('ckan.site_url')}/dataset/{package_name}/resource/"
-        f"{resource_id}/download/{filename.lower()}"
+        f"{resource_id}/download/{filename}"
     )
 
 
