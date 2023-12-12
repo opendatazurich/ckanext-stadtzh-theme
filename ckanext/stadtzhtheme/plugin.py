@@ -195,7 +195,7 @@ def validate_url(key, data, errors, context):
         url_type_key = (key[0], key[1], "url_type")
         url_type = data.get(url_type_key, None)
         if url_type == "upload":
-            log.warn("url_type is upload, skipping")
+            log.debug("url_type is upload, skipping")
             return
     except IndexError:
         pass
@@ -739,7 +739,8 @@ class StadtzhThemePlugin(
     def _set_resource_filename(self, resource):
         if resource["url_type"] == "upload" and resource.get("upload"):
             upload = resource["upload"]
-            resource["filename"] = upload.filename
+            if upload.filename:
+                resource["filename"] = os.path.basename(upload.filename)
 
     def before_resource_create(self, context, resource):
         self._set_resource_filename(resource)
