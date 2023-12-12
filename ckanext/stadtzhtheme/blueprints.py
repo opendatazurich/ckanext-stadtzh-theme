@@ -54,25 +54,26 @@ def resource_download_permalink(
     except NotAuthorized:
         return base.abort(403, _("Not authorized to download resource"))
 
+    if rsc.get("url_type") != "upload":
+        if "url" not in rsc:
+            return base.abort(404, _("No download is available"))
+        return h.redirect_to(rsc["url"])
+
     if "s3filestore" in tk.config.get("ckan.plugins"):
-        # s3filestore needs the filename of the resource, not its name
+        # s3filestore needs the filename of the resource, which might be different
+        # from its name
         resource_filename = rsc.get("filename", resource_name)
         url = s3filestore_download(package_name, resource_filename, rsc.get("id"))
         return h.redirect_to(url)
 
-    if rsc.get("url_type") == "upload":
-        upload = uploader.get_resource_uploader(rsc)
-        filepath = upload.get_path(rsc["id"])
-        resp = send_file(filepath, download_name=resource_name)
+    upload = uploader.get_resource_uploader(rsc)
+    filepath = upload.get_path(rsc["id"])
+    resp = send_file(filepath, download_name=resource_name)
 
-        if rsc.get("mimetype"):
-            resp.headers["Content-Type"] = rsc["mimetype"]
-        signals.resource_download.send(resource_name)
-        return resp
-
-    elif "url" not in rsc:
-        return base.abort(404, _("No download is available"))
-    return h.redirect_to(rsc["url"])
+    if rsc.get("mimetype"):
+        resp.headers["Content-Type"] = rsc["mimetype"]
+    signals.resource_download.send(resource_name)
+    return resp
 
 
 ogdzh_dataset.add_url_rule(
