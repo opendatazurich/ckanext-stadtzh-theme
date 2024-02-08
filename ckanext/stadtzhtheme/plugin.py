@@ -195,7 +195,7 @@ def validate_url(key, data, errors, context):
         url_type_key = (key[0], key[1], "url_type")
         url_type = data.get(url_type_key, None)
         if url_type == "upload":
-            log.warn("url_type is upload, skipping")
+            log.debug("url_type is upload, skipping")
             return
     except IndexError:
         pass
@@ -426,7 +426,7 @@ class StadtzhThemePlugin(
         # but only for files, not for urls, so we need one we can use for both
         schema["resources"].update({"zh_hash": [tk.get_validator("ignore_missing")]})
 
-        # validate URL
+        # Validate URL with custom validate_url method
         schema["resources"].update(
             {
                 "url": [
@@ -435,6 +435,17 @@ class StadtzhThemePlugin(
                     tk.get_validator("remove_whitespace"),
                     tk.get_validator("validate_url"),
                 ]
+            }
+        )
+
+        # Add resource field 'filename'
+        schema["resources"].update(
+            {
+                "filename": [
+                    tk.get_validator("ignore_missing"),
+                    tk.get_validator("unicode_safe"),
+                    tk.get_validator("remove_whitespace"),
+                ],
             }
         )
 
@@ -572,6 +583,17 @@ class StadtzhThemePlugin(
 
         # add a custom hash field
         schema["resources"].update({"zh_hash": [tk.get_validator("ignore_missing")]})
+
+        # Add resource field 'filename'
+        schema["resources"].update(
+            {
+                "filename": [
+                    tk.get_validator("ignore_missing"),
+                    tk.get_validator("unicode_safe"),
+                    tk.get_validator("remove_whitespace"),
+                ],
+            },
+        )
 
         return schema
 
@@ -714,12 +736,23 @@ class StadtzhThemePlugin(
 
     # IResourceController
 
+    def _set_resource_filename(self, resource):
+        if resource.get("url_type") == "upload" and resource.get("upload"):
+            upload = resource["upload"]
+            if upload.filename:
+                resource["filename"] = os.path.basename(upload.filename)
+
     def before_resource_create(self, context, resource):
+        self._set_resource_filename(resource)
+
         dataset = tk.get_action("package_show")(context, {"id": resource["package_id"]})
         existing_names = [r["name"] for r in dataset["resources"]]
         if resource["name"] in existing_names:
             msg = 'The resource name "{0}" is already in use'.format(resource["name"])
             raise tk.ValidationError({"resources": msg})
+
+    def before_resource_update(self, context, current, resource):
+        self._set_resource_filename(resource)
 
     # IClick
 
