@@ -217,8 +217,10 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
                 )
 
             # Resources
+            license_id = self._get_dataset_value(dataset_dict, "license_id", "")
+            rights = self._rights(license_id)
             for resource_dict in dataset_dict.get("resources", []):
-                self._add_resources(resource_dict, dataset_ref, g)
+                self._add_resources(resource_dict, dataset_ref, rights, g)
 
             # Publisher
             self._add_publisher(dataset_dict, dataset_ref, g)
@@ -330,7 +332,7 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
             ]
             self._add_triples_from_dict(dataset_dict, contact_details, items)
 
-    def _add_resources(self, resource_dict, dataset_ref, g):
+    def _add_resources(self, resource_dict, dataset_ref, license_title, g):
         distribution = URIRef(resource_uri(resource_dict))
 
         g.add((dataset_ref, DCAT.distribution, distribution))
@@ -347,8 +349,6 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
 
         self._add_triples_from_dict(resource_dict, distribution, items)
 
-        license_id = self._get_dataset_value(resource_dict, "license_id", "")
-        license_title = self._rights(license_id)
         g.add((distribution, DCT.rights, Literal(license_title)))
         g.add((distribution, DCT.license, Literal(license_title)))
 
