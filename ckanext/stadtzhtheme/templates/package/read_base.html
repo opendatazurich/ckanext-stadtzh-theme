@@ -1,6 +1,7 @@
 {% ckan_extends %}
 
 {% block links -%}
+  {{ super() }}
   <link rel="alternate" type="application/rdf+xml" href="{{ h.url_for('dataset.read', id=pkg.id, format='rdf', qualified=True) }}"/>
 {% endblock -%}
 
