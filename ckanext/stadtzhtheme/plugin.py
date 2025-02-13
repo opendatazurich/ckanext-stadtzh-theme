@@ -221,7 +221,6 @@ class StadtzhThemePlugin(
     plugins.SingletonPlugin, tk.DefaultDatasetForm, DefaultTranslation
 ):
     plugins.implements(plugins.IClick)
-    plugins.implements(plugins.IConfigurable)
     plugins.implements(plugins.IConfigurer, inherit=False)
     plugins.implements(plugins.IDatasetForm, inherit=False)
     plugins.implements(plugins.ITranslation, inherit=False)
@@ -232,11 +231,6 @@ class StadtzhThemePlugin(
     plugins.implements(plugins.IActions, inherit=True)
     plugins.implements(xi.IXloader, inherit=True)
     plugins.implements(plugins.IResourceController, inherit=True)
-
-    def configure(self, config):
-        # create vocabularies if necessary
-        create_updateInterval()
-        create_dataType()
 
     def update_config(self, config):
         try:
