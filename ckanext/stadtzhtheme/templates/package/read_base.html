@@ -23,10 +23,9 @@
     {# Social media links should not be displayed #}
 {% endblock %}
 
-{% block structured_data %}
-  {% if h.helper_available('structured_data') %}
-  <script type="application/ld+json">
-  {{ h.structured_data(pkg.id, ['stadtzh_schemaorg'])|safe }}
-  </script>
-  {% endif %}
+  {% block structured_data %}
+    <!-- Structured data -->
+    <script type="application/ld+json">
+      {{ h.structured_data(pkg, ['stadtzh_schemaorg']) | safe }}
+    </script>
 {% endblock %}
