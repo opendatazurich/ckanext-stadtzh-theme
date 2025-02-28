@@ -65,6 +65,7 @@ def create_updateInterval():
 
 def updateInterval():
     """Return the list of intervals from the updateInterval vocabulary."""
+    create_updateInterval()
     try:
         updateInterval = tk.get_action("tag_list")(
             data_dict={"vocabulary_id": "updateInterval"}
@@ -98,6 +99,7 @@ def create_dataType():
 
 def dataType():
     """Return the list of intervals from the dataType vocabulary."""
+    create_dataType()
     try:
         dataType = tk.get_action("tag_list")(data_dict={"vocabulary_id": "dataType"})
         return dataType
