@@ -9,7 +9,6 @@ from datetime import datetime
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as tk
 import yaml
-from ckan import model
 from ckan.lib.plugins import DefaultTranslation
 from ckan.logic.validators import url_validator
 from validate_email import validate_email
@@ -203,13 +202,11 @@ def validate_url(key, data, errors, context):
     return url_validator(key, data, errors, context)
 
 
-def ogdzh_package_create_default_resource_views(pkg_dict):
+def ogdzh_package_create_default_resource_views(context, pkg_dict):
     if not StadtzhThemePlugin.is_supported_package_type(StadtzhThemePlugin, pkg_dict):
         return pkg_dict
 
-        # create resource views if necessary
-    user = tk.get_action("get_site_user")({"ignore_auth": True}, {})
-    context = {"model": model, "session": model.Session, "user": user["name"]}
+    # create resource views if necessary
     tk.check_access("package_create_default_resource_views", context)
 
     # get the dataset via API, as the pkg_dict does not contain all fields
@@ -687,8 +684,8 @@ class StadtzhThemePlugin(
 
         return search_data
 
-    def before_dataset_view(self, pkg_dict):
-        return ogdzh_package_create_default_resource_views(pkg_dict)
+    def after_dataset_update(self, context, pkg_dict):
+        return ogdzh_package_create_default_resource_views(context, pkg_dict)
 
     def after_dataset_search(self, search_results, search_params):
         for package in search_results["results"]:
