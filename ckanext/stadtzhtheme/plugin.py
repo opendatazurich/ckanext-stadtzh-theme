@@ -203,6 +203,29 @@ def validate_url(key, data, errors, context):
     return url_validator(key, data, errors, context)
 
 
+def ogdzh_package_create_default_resource_views(pkg_dict):
+    if not StadtzhThemePlugin.is_supported_package_type(StadtzhThemePlugin, pkg_dict):
+        return pkg_dict
+
+        # create resource views if necessary
+    user = tk.get_action("get_site_user")({"ignore_auth": True}, {})
+    context = {"model": model, "session": model.Session, "user": user["name"]}
+    tk.check_access("package_create_default_resource_views", context)
+
+    # get the dataset via API, as the pkg_dict does not contain all fields
+    dataset = tk.get_action("package_show")(context, {"id": pkg_dict["id"]})
+
+    # Make sure resource views are created before showing a dataset
+    tk.get_action("package_create_default_resource_views")(
+        context, {"package": dataset}
+    )
+    StadtzhThemePlugin._replace_resource_download_urls(
+        StadtzhThemePlugin, pkg_dict["resources"], pkg_dict["name"]
+    )
+
+    return pkg_dict
+
+
 class IFacetPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IFacets, inherit=True)
 
@@ -665,24 +688,7 @@ class StadtzhThemePlugin(
         return search_data
 
     def before_dataset_view(self, pkg_dict):
-        if not self.is_supported_package_type(pkg_dict):
-            return pkg_dict
-
-        # create resource views if necessary
-        user = tk.get_action("get_site_user")({"ignore_auth": True}, {})
-        context = {"model": model, "session": model.Session, "user": user["name"]}
-        tk.check_access("package_create_default_resource_views", context)
-
-        # get the dataset via API, as the pkg_dict does not contain all fields
-        dataset = tk.get_action("package_show")(context, {"id": pkg_dict["id"]})
-
-        # Make sure resource views are created before showing a dataset
-        tk.get_action("package_create_default_resource_views")(
-            context, {"package": dataset}
-        )
-        self._replace_resource_download_urls(pkg_dict["resources"], pkg_dict["name"])
-
-        return pkg_dict
+        return ogdzh_package_create_default_resource_views(pkg_dict)
 
     def after_dataset_search(self, search_results, search_params):
         for package in search_results["results"]:
