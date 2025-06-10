@@ -449,6 +449,10 @@ class StadtzhThemePlugin(
             }
         )
 
+        schema["resources"].update(
+            {"markdown_snippet": [tk.get_validator("ignore_missing")]}
+        )
+
         return schema
 
     def create_package_schema(self):
