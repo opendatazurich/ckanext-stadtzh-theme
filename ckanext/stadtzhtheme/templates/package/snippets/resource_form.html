@@ -35,4 +35,9 @@
   {% block basic_fields_filename %}
     <input name="filename" value="{{ data.filename }}" type="hidden"/>
   {% endblock %}
+
+  {% block markdown_snippet %}
+    {{ form.markdown('markdown_snippet', id='field-description', label=_('Markdown zur Anzeige von interaktiven Notebooks'), placeholder=_('[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](YOUR_NOTEBOOK_URL_HERE)'), value=data.markdown_snippet, error=errors.markdown_snippet) }}
+  {% endblock %}
+
 {% endblock %}
