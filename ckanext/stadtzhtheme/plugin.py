@@ -23,6 +23,11 @@ log = logging.getLogger(__name__)
 
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
+RENKU_MARKDOWN = """
+Diesen Datensatz direkt online Analysieren mit [![renku](https://renkulab.io/renku-badge.svg)](https://renkulab.io/p/opendatazurich/starter-code/sessions/{renku_session_id}/start?PACKAGE_ID={package_name}&RESOURCE_ID={resource_id}) (Python) oder [SQL](https://sql-workbench.com/#queries=v0) 
+Jupyter Notebooks und R-Markdown-Dateien mit Startercode zum Download findest du auch [hier](https://opendatazurich.github.io/starter-code/).
+"""
+
 
 def create_updateInterval():
     """Create update interval vocab and tags, if they don't exist already."""
@@ -746,8 +751,25 @@ class StadtzhThemePlugin(
             if upload.filename:
                 resource["filename"] = os.path.basename(upload.filename)
 
+    def _set_renku_url(self, resource):
+        if not resource.get("markdown_snippet") and resource.get("format") in [
+            "CSV",
+            "parquet",
+        ]:
+            snippet = RENKU_MARKDOWN.format(
+                renku_session_id=tk.config.get(
+                    "ckanext.stadtzhtheme.renku_session_id", ""
+                ),
+                package_name=resource.get("package_id"),
+                resource_id=resource.get("id"),
+                file_format=resource.get("format"),
+                download_url=resource.get("url"),
+            )
+            resource["markdown_snippet"] = snippet
+
     def before_resource_create(self, context, resource):
         self._set_resource_filename(resource)
+        self._set_renku_url(resource)
 
         dataset = tk.get_action("package_show")(context, {"id": resource["package_id"]})
         existing_names = [r["name"] for r in dataset["resources"]]
@@ -757,6 +779,7 @@ class StadtzhThemePlugin(
 
     def before_resource_update(self, context, current, resource):
         self._set_resource_filename(resource)
+        self._set_renku_url(resource)
 
     # IClick
 
