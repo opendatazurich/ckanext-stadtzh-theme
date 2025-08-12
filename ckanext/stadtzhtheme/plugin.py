@@ -751,10 +751,10 @@ class StadtzhThemePlugin(
 
     def _set_renku_url(self, resource):
         if not resource.get("markdown_snippet"):
-            package_name = resource.get("package_id"),
-            resource_id = resource.get("id"),
-            file_format = resource.get("format"),
-            download_url = resource.get("url"),
+            package_name = (resource.get("package_id"),)
+            resource_id = (resource.get("id"),)
+            file_format = (resource.get("format"),)
+            download_url = (resource.get("url"),)
             renku_session_id = tk.config.get(
                 "ckanext.stadtzhtheme.renku_session_id", ""
             )
