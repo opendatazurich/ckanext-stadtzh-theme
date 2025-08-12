@@ -73,3 +73,9 @@ class TestPlugin(object):
 
         assert "Aktualisierungs&shy;datum" not in response, response
         assert "Date last updated" in response, response
+
+    def test_markdown_snippet_csv_value(self):
+        resource = factories.Resource(format="CSV", description="My super CSV")
+        assert resource.get("format") == "CSV"
+        assert resource.get("markdown_snippet")
+        assert "renku" in resource.get("markdown_snippet")
