@@ -753,10 +753,10 @@ class StadtzhThemePlugin(
         if resource.get("markdown_snippet"):
             return resource
         else:
-            package_id = (resource.get("package_id"),)
-            resource_id = (resource.get("id"),)
-            file_format = (resource.get("format"),)
-            download_url = (resource.get("url"),)
+            package_id = resource.get("package_id")
+            resource_id = resource.get("id")
+            file_format = resource.get("format")
+            download_url = resource.get("url")
             renku_session_id = tk.config.get(
                 "ckanext.stadtzhtheme.renku_session_id", ""
             )
