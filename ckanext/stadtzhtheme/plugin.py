@@ -752,34 +752,32 @@ class StadtzhThemePlugin(
     def _set_markdown_snippet_text(self, resource):
         if resource.get("markdown_snippet"):
             return resource
-        else:
-            package_id = resource.get("package_id")
-            resource_id = resource.get("id")
-            file_format = resource.get("format")
-            download_url = resource.get("url")
-            renku_session_id = tk.config.get(
-                "ckanext.stadtzhtheme.renku_session_id", ""
-            )
 
-            if resource.get("format").lower() == "geojson":
-                resource["markdown_snippet"] = RENKU_MARKDOWN.format(
-                    renku_session_id=renku_session_id,
-                    package_id=package_id,
-                    resource_id=resource_id,
-                    file_format=file_format,
-                    download_url=download_url,
-                )
-            elif resource.get("format").lower() in [
-                "csv",
-                "parquet",
-            ]:
-                resource["markdown_snippet"] = RENKU_WITH_SQL_MARKDOWN.format(
-                    renku_session_id=renku_session_id,
-                    package_id=package_id,
-                    resource_id=resource_id,
-                    file_format=file_format,
-                    download_url=download_url,
-                )
+        package_id = resource.get("package_id")
+        resource_id = resource.get("id")
+        file_format = resource.get("format")
+        download_url = resource.get("url")
+        renku_session_id = tk.config.get("ckanext.stadtzhtheme.renku_session_id", "")
+
+        if resource.get("format").lower() == "geojson":
+            resource["markdown_snippet"] = RENKU_MARKDOWN.format(
+                renku_session_id=renku_session_id,
+                package_id=package_id,
+                resource_id=resource_id,
+                file_format=file_format,
+                download_url=download_url,
+            )
+        elif resource.get("format").lower() in [
+            "csv",
+            "parquet",
+        ]:
+            resource["markdown_snippet"] = RENKU_WITH_SQL_MARKDOWN.format(
+                renku_session_id=renku_session_id,
+                package_id=package_id,
+                resource_id=resource_id,
+                file_format=file_format,
+                download_url=download_url,
+            )
 
     def before_resource_create(self, context, resource):
         self._set_resource_filename(resource)
