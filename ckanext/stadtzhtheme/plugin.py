@@ -764,10 +764,10 @@ class StadtzhThemePlugin(
             if resource.get("format").lower() == "geojson":
                 resource["markdown_snippet"] = RENKU_MARKDOWN.format(
                     renku_session_id=renku_session_id,
-                    package_name=resource.get("package_id"),
-                    resource_id=resource.get("id"),
-                    file_format=resource.get("format"),
-                    download_url=resource.get("url"),
+                    package_name=package_name,
+                    resource_id=resource_id,
+                    file_format=file_format,
+                    download_url=download_url,
                 )
             elif resource.get("format").lower() in [
                 "csv",
