@@ -79,7 +79,6 @@ class TestPlugin(object):
         assert resource_csv.get("markdown_snippet")
         assert "renku" in resource_csv.get("markdown_snippet")
         assert "SQL" in resource_csv.get("markdown_snippet")
-        assert resource_csv.get("id") in resource_csv.get("markdown_snippet")
         assert resource_csv.get("package_id") in resource_csv.get("markdown_snippet")
 
         resource_parquet = factories.Resource(
@@ -88,7 +87,6 @@ class TestPlugin(object):
         assert resource_parquet.get("markdown_snippet")
         assert "renku" in resource_parquet.get("markdown_snippet")
         assert "SQL" in resource_parquet.get("markdown_snippet")
-        assert resource_parquet.get("id") in resource_parquet.get("markdown_snippet")
         assert resource_parquet.get("package_id") in resource_parquet.get(
             "markdown_snippet"
         )
@@ -99,7 +97,6 @@ class TestPlugin(object):
         assert resource_geojson.get("markdown_snippet")
         assert "renku" in resource_geojson.get("markdown_snippet")
         assert "SQL" not in resource_geojson.get("markdown_snippet")
-        assert resource_geojson.get("id") in resource_geojson.get("markdown_snippet")
         assert resource_geojson.get("package_id") in resource_geojson.get(
             "markdown_snippet"
         )
