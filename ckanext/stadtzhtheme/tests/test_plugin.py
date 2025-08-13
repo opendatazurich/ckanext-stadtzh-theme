@@ -94,7 +94,7 @@ class TestPlugin(object):
         assert "renku" in resource_geojson.get("markdown_snippet")
         assert "SQL" not in resource_geojson.get("markdown_snippet")
 
-        resource_xml = factories.Resource(title="No format", format="XML")
+        resource_xml = factories.Resource(title="My super XML", format="XML")
         assert not resource_xml.get("markdown_snippet")
 
         resource_no_format = factories.Resource(title="No format", format="")
