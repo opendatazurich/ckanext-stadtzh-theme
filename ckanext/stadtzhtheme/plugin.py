@@ -750,7 +750,9 @@ class StadtzhThemePlugin(
                 resource["filename"] = os.path.basename(upload.filename)
 
     def _set_markdown_snippet_text(self, resource):
-        if not resource.get("markdown_snippet"):
+        if resource.get("markdown_snippet"):
+            return resource
+        else:
             package_name = (resource.get("package_id"),)
             resource_id = (resource.get("id"),)
             file_format = (resource.get("format"),)
