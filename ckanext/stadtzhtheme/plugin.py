@@ -759,7 +759,7 @@ class StadtzhThemePlugin(
         download_url = resource.get("url")
         renku_session_id = tk.config.get("ckanext.stadtzhtheme.renku_session_id", "")
 
-        if resource.get("format").lower() == "geojson":
+        if resource.get("url").lower().endswith("geojson_link"):
             resource["markdown_snippet"] = RENKU_MARKDOWN.format(
                 renku_session_id=renku_session_id,
                 package_id=package_id,
@@ -767,10 +767,16 @@ class StadtzhThemePlugin(
                 file_format=file_format,
                 download_url=download_url,
             )
-        elif resource.get("format").lower() in [
-            "csv",
-            "parquet",
-        ]:
+        elif (
+            resource.get("url")
+            .lower()
+            .endswith(
+                (
+                    "csv",
+                    "parquet",
+                )
+            )
+        ):
             resource["markdown_snippet"] = RENKU_WITH_SQL_MARKDOWN.format(
                 renku_session_id=renku_session_id,
                 package_id=package_id,
