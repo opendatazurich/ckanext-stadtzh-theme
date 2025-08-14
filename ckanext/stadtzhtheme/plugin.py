@@ -68,6 +68,7 @@ def create_updateInterval():
 
 def updateInterval():
     """Return the list of intervals from the updateInterval vocabulary."""
+    create_updateInterval()
     try:
         updateInterval = tk.get_action("tag_list")(
             data_dict={"vocabulary_id": "updateInterval"}
@@ -101,6 +102,7 @@ def create_dataType():
 
 def dataType():
     """Return the list of intervals from the dataType vocabulary."""
+    create_dataType()
     try:
         dataType = tk.get_action("tag_list")(data_dict={"vocabulary_id": "dataType"})
         return dataType
@@ -224,7 +226,6 @@ class StadtzhThemePlugin(
     plugins.SingletonPlugin, tk.DefaultDatasetForm, DefaultTranslation
 ):
     plugins.implements(plugins.IClick)
-    plugins.implements(plugins.IConfigurable)
     plugins.implements(plugins.IConfigurer, inherit=False)
     plugins.implements(plugins.IDatasetForm, inherit=False)
     plugins.implements(plugins.ITranslation, inherit=False)
@@ -235,11 +236,6 @@ class StadtzhThemePlugin(
     plugins.implements(plugins.IActions, inherit=True)
     plugins.implements(xi.IXloader, inherit=True)
     plugins.implements(plugins.IResourceController, inherit=True)
-
-    def configure(self, config):
-        # create vocabularies if necessary
-        create_updateInterval()
-        create_dataType()
 
     def update_config(self, config):
         try:
