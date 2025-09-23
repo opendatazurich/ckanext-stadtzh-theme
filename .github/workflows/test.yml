@@ -69,11 +69,10 @@ jobs:
       run: |
         # Replace default path to CKAN core config file with the one on the container
         sed -i -e 's/use = config:.*/use = config:\/srv\/app\/src\/ckan\/test-core.ini/' test.ini
-    - name: Setup extension
+    - name: Init database
       run: |
-        ckan config-tool test.ini "ckan.plugins = "
         ckan -c test.ini db init
-        ckan config-tool test.ini "ckan.plugins = stadtzhtheme showcase"
+        ckan -c test.ini db pending-migrations --apply
     - name: Compile catalogue
       run: |
         python3 setup.py compile_catalog
