@@ -4,10 +4,10 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
       - name: Install requirements
-        run: pip install flake8 pycodestyle black isort
+        run: pip install -r dev-requirements.txt
       - name: Check syntax
         run: flake8 . --count --select=C901,E901,E999,F401,F821,F822,F823 --show-source --statistics --extend-exclude ckan
       - name: Check codestyle
@@ -19,7 +19,7 @@ jobs:
     needs: lint
     strategy:
       matrix:
-        ckan-version: ["2.10"]
+        ckan-version: ["2.11"]
       fail-fast: false
 
     name: CKAN ${{ matrix.ckan-version }}
@@ -48,7 +48,7 @@ jobs:
       CKAN_REDIS_URL: redis://redis:6379/1
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v5
     - name: Install requirements
       run: |
         pip install -r pip-requirements.txt
