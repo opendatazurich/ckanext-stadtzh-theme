@@ -4,10 +4,10 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
       - name: Install requirements
-        run: pip install flake8 pycodestyle black isort
+        run: pip install -r dev-requirements.txt
       - name: Check syntax
         run: flake8 . --count --select=C901,E901,E999,F401,F821,F822,F823 --show-source --statistics --extend-exclude ckan
       - name: Check codestyle
@@ -19,16 +19,17 @@ jobs:
     needs: lint
     strategy:
       matrix:
-        ckan-version: ["2.10"]
+        ckan-version: ["2.11"]
       fail-fast: false
 
     name: CKAN ${{ matrix.ckan-version }}
     runs-on: ubuntu-latest
     container:
-      image: openknowledge/ckan-dev:${{ matrix.ckan-version }}
+      image: ckan/ckan-dev:${{ matrix.ckan-version }}
+      options: --user root
     services:
       solr:
-        image: ckan/ckan-solr:${{ matrix.ckan-version }}
+        image: ckan/ckan-solr:${{ matrix.ckan-version }}-solr9
       postgres:
         image: ckan/ckan-postgres-dev:${{ matrix.ckan-version }}
         env:
@@ -48,7 +49,7 @@ jobs:
       CKAN_REDIS_URL: redis://redis:6379/1
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v5
     - name: Install requirements
       run: |
         pip install -r pip-requirements.txt
@@ -68,11 +69,10 @@ jobs:
       run: |
         # Replace default path to CKAN core config file with the one on the container
         sed -i -e 's/use = config:.*/use = config:\/srv\/app\/src\/ckan\/test-core.ini/' test.ini
-    - name: Setup extension
+    - name: Init database
       run: |
-        ckan config-tool test.ini "ckan.plugins = "
         ckan -c test.ini db init
-        ckan config-tool test.ini "ckan.plugins = stadtzhtheme showcase"
+        ckan -c test.ini db pending-migrations --apply
     - name: Compile catalogue
       run: |
         python3 setup.py compile_catalog

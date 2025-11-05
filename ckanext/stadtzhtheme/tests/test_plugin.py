@@ -1,3 +1,5 @@
+from urllib.parse import quote
+
 import pytest
 from ckan.lib.helpers import url_for
 from ckan.tests import factories, helpers
@@ -157,3 +159,17 @@ class TestPlugin(object):
         assert resource_vanilla.get("markdown_snippet")
         assert "renku" in resource_vanilla.get("markdown_snippet")
         assert "SQL" in resource_vanilla.get("markdown_snippet")
+
+    def test_markdown_snippet_value_encoding(self):
+        download_url = "https://download-url.ch/download/hystreet_fussgaengerfrequenzen_seit2021.parquet"
+        download_url_encoded = quote(
+            "https://download-url.ch/download/hystreet_fussgaengerfrequenzen_seit2021.parquet",
+            safe="",
+        )
+        resource_csv = factories.Resource(
+            url=download_url, description="My super parquet"
+        )
+        assert resource_csv.get("markdown_snippet")
+        assert "SQL" in resource_csv.get("markdown_snippet")
+        assert download_url_encoded in resource_csv.get("markdown_snippet")
+        assert download_url not in resource_csv.get("markdown_snippet")

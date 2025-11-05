@@ -1,4 +1,4 @@
-ckanapi==4.6
-ckantoolkit>=0.0.2
-pyyaml==6.0.1
+ckanapi==4.8
+ckantoolkit==0.0.7
+pyyaml==6.0.2
 validate_email==1.3

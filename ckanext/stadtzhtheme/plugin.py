@@ -5,6 +5,7 @@ import logging
 import os.path
 import re
 from datetime import datetime
+from urllib.parse import quote
 
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as tk
@@ -68,6 +69,7 @@ def create_updateInterval():
 
 def updateInterval():
     """Return the list of intervals from the updateInterval vocabulary."""
+    create_updateInterval()
     try:
         updateInterval = tk.get_action("tag_list")(
             data_dict={"vocabulary_id": "updateInterval"}
@@ -101,6 +103,7 @@ def create_dataType():
 
 def dataType():
     """Return the list of intervals from the dataType vocabulary."""
+    create_dataType()
     try:
         dataType = tk.get_action("tag_list")(data_dict={"vocabulary_id": "dataType"})
         return dataType
@@ -224,7 +227,6 @@ class StadtzhThemePlugin(
     plugins.SingletonPlugin, tk.DefaultDatasetForm, DefaultTranslation
 ):
     plugins.implements(plugins.IClick)
-    plugins.implements(plugins.IConfigurable)
     plugins.implements(plugins.IConfigurer, inherit=False)
     plugins.implements(plugins.IDatasetForm, inherit=False)
     plugins.implements(plugins.ITranslation, inherit=False)
@@ -235,11 +237,6 @@ class StadtzhThemePlugin(
     plugins.implements(plugins.IActions, inherit=True)
     plugins.implements(xi.IXloader, inherit=True)
     plugins.implements(plugins.IResourceController, inherit=True)
-
-    def configure(self, config):
-        # create vocabularies if necessary
-        create_updateInterval()
-        create_dataType()
 
     def update_config(self, config):
         try:
@@ -756,7 +753,7 @@ class StadtzhThemePlugin(
         package_id = resource.get("package_id")
         resource_id = resource.get("id")
         file_format = resource.get("format")
-        download_url = resource.get("url")
+        download_url = quote(resource.get("url"), safe="")
         renku_session_id = tk.config.get("ckanext.stadtzhtheme.renku_session_id", "")
 
         if resource.get("url").lower().endswith("geojson_link"):
