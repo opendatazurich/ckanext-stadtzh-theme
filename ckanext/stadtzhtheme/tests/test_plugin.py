@@ -1,3 +1,5 @@
+from urllib.parse import quote
+
 import pytest
 from ckan.lib.helpers import url_for
 from ckan.tests import factories, helpers
@@ -75,14 +77,16 @@ class TestPlugin(object):
         assert "Date last updated" in response, response
 
     def test_markdown_snippet_value(self):
-        resource_csv = factories.Resource(format="CSV", description="My super CSV")
+        resource_csv = factories.Resource(
+            url="https://download-url.ch/file.csv", description="My super CSV"
+        )
         assert resource_csv.get("markdown_snippet")
         assert "renku" in resource_csv.get("markdown_snippet")
         assert "SQL" in resource_csv.get("markdown_snippet")
         assert resource_csv.get("package_id") in resource_csv.get("markdown_snippet")
 
         resource_parquet = factories.Resource(
-            format="parquet", description="My super parquet"
+            url="https://download-url.ch/file.parquet", description="My super parquet"
         )
         assert resource_parquet.get("markdown_snippet")
         assert "renku" in resource_parquet.get("markdown_snippet")
@@ -92,7 +96,8 @@ class TestPlugin(object):
         )
 
         resource_geojson = factories.Resource(
-            format="geoJSON", description="My super geoJSON"
+            url="https://download-url.ch?format=geojson_link",
+            description="My super geoJSON",
         )
         assert resource_geojson.get("markdown_snippet")
         assert "renku" in resource_geojson.get("markdown_snippet")
@@ -101,21 +106,25 @@ class TestPlugin(object):
             "markdown_snippet"
         )
 
-        resource_xml = factories.Resource(title="My super XML", format="XML")
+        resource_xml = factories.Resource(
+            title="My super XML", url="https://download-url.ch/file.xml"
+        )
         assert not resource_xml.get("markdown_snippet")
 
-        resource_no_format = factories.Resource(title="No format", format="")
+        resource_no_format = factories.Resource(
+            title="No format", url="https://download-url.ch/"
+        )
         assert not resource_no_format.get("markdown_snippet")
 
     def test_markdown_snippet_value_on_resource_updates(self):
 
-        resource_vanilla = factories.Resource(title="No format", id="vanilla-resource")
+        resource_vanilla = factories.Resource(title="No format")
 
         resource_vanilla = helpers.call_action(
             "resource_patch",
             id=resource_vanilla.get("id"),
             description="TXT Resource with markdown_snippet text",
-            format="TXT",
+            url="https://download-url.ch.txt",
         )
         assert not resource_vanilla.get("markdown_snippet")
 
@@ -124,7 +133,7 @@ class TestPlugin(object):
             id=resource_vanilla.get("id"),
             description="TXT Resource with markdown_snippet text",
             markdown_snippet="This placeholder should not be overwritten.",
-            format="TXT",
+            url="https://download-url.ch/file.TXT",
         )
         assert resource_vanilla.get("markdown_snippet")
         assert "This placeholder should not be overwritten." in resource_vanilla.get(
@@ -135,7 +144,7 @@ class TestPlugin(object):
             "resource_patch",
             id=resource_vanilla.get("id"),
             description="CSV Resource with markdown_snippet text",
-            format="CSV",
+            url="https://download-url.ch/file.csv",
         )
         assert "This placeholder should not be overwritten." in resource_vanilla.get(
             "markdown_snippet"
@@ -150,3 +159,17 @@ class TestPlugin(object):
         assert resource_vanilla.get("markdown_snippet")
         assert "renku" in resource_vanilla.get("markdown_snippet")
         assert "SQL" in resource_vanilla.get("markdown_snippet")
+
+    def test_markdown_snippet_value_encoding(self):
+        download_url = "https://download-url.ch/download/hystreet_fussgaengerfrequenzen_seit2021.parquet"
+        download_url_encoded = quote(
+            "https://download-url.ch/download/hystreet_fussgaengerfrequenzen_seit2021.parquet",
+            safe="",
+        )
+        resource_csv = factories.Resource(
+            url=download_url, description="My super parquet"
+        )
+        assert resource_csv.get("markdown_snippet")
+        assert "SQL" in resource_csv.get("markdown_snippet")
+        assert download_url_encoded in resource_csv.get("markdown_snippet")
+        assert download_url not in resource_csv.get("markdown_snippet")
