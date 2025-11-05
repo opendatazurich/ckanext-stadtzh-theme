@@ -1,6 +1,6 @@
 import pytest
 from ckan.lib.helpers import url_for
-from ckan.tests import factories
+from ckan.tests import factories, helpers
 
 import ckanext.stadtzhtheme.plugin as plugin
 
@@ -73,3 +73,80 @@ class TestPlugin(object):
 
         assert "Aktualisierungs&shy;datum" not in response, response
         assert "Date last updated" in response, response
+
+    def test_markdown_snippet_value(self):
+        resource_csv = factories.Resource(format="CSV", description="My super CSV")
+        assert resource_csv.get("markdown_snippet")
+        assert "renku" in resource_csv.get("markdown_snippet")
+        assert "SQL" in resource_csv.get("markdown_snippet")
+        assert resource_csv.get("package_id") in resource_csv.get("markdown_snippet")
+
+        resource_parquet = factories.Resource(
+            format="parquet", description="My super parquet"
+        )
+        assert resource_parquet.get("markdown_snippet")
+        assert "renku" in resource_parquet.get("markdown_snippet")
+        assert "SQL" in resource_parquet.get("markdown_snippet")
+        assert resource_parquet.get("package_id") in resource_parquet.get(
+            "markdown_snippet"
+        )
+
+        resource_geojson = factories.Resource(
+            format="geoJSON", description="My super geoJSON"
+        )
+        assert resource_geojson.get("markdown_snippet")
+        assert "renku" in resource_geojson.get("markdown_snippet")
+        assert "SQL" not in resource_geojson.get("markdown_snippet")
+        assert resource_geojson.get("package_id") in resource_geojson.get(
+            "markdown_snippet"
+        )
+
+        resource_xml = factories.Resource(title="My super XML", format="XML")
+        assert not resource_xml.get("markdown_snippet")
+
+        resource_no_format = factories.Resource(title="No format", format="")
+        assert not resource_no_format.get("markdown_snippet")
+
+    def test_markdown_snippet_value_on_resource_updates(self):
+
+        resource_vanilla = factories.Resource(title="No format", id="vanilla-resource")
+
+        resource_vanilla = helpers.call_action(
+            "resource_patch",
+            id=resource_vanilla.get("id"),
+            description="TXT Resource with markdown_snippet text",
+            format="TXT",
+        )
+        assert not resource_vanilla.get("markdown_snippet")
+
+        resource_vanilla = helpers.call_action(
+            "resource_patch",
+            id=resource_vanilla.get("id"),
+            description="TXT Resource with markdown_snippet text",
+            markdown_snippet="This placeholder should not be overwritten.",
+            format="TXT",
+        )
+        assert resource_vanilla.get("markdown_snippet")
+        assert "This placeholder should not be overwritten." in resource_vanilla.get(
+            "markdown_snippet"
+        )
+
+        resource_vanilla = helpers.call_action(
+            "resource_patch",
+            id=resource_vanilla.get("id"),
+            description="CSV Resource with markdown_snippet text",
+            format="CSV",
+        )
+        assert "This placeholder should not be overwritten." in resource_vanilla.get(
+            "markdown_snippet"
+        )
+
+        resource_vanilla = helpers.call_action(
+            "resource_patch",
+            id=resource_vanilla.get("id"),
+            description="CSV Resource without markdown_snippet text",
+            markdown_snippet="",
+        )
+        assert resource_vanilla.get("markdown_snippet")
+        assert "renku" in resource_vanilla.get("markdown_snippet")
+        assert "SQL" in resource_vanilla.get("markdown_snippet")

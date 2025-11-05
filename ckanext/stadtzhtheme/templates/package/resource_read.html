@@ -10,6 +10,11 @@
     {% endif %}
   {% endblock %}
   <div class="prose notes" property="rdfs:label">
+    {% if res.markdown_snippet %}
+    <div class="snippet">
+      {{ h.render_markdown(res.markdown_snippet) }}
+    </div>
+    {% endif %}
 
     {% set descriptions = h.get_resource_descriptions(res) %}
     {% if descriptions %}
