@@ -757,9 +757,13 @@ class StadtzhThemePlugin(
         file_format = resource.get("format")
 
         download_url_for_sql = quote(resource.get("url"), safe="").replace("-", "%20")
-        frontend_url_for_sql = quote(tk.config.get("ckanext.stadtzhtheme.frontend_url", ""), safe="").replace("-", "%20")
+        frontend_url_for_sql = quote(
+            tk.config.get("ckanext.stadtzhtheme.frontend_url", ""), safe=""
+        ).replace("-", "%20")
         renku_session_id = tk.config.get("ckanext.stadtzhtheme.renku_session_id", "")
-        renku_session_id_r = tk.config.get("ckanext.stadtzhtheme.renku_session_id_r", "")
+        renku_session_id_r = tk.config.get(
+            "ckanext.stadtzhtheme.renku_session_id_r", ""
+        )
 
         if resource.get("url").lower().endswith("geojson_link"):
             resource["markdown_snippet"] = RENKU_MARKDOWN.format(
