@@ -161,11 +161,11 @@ class TestPlugin(object):
         assert "SQL" in resource_vanilla.get("markdown_snippet")
 
     def test_markdown_snippet_value_encoding(self):
-        download_url = "https://download-url.ch/download/hystreet_fussgaengerfrequenzen_seit2021.parquet"
+        download_url = "https://downloadurl.ch/download/hystreet_fussgaengerfrequenzen_seit2021.parquet"
         download_url_encoded = quote(
-            "https://download-url.ch/download/hystreet_fussgaengerfrequenzen_seit2021.parquet",
+            "https://downloadurl.ch/download/hystreet_fussgaengerfrequenzen_seit2021.parquet",
             safe="",
-        )
+        ).replace("-", "%20")
         resource_csv = factories.Resource(
             url=download_url, description="My super parquet"
         )
