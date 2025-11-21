@@ -173,3 +173,17 @@ class TestPlugin(object):
         assert "SQL" in resource_csv.get("markdown_snippet")
         assert download_url_encoded in resource_csv.get("markdown_snippet")
         assert download_url not in resource_csv.get("markdown_snippet")
+
+    def test_markdown_snippet_value_encoding_with_dash(self):
+        download_url = "https://download-url.ch/download/some-id-with-dashes.parquet"
+        download_url_encoded = quote(
+            "https://download-url.ch/download/some-id-with-dashes.parquet",
+            safe="",
+        ).replace("-", "%20")
+        resource_csv = factories.Resource(
+            url=download_url, description="My super parquet"
+        )
+        assert resource_csv.get("markdown_snippet")
+        assert "SQL" in resource_csv.get("markdown_snippet")
+        assert download_url_encoded in resource_csv.get("markdown_snippet")
+        assert download_url not in resource_csv.get("markdown_snippet")
