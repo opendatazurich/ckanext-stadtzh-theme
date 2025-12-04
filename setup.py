@@ -14,7 +14,7 @@ setup(
     author="Liip AG",
     author_email="ogd@liip.ch",
     url="http://www.liip.ch/",
-    license="GPL",
+    license="AGPL-3.0-or-later",
     packages=find_packages(exclude=["ez_setup", "examples", "tests"]),
     namespace_packages=["ckanext", "ckanext.stadtzhtheme"],
     include_package_data=True,
