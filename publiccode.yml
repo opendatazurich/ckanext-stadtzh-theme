@@ -22,7 +22,7 @@ description:
   en:
     localisedName: ckanext-stadtzh-theme
     shortDescription: CKAN extension implementing theme for the OGD portal of the City of Zurich (https://data.stadt-zuerich.ch/)
-    longDescription: ckanext-stadtzh-theme is a plugin/extension for CKAN, based on ckanext-scheming (https://github.com/ckan/ckanext-scheming), that implements the theme for the OGD portal (https://data.stadt-zuerich.ch/) of the City of Zurich.
+    longDescription: ckanext-stadtzh-theme is a plugin/extension for CKAN, that implements the theme for the OGD portal (https://data.stadt-zuerich.ch/) of the City of Zurich.
     features:
       - implementing theme for the OGD portal of the City of Zurich
       - implementing DCAT profile
