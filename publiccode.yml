@@ -30,7 +30,7 @@ description:
       - cleanup file storage command
       - autosuggestion
 legal:
-  license: GPL-3.0-only
+  license: AGPL-3.0-or-later
 maintenance:
   type: contract
   contractors:
