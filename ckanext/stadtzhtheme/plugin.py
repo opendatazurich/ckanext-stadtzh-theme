@@ -747,11 +747,11 @@ class StadtzhThemePlugin(
             if upload.filename:
                 resource["filename"] = os.path.basename(upload.filename)
 
-    def _set_markdown_snippet_text(self, resource):
+    def _set_markdown_snippet_text(self, resource, dataset_slug):
         if resource.get("markdown_snippet"):
             return resource
 
-        package_id = resource.get("package_id")
+        package_id = dataset_slug if dataset_slug else resource.get("package_id")
         package_id_urlized = resource.get("package_id").replace("-", "%20")
         resource_id = resource.get("id")
         file_format = resource.get("format")
@@ -795,18 +795,21 @@ class StadtzhThemePlugin(
             )
 
     def before_resource_create(self, context, resource):
-        self._set_resource_filename(resource)
-        self._set_markdown_snippet_text(resource)
-
         dataset = tk.get_action("package_show")(context, {"id": resource["package_id"]})
+        dataset_slug = dataset.get("name")
+        self._set_resource_filename(resource)
+        self._set_markdown_snippet_text(resource, dataset_slug)
+
         existing_names = [r["name"] for r in dataset["resources"]]
         if resource["name"] in existing_names:
             msg = 'The resource name "{0}" is already in use'.format(resource["name"])
             raise tk.ValidationError({"resources": msg})
 
     def before_resource_update(self, context, current, resource):
+        dataset = tk.get_action("package_show")(context, {"id": resource["package_id"]})
+        dataset_slug = dataset.get("name")
         self._set_resource_filename(resource)
-        self._set_markdown_snippet_text(resource)
+        self._set_markdown_snippet_text(resource, dataset_slug)
 
     # IClick
 
