@@ -80,9 +80,7 @@ class TestPlugin(object):
         resource_csv = factories.Resource(
             url="https://download-url.ch/file.csv", description="My super CSV"
         )
-        dataset_csv = helpers.call_action(
-            "package_show", id=resource_csv["package_id"]
-        )
+        dataset_csv = helpers.call_action("package_show", id=resource_csv["package_id"])
         assert resource_csv.get("markdown_snippet")
         assert "renku" in resource_csv.get("markdown_snippet")
         assert "SQL" in resource_csv.get("markdown_snippet")
@@ -97,9 +95,7 @@ class TestPlugin(object):
         assert resource_parquet.get("markdown_snippet")
         assert "renku" in resource_parquet.get("markdown_snippet")
         assert "SQL" in resource_parquet.get("markdown_snippet")
-        assert dataset_parquet.get("name") in resource_parquet.get(
-            "markdown_snippet"
-        )
+        assert dataset_parquet.get("name") in resource_parquet.get("markdown_snippet")
 
         resource_geojson = factories.Resource(
             url="https://download-url.ch?format=geojson_link",
@@ -111,9 +107,7 @@ class TestPlugin(object):
         assert resource_geojson.get("markdown_snippet")
         assert "renku" in resource_geojson.get("markdown_snippet")
         assert "SQL" not in resource_geojson.get("markdown_snippet")
-        assert dataset_geojson.get("name") in resource_geojson.get(
-            "markdown_snippet"
-        )
+        assert dataset_geojson.get("name") in resource_geojson.get("markdown_snippet")
 
         resource_xml = factories.Resource(
             title="My super XML", url="https://download-url.ch/file.xml"
