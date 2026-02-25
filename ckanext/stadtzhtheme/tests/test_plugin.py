@@ -80,18 +80,24 @@ class TestPlugin(object):
         resource_csv = factories.Resource(
             url="https://download-url.ch/file.csv", description="My super CSV"
         )
+        dataset_csv = helpers.call_action(
+            "package_show", id=resource_csv["package_id"]
+        )
         assert resource_csv.get("markdown_snippet")
         assert "renku" in resource_csv.get("markdown_snippet")
         assert "SQL" in resource_csv.get("markdown_snippet")
-        assert resource_csv.get("package_id") in resource_csv.get("markdown_snippet")
+        assert dataset_csv.get("name") in resource_csv.get("markdown_snippet")
 
         resource_parquet = factories.Resource(
             url="https://download-url.ch/file.parquet", description="My super parquet"
         )
+        dataset_parquet = helpers.call_action(
+            "package_show", id=resource_parquet["package_id"]
+        )
         assert resource_parquet.get("markdown_snippet")
         assert "renku" in resource_parquet.get("markdown_snippet")
         assert "SQL" in resource_parquet.get("markdown_snippet")
-        assert resource_parquet.get("package_id") in resource_parquet.get(
+        assert dataset_parquet.get("name") in resource_parquet.get(
             "markdown_snippet"
         )
 
@@ -99,10 +105,13 @@ class TestPlugin(object):
             url="https://download-url.ch?format=geojson_link",
             description="My super geoJSON",
         )
+        dataset_geojson = helpers.call_action(
+            "package_show", id=resource_geojson["package_id"]
+        )
         assert resource_geojson.get("markdown_snippet")
         assert "renku" in resource_geojson.get("markdown_snippet")
         assert "SQL" not in resource_geojson.get("markdown_snippet")
-        assert resource_geojson.get("package_id") in resource_geojson.get(
+        assert dataset_geojson.get("name") in resource_geojson.get(
             "markdown_snippet"
         )
 
