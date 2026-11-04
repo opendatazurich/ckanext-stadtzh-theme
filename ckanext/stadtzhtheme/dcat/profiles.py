@@ -90,6 +90,14 @@ mapping_accrualPeriodicity = {
     "sporadisch oder unregelmaessig": "http://purl.org/cld/freq/irregular",
 }
 
+# Mapping of the values of spatialRelationship to URIs exported as dct:spatial.
+# Values not listed here are not exported.
+mapping_spatial = {
+    "Stadt Zürich": "https://ld.stadt-zuerich.ch/statistics/code/R30000",
+    "Kanton Zürich": "https://ld.stadt-zuerich.ch/statistics/code/ORT00ZH",
+    "Schweiz": "https://ld.stadt-zuerich.ch/statistics/code/LND1000",
+}
+
 # Supported formats of timeRange (hyphen or en dash, optional whitespace):
 #   yyyy
 #   yyyy - yyyy
@@ -228,6 +236,9 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
             # Temporal
             self._add_temporal(dataset_dict, dataset_ref, g)
 
+            # Spatial
+            self._add_spatial(dataset_dict, dataset_ref, g)
+
             # Themes
             self._add_groups(dataset_dict, dataset_ref, g)
 
@@ -302,6 +313,14 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
             )
         )
         g.add((dataset_ref, DCT.temporal, temporal_extent))
+
+    def _add_spatial(self, dataset_dict, dataset_ref, g):
+        spatial = self._get_dataset_value(dataset_dict, "spatialRelationship")
+        if not spatial:
+            return
+        spatial_uri = mapping_spatial.get(spatial.strip())
+        if spatial_uri:
+            g.add((dataset_ref, DCT.spatial, URIRef(spatial_uri)))
 
     def _add_groups(self, dataset_dict, dataset_ref, g):
         groups = self._get_dataset_value(dataset_dict, "groups", [])

@@ -101,3 +101,25 @@ def test_graph_temporal_from_extras():
     )
 
     assert len(list(g.objects(DATASET_URI, DCT.temporal))) == 1
+
+
+@pytest.mark.parametrize(
+    "spatial, expected_uri",
+    [
+        ("Stadt Zürich", "https://ld.stadt-zuerich.ch/statistics/code/R30000"),
+        ("Stadt Zürich ", "https://ld.stadt-zuerich.ch/statistics/code/R30000"),
+        ("Kanton Zürich", "https://ld.stadt-zuerich.ch/statistics/code/ORT00ZH"),
+        ("Schweiz", "https://ld.stadt-zuerich.ch/statistics/code/LND1000"),
+    ],
+)
+def test_graph_spatial(spatial, expected_uri):
+    g = _graph_from_dataset(_dataset_dict(spatialRelationship=spatial))
+
+    assert list(g.objects(DATASET_URI, DCT.spatial)) == [URIRef(expected_uri)]
+
+
+@pytest.mark.parametrize("spatial", [None, "", "Metropolregion Zürich", "Europa"])
+def test_graph_spatial_unmapped(spatial):
+    g = _graph_from_dataset(_dataset_dict(spatialRelationship=spatial))
+
+    assert list(g.objects(DATASET_URI, DCT.spatial)) == []
