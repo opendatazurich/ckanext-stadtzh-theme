@@ -91,11 +91,12 @@ mapping_accrualPeriodicity = {
 }
 
 # Mapping of the values of spatialRelationship to URIs exported as dct:spatial.
+# DCAT-AP CH 3.0.0 recommends LINDAS resources for dct:spatial.
 # Values not listed here are not exported.
 mapping_spatial = {
-    "Stadt Zürich": "https://ld.stadt-zuerich.ch/statistics/code/R30000",
-    "Kanton Zürich": "https://ld.stadt-zuerich.ch/statistics/code/ORT00ZH",
-    "Schweiz": "https://ld.stadt-zuerich.ch/statistics/code/LND1000",
+    "Stadt Zürich": "https://ld.admin.ch/municipality/261",
+    "Kanton Zürich": "https://ld.admin.ch/canton/1",
+    "Schweiz": "https://ld.admin.ch/country/CHE",
 }
 
 # Supported formats of timeRange (hyphen or en dash, optional whitespace):

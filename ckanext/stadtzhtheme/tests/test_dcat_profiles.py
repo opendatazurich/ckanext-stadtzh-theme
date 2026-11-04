@@ -138,10 +138,10 @@ def test_schemaorg_temporal_coverage_unsupported_format():
 @pytest.mark.parametrize(
     "spatial, expected_uri",
     [
-        ("Stadt Zürich", "https://ld.stadt-zuerich.ch/statistics/code/R30000"),
-        ("Stadt Zürich ", "https://ld.stadt-zuerich.ch/statistics/code/R30000"),
-        ("Kanton Zürich", "https://ld.stadt-zuerich.ch/statistics/code/ORT00ZH"),
-        ("Schweiz", "https://ld.stadt-zuerich.ch/statistics/code/LND1000"),
+        ("Stadt Zürich", "https://ld.admin.ch/municipality/261"),
+        ("Stadt Zürich ", "https://ld.admin.ch/municipality/261"),
+        ("Kanton Zürich", "https://ld.admin.ch/canton/1"),
+        ("Schweiz", "https://ld.admin.ch/country/CHE"),
     ],
 )
 def test_graph_spatial(spatial, expected_uri):
