@@ -5,6 +5,8 @@ from rdflib.namespace import RDF, XSD
 from ckanext.stadtzhtheme.dcat.profiles import (
     DCAT,
     DCT,
+    SCHEMA,
+    StadtzhSchemaOrgProfile,
     StadtzhSwissDcatProfile,
     parse_time_range,
 )
@@ -111,6 +113,26 @@ def test_graph_temporal_from_extras():
     )
 
     assert len(list(g.objects(DATASET_URI, DCT.temporal))) == 1
+
+
+def _schemaorg_temporal_coverage(dataset_dict):
+    g = Graph()
+    StadtzhSchemaOrgProfile(g)._temporal_graph(DATASET_URI, dataset_dict)
+    return list(g.objects(DATASET_URI, SCHEMA.temporalCoverage))
+
+
+def test_schemaorg_temporal_coverage():
+    coverage = _schemaorg_temporal_coverage(_dataset_dict(timeRange="1993 – 2025"))
+
+    assert coverage == [Literal("1993-01-01/2025-12-31")]
+
+
+def test_schemaorg_temporal_coverage_unsupported_format():
+    coverage = _schemaorg_temporal_coverage(
+        _dataset_dict(timeRange="Laufende Nachführung")
+    )
+
+    assert coverage == []
 
 
 @pytest.mark.parametrize(

@@ -548,25 +548,16 @@ class StadtzhSchemaOrgProfile(SchemaOrgProfile, StadtzhProfile):
 
     def _temporal_graph(self, dataset_ref, dataset_dict):
         time_range = self._time_interval_from_dataset(dataset_dict)
-        if (
-            time_range is not None
-            and time_range.get("start_date")
-            and time_range.get("end_date")
-        ):
-            start = time_range.get("start_date")
-            end = time_range.get("end_date")
-            if start and end:
-                self.g.add(
-                    (
-                        dataset_ref,
-                        SCHEMA.temporalCoverage,
-                        Literal("%s/%s" % (start, end)),
-                    )
-                )
-            elif start:
-                self._add_date_triple(dataset_ref, SCHEMA.temporalCoverage, start)
-            elif end:
-                self._add_date_triple(dataset_ref, SCHEMA.temporalCoverage, end)
+        if time_range is None:
+            return
+
+        self.g.add(
+            (
+                dataset_ref,
+                SCHEMA.temporalCoverage,
+                Literal("%s/%s" % (time_range["start_date"], time_range["end_date"])),
+            )
+        )
 
     def _distribution_url_graph(self, distribution, resource_dict):
         url = resource_dict.get("url")
