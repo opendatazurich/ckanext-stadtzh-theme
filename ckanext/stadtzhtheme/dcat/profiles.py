@@ -3,6 +3,7 @@
 import datetime
 import itertools
 import logging
+import re
 import traceback
 
 from ckan.lib.helpers import render_markdown, url_for
@@ -89,7 +90,59 @@ mapping_accrualPeriodicity = {
     "sporadisch oder unregelmaessig": "http://purl.org/cld/freq/irregular",
 }
 
+# Supported formats of timeRange (hyphen or en dash, optional whitespace):
+#   yyyy
+#   yyyy - yyyy
+#   dd.mm.yyyy - dd.mm.yyyy
+_RANGE_SEPARATOR = r"\s*[-–]\s*"
+_DATE = r"(\d{1,2}\.\d{1,2}\.\d{4})"
+YEAR_RE = re.compile(r"^(\d{4})$")
+YEAR_RANGE_RE = re.compile(r"^(\d{4})" + _RANGE_SEPARATOR + r"(\d{4})$")
+DATE_RANGE_RE = re.compile(r"^" + _DATE + _RANGE_SEPARATOR + _DATE + r"$")
+
 ckan_locale_default = toolkit.config.get("ckan.locale_default", "de")
+
+
+def _parse_date(value):
+    return datetime.datetime.strptime(value, "%d.%m.%Y").date()
+
+
+def parse_time_range(time_range):
+    """
+    Parses the free-text timeRange field into a dict with the keys
+    start_date and end_date (ISO 8601 date strings).
+    Returns None if the value is not in one of the supported formats.
+    """
+    if not time_range or not isinstance(time_range, str):
+        return None
+    time_range = time_range.strip()
+
+    match = YEAR_RE.match(time_range)
+    if match:
+        start_year = end_year = match.group(1)
+    else:
+        match = YEAR_RANGE_RE.match(time_range)
+        if match:
+            start_year, end_year = match.groups()
+        else:
+            start_year = end_year = None
+
+    if start_year:
+        start = datetime.date(int(start_year), 1, 1)
+        end = datetime.date(int(end_year), 12, 31)
+    else:
+        match = DATE_RANGE_RE.match(time_range)
+        if not match:
+            return None
+        try:
+            start, end = (_parse_date(d) for d in match.groups())
+        except ValueError:
+            return None
+
+    if start > end:
+        return None
+
+    return {"start_date": start.isoformat(), "end_date": end.isoformat()}
 
 
 class StadtzhProfile(object):
@@ -100,26 +153,7 @@ class StadtzhProfile(object):
         return mapping_groups_dict.get(group_id, [])
 
     def _time_interval_from_dataset(self, dataset_dict):
-        time_range = self._get_dataset_value(dataset_dict, "timeRange")
-        if time_range is None:
-            return None
-        time_interval = {}
-        try:
-            dates = time_range.encode("utf-8").strip().split("-", 1)
-            dates = [d.strip() for d in dates]
-            if len(dates) > 0 and dates[0].isdigit() and len(dates[0]) == 4:
-                time_interval["start_date"] = dates[0] + "-01-01"
-                if len(dates) > 1 and dates[1].isdigit() and len(dates[1]) == 4:
-                    end_year = dates[1]
-                else:
-                    end_year = dates[0]
-                time_interval["end_date"] = end_year + "-12-31"
-            else:
-                return None
-        except (TypeError, IndexError):
-            return None
-
-        return time_interval
+        return parse_time_range(self._get_dataset_value(dataset_dict, "timeRange"))
 
 
 class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
@@ -248,25 +282,26 @@ class StadtzhSwissDcatProfile(RDFProfile, StadtzhProfile):
 
     def _add_temporal(self, dataset_dict, dataset_ref, g):
         time_range = self._time_interval_from_dataset(dataset_dict)
-        if (
-            time_range is not None
-            and time_range.get("start_date")
-            and time_range.get("end_date")
-        ):
-            start = time_range.get("start_date")
-            end = time_range.get("end_date")
+        if time_range is None:
+            return
 
-            temporal_extent = BNode()
-            g.add((temporal_extent, RDF.type, DCT.PeriodOfTime))
-            g.add(
-                (
-                    temporal_extent,
-                    SCHEMA.startDate,
-                    Literal(start, datatype=XSD.date),
-                )
+        temporal_extent = BNode()
+        g.add((temporal_extent, RDF.type, DCT.PeriodOfTime))
+        g.add(
+            (
+                temporal_extent,
+                DCAT.startDate,
+                Literal(time_range["start_date"], datatype=XSD.date),
             )
-            g.add((temporal_extent, SCHEMA.endDate, Literal(end, datatype=XSD.date)))
-            g.add((dataset_ref, DCT.temporal, temporal_extent))
+        )
+        g.add(
+            (
+                temporal_extent,
+                DCAT.endDate,
+                Literal(time_range["end_date"], datatype=XSD.date),
+            )
+        )
+        g.add((dataset_ref, DCT.temporal, temporal_extent))
 
     def _add_groups(self, dataset_dict, dataset_ref, g):
         groups = self._get_dataset_value(dataset_dict, "groups", [])
