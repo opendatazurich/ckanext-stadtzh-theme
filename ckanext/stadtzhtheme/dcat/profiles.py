@@ -115,38 +115,46 @@ def _parse_date(value):
     return datetime.datetime.strptime(value, "%d.%m.%Y").date()
 
 
+def _dates_from_time_range(time_range):
+    """
+    Returns a (start, end) tuple of datetime.date objects, or None if the
+    value is not in one of the supported formats.
+    Raises ValueError for invalid dates (e.g. year 0 or 31.02.2020).
+    """
+    match = YEAR_RE.match(time_range) or YEAR_RANGE_RE.match(time_range)
+    if match:
+        start_year, end_year = match.group(1), match.groups()[-1]
+        return (
+            datetime.date(int(start_year), 1, 1),
+            datetime.date(int(end_year), 12, 31),
+        )
+
+    match = DATE_RANGE_RE.match(time_range)
+    if match:
+        start, end = match.groups()
+        return _parse_date(start), _parse_date(end)
+
+    return None
+
+
 def parse_time_range(time_range):
     """
     Parses the free-text timeRange field into a dict with the keys
     start_date and end_date (ISO 8601 date strings).
-    Returns None if the value is not in one of the supported formats.
+    Returns None if the value is not in one of the supported formats or
+    contains invalid dates.
     """
     if not time_range or not isinstance(time_range, str):
         return None
-    time_range = time_range.strip()
 
-    match = YEAR_RE.match(time_range)
-    if match:
-        start_year = end_year = match.group(1)
-    else:
-        match = YEAR_RANGE_RE.match(time_range)
-        if match:
-            start_year, end_year = match.groups()
-        else:
-            start_year = end_year = None
+    try:
+        dates = _dates_from_time_range(time_range.strip())
+    except ValueError:
+        return None
 
-    if start_year:
-        start = datetime.date(int(start_year), 1, 1)
-        end = datetime.date(int(end_year), 12, 31)
-    else:
-        match = DATE_RANGE_RE.match(time_range)
-        if not match:
-            return None
-        try:
-            start, end = (_parse_date(d) for d in match.groups())
-        except ValueError:
-            return None
-
+    if dates is None:
+        return None
+    start, end = dates
     if start > end:
         return None
 

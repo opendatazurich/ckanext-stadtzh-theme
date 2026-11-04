@@ -50,6 +50,9 @@ def test_parse_time_range_supported_formats(time_range, expected):
         "2021 bis 2024",
         "31/08/1939 - 30/09/2026",
         "31.02.2020 - 01.03.2020",
+        "0000",
+        "0000 - 2020",
+        "00.00.0000 - 01.01.2020",
         "2025 - 2020",
         "01.01.2025 - 31.12.2020",
     ],
@@ -92,6 +95,13 @@ def test_graph_temporal():
 def test_graph_temporal_unsupported_format():
     g = _graph_from_dataset(_dataset_dict(timeRange="Laufende Nachführung"))
 
+    assert list(g.objects(DATASET_URI, DCT.temporal)) == []
+
+
+def test_graph_temporal_invalid_year_does_not_break_export():
+    g = _graph_from_dataset(_dataset_dict(timeRange="0000"))
+
+    assert (DATASET_URI, RDF.type, DCAT.Dataset) in g
     assert list(g.objects(DATASET_URI, DCT.temporal)) == []
 
 
