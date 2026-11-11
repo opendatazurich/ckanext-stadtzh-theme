@@ -1,4 +1,4 @@
-black==25.9.0
+black==26.10.1
 flake8==7.3.0
 isort==6.0.1
 pytest-ckan==0.0.12
